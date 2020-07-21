@@ -16,7 +16,7 @@ class Task
     // self::STATUS_NEW => 'Новое'.
     const STATUS_NAMES = [
         'new' => 'Новое',
-        'cancelled' => 'Отменено',
+        'canceled' => 'Отменено',
         'wip' => 'В работе',
         'done' => 'Завершено',
         'failed' => 'Провалено',
@@ -35,8 +35,14 @@ class Task
     ];
 
     const AVAILABLE_ACTIONS = [
-        self::STATUS_NEW => [self::ACTION_ACCEPT, self::ACTION_REMOVE],
-        self::STATUS_WIP => [self::ACTION_DONE, self::ACTION_DECLINE],
+        self::STATUS_NEW => [
+            'executor' => [self::ACTION_ACCEPT],
+            'author' => [self::ACTION_REMOVE],
+        ],
+        self::STATUS_WIP => [
+            'executor' => [self::ACTION_DONE],
+            'author' => [self::ACTION_DECLINE],
+        ],
         self::STATUS_CANCELED => [],
         self::STATUS_FAILED => [],
         self::STATUS_DONE => [],
@@ -50,10 +56,10 @@ class Task
     ];
 
     // В материалах к задаче было указано, что поля инициализируются значениями. Но не сказано, что их можно не указывать.
-    private $idAuthor;
-    private $idExecutor;
+    private $idAuthor = null;
+    private $idExecutor = null;
 
-    public $status;
+    private $status;
 
     public function __construct(int $idExecutor, int $idAuthor)
     {
@@ -61,24 +67,52 @@ class Task
         $this->idExecutor = $idExecutor;
     }
 
-    public function getActions(): ?array
+    public function setStatus(string $status): bool
     {
-        if (!array_key_exists($this->status, self::AVAILABLE_ACTIONS)) {
-            // Ученик не знает, что можно кидать исключения.
-            // А вообще, здесь есть глубокий вопрос, может быть статус стоит кинуть в конструктор и также хранить в приватном поле
+        if (!array_key_exists($status, self::STATUS_NAMES)) {
+            return false;
+        }
+
+        $this->status = $status;
+        return true;
+    }
+
+    public function getActions(int $userId): ?array
+    {
+        if (!$this->status) {
             return null;
         }
 
-        return self::AVAILABLE_ACTIONS[$this->status];
+        if ($userId !== $this->idAuthor && $userId !== $this->idExecutor) {
+            return [];
+        }
+
+        $type = $this->idAuthor === $userId ? 'author' : 'executor';
+
+
+        if (!array_key_exists($this->status, self::AVAILABLE_ACTIONS)) {
+            return null;
+        }
+
+        return self::AVAILABLE_ACTIONS[$this->status][$type] ?? [];
     }
 
     public function getNextStatus(string $action): ?string
     {
+        if (!$this->status) {
+            return null;
+        }
+
         if (!array_key_exists($this->status, self::AVAILABLE_ACTIONS)) {
             return null;
         }
 
-        if (!in_array($action, self::AVAILABLE_ACTIONS[$this->status], true)) {
+        $actions = array_merge(
+            self::AVAILABLE_ACTIONS[$this->status]['executor'] ?? [],
+            self::AVAILABLE_ACTIONS[$this->status]['author'] ?? []
+        );
+
+        if (!in_array($action, $actions, true)) {
             return null;
         }
 
