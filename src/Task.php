@@ -36,7 +36,7 @@ class Task
 
     const AVAILABLE_ACTIONS = [
         self::STATUS_NEW => [
-            'executor' => [self::ACTION_ACCEPT],
+            'any' => [self::ACTION_ACCEPT],
             'author' => [self::ACTION_REMOVE],
         ],
         self::STATUS_WIP => [
@@ -83,12 +83,7 @@ class Task
             return null;
         }
 
-        if ($userId !== $this->idAuthor && $userId !== $this->idExecutor) {
-            return [];
-        }
-
-        $type = $this->idAuthor === $userId ? 'author' : 'executor';
-
+        $type = $this->getUserTypeById($userId);
 
         if (!array_key_exists($this->status, self::AVAILABLE_ACTIONS)) {
             return null;
@@ -109,7 +104,8 @@ class Task
 
         $actions = array_merge(
             self::AVAILABLE_ACTIONS[$this->status]['executor'] ?? [],
-            self::AVAILABLE_ACTIONS[$this->status]['author'] ?? []
+            self::AVAILABLE_ACTIONS[$this->status]['author'] ?? [],
+            self::AVAILABLE_ACTIONS[$this->status]['any'] ?? []
         );
 
         if (!in_array($action, $actions, true)) {
@@ -117,5 +113,21 @@ class Task
         }
 
         return self::ACTION_TO_STATUS[$action] ?? null; // nullsafe
+    }
+
+    private function getUserTypeById(int $userId)
+    {
+        switch($userId) {
+            case $this->idExecutor:
+                $type = 'executor';
+                break;
+            case $this->idAuthor:
+                $type = 'author';
+                break;
+            default:
+                $type = 'any';
+        }
+
+        return $type;
     }
 }
