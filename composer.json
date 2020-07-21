@@ -1,12 +1,12 @@
 {
-    "name": "sergey/1181399-task-force-1",
-    "authors": [
-        {
-            "name": "Sergey",
-            "email": "icq431@yandex.ru"
-        }
-    ],
-    "require": {},
+  "name": "sergey/1181399-task-force-1",
+  "authors": [
+    {
+      "name": "Sergey",
+      "email": "icq431@yandex.ru"
+    }
+  ],
+  "require": {},
   "autoload": {
     "psr-4": {
       "Htmlacademy\\": "src/"
