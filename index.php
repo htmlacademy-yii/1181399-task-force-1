@@ -2,8 +2,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require('./src/Task.php');
-use Htmlacademy\Task;
+require('vendor/autoload.php');
+use Htmlacademy\Models\Task;
 
 $task = new Task(1,2);
 

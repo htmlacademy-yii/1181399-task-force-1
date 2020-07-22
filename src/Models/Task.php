@@ -1,6 +1,6 @@
 <?php
 
-namespace Htmlacademy;
+namespace Htmlacademy\Models;
 
 class Task
 {
