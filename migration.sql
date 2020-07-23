@@ -4,7 +4,7 @@ use task_force;
 # set foreign_key_checks = 0;
 
 create table if not exists cities (
-    id int not null auto_increment,
+    id bigint not null auto_increment,
     map_h varchar(10) not null,
     map_w varchar(10) not null,
     name varchar(30) not null,
@@ -25,7 +25,7 @@ create table if not exists users (
     telegram varchar(50),
     avatar_url text,
     last_visit datetime default current_timestamp,
-    city_id int not null,
+    city_id bigint not null,
     notification_message bool default true,
     notification_actions bool default true,
     notification_feedback bool default true,
@@ -33,20 +33,8 @@ create table if not exists users (
     public_profile bool default true,
 
     primary key (id),
-    foreign key (city_id) references cities (id) on update cascade on delete cascade
-);
-
-create table if not exists feedback (
-    id bigint not null auto_increment,
-    author_id bigint not null,
-    user_id bigint not null,
-    status enum('success', 'failed'),
-    comment text,
-    rating tinyint,
-
-    primary key (id),
-    foreign key (author_id) references users (id) on update cascade on delete cascade,
-    foreign key (user_id) references users (id) on update cascade on delete cascade
+    foreign key (city_id) references cities (id) on update cascade on delete cascade,
+    unique (id)
 );
 
 create table if not exists bookmarks (
@@ -60,7 +48,7 @@ create table if not exists bookmarks (
 );
 
 create table if not exists categories (
-    id int not null auto_increment,
+    id bigint not null auto_increment,
     icon text,
     name varchar(255) not null,
 
@@ -70,7 +58,7 @@ create table if not exists categories (
 create table if not exists category_user (
     id bigint not null auto_increment,
     user_id bigint not null,
-    category_id int not null,
+    category_id bigint not null,
 
     primary key (id),
     foreign key (user_id) references users (id) on update cascade on delete cascade,
@@ -81,8 +69,8 @@ create table if not exists tasks (
     id bigint not null auto_increment,
     author_id bigint not null,
     executor_id bigint,
-    category_id int not null,
-    city_id int not null,
+    category_id bigint not null,
+    city_id bigint not null,
     budget int unsigned,
     description longtext,
     title varchar(255) not null,
@@ -99,6 +87,21 @@ create table if not exists tasks (
     foreign key (author_id) references users (id) on update cascade on delete cascade,
     foreign key (executor_id) references users (id) on update cascade on delete set null,
     foreign key (city_id) references cities (id) on update cascade on delete cascade
+);
+
+create table if not exists feedback (
+    id bigint not null auto_increment,
+    task_id bigint not null,
+    author_id bigint not null,
+    user_id bigint not null,
+    status enum('success', 'failed'),
+    comment text,
+    rating tinyint,
+
+    primary key (id),
+    foreign key (author_id) references users (id) on update cascade on delete cascade,
+    foreign key (user_id) references users (id) on update cascade on delete cascade,
+    foreign key (task_id) references tasks (id) on update cascade on delete cascade
 );
 
 create table if not exists applications (
