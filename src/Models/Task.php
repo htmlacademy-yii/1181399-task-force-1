@@ -2,6 +2,12 @@
 
 namespace Htmlacademy\Models;
 
+use Htmlacademy\Actions\Tasks\AbstractAction;
+use Htmlacademy\Actions\Tasks\AcceptAction;
+use Htmlacademy\Actions\Tasks\DeclineAction;
+use Htmlacademy\Actions\Tasks\DoneAction;
+use Htmlacademy\Actions\Tasks\RemoveAction;
+
 class Task
 {
     // Вся эта история со статусами до боли напоминает паттерн State machine.
@@ -22,37 +28,9 @@ class Task
         'failed' => 'Провалено',
     ];
 
-    const ACTION_ACCEPT = 'accept';
-    const ACTION_REMOVE = 'remove';
-    const ACTION_DONE = 'done';
-    const ACTION_DECLINE = 'decline';
-
-    const ACTION_NAMES = [
-        self::ACTION_ACCEPT => 'Откликнуться',
-        self::ACTION_REMOVE => 'Отменить',
-        self::ACTION_DONE => 'Отметить выполненным',
-        self::ACTION_DECLINE => 'Отказаться'
-    ];
-
     const AVAILABLE_ACTIONS = [
-        self::STATUS_NEW => [
-            'any' => [self::ACTION_ACCEPT],
-            'author' => [self::ACTION_REMOVE],
-        ],
-        self::STATUS_WIP => [
-            'executor' => [self::ACTION_DONE],
-            'author' => [self::ACTION_DECLINE],
-        ],
-        self::STATUS_CANCELED => [],
-        self::STATUS_FAILED => [],
-        self::STATUS_DONE => [],
-    ];
-
-    const ACTION_TO_STATUS = [
-        self::ACTION_ACCEPT => self::STATUS_WIP,
-        self::ACTION_REMOVE => self::STATUS_CANCELED,
-        self::ACTION_DONE => self::STATUS_DONE,
-        self::ACTION_DECLINE => self::STATUS_FAILED,
+        self::STATUS_NEW => [AcceptAction::class, RemoveAction::class],
+        self::STATUS_WIP => [DoneAction::class, DeclineAction::class],
     ];
 
     // В материалах к задаче было указано, что поля инициализируются значениями. Но не сказано, что их можно не указывать.
@@ -83,13 +61,18 @@ class Task
             return null;
         }
 
-        $type = $this->getUserTypeById($userId);
-
-        if (!array_key_exists($this->status, self::AVAILABLE_ACTIONS)) {
-            return null;
+        $availableActions = [];
+        if (array_key_exists($this->status, self::AVAILABLE_ACTIONS)) {
+            foreach (self::AVAILABLE_ACTIONS[$this->status] as $action) {
+                /** @var AbstractAction $action */
+                $action = new $action();
+                if ($action->can($this->idAuthor, $this->idExecutor, $userId)) {
+                    $availableActions[] = $action->getSlug();
+                }
+            }
         }
 
-        return self::AVAILABLE_ACTIONS[$this->status][$type] ?? [];
+        return $availableActions;
     }
 
     public function getNextStatus(string $action): ?string
