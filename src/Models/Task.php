@@ -7,6 +7,7 @@ use Htmlacademy\Actions\Tasks\AcceptAction;
 use Htmlacademy\Actions\Tasks\DeclineAction;
 use Htmlacademy\Actions\Tasks\DoneAction;
 use Htmlacademy\Actions\Tasks\RemoveAction;
+use Htmlacademy\Enums\Actions;
 
 class Task
 {
@@ -77,25 +78,17 @@ class Task
 
     public function getNextStatus(string $action): ?string
     {
-        if (!$this->status) {
+        if (!$this->status || !isset(self::AVAILABLE_ACTIONS[$this->status])) {
             return null;
         }
 
-        if (!array_key_exists($this->status, self::AVAILABLE_ACTIONS)) {
-            return null;
+        foreach (self::AVAILABLE_ACTIONS[$this->status] as $act) {
+            if ($act::getSlug() === $action) {
+                return $act::nextStatus();
+            }
         }
 
-        $actions = array_merge(
-            self::AVAILABLE_ACTIONS[$this->status]['executor'] ?? [],
-            self::AVAILABLE_ACTIONS[$this->status]['author'] ?? [],
-            self::AVAILABLE_ACTIONS[$this->status]['any'] ?? []
-        );
-
-        if (!in_array($action, $actions, true)) {
-            return null;
-        }
-
-        return self::ACTION_TO_STATUS[$action] ?? null; // nullsafe
+        return null;
     }
 
     private function getUserTypeById(int $userId)

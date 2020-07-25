@@ -2,6 +2,7 @@
 
 namespace Htmlacademy\Actions\Tasks;
 
+use Htmlacademy\Enums\Actions;
 use Htmlacademy\Models\Task;
 
 class DoneAction extends AbstractAction
@@ -17,7 +18,7 @@ class DoneAction extends AbstractAction
     /**
      * @inheritDoc
      */
-    public function getName(): string
+    public static function getName(): string
     {
         return 'Завершить заказ';
     }
@@ -25,12 +26,12 @@ class DoneAction extends AbstractAction
     /**
      * @inheritDoc
      */
-    public function getSlug(): string
+    public static function getSlug(): string
     {
-        return 'done';
+        return Actions::DONE;
     }
 
-    public function nextStatus(): string
+    public static function nextStatus(): string
     {
         return Task::STATUS_DONE;
     }

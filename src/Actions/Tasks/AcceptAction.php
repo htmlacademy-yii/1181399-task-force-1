@@ -2,6 +2,7 @@
 
 namespace Htmlacademy\Actions\Tasks;
 
+use Htmlacademy\Enums\Actions;
 use Htmlacademy\Models\Task;
 
 class AcceptAction extends AbstractAction
@@ -17,7 +18,7 @@ class AcceptAction extends AbstractAction
     /**
      * @inheritDoc
      */
-    public function getName(): string
+    public static function getName(): string
     {
         return 'Принять';
     }
@@ -25,12 +26,12 @@ class AcceptAction extends AbstractAction
     /**
      * @inheritDoc
      */
-    public function getSlug(): string
+    public static function getSlug(): string
     {
-        return 'accept';
+        return Actions::ACCEPT;
     }
 
-    public function nextStatus(): string
+    public static function nextStatus(): string
     {
         return Task::STATUS_WIP;
     }

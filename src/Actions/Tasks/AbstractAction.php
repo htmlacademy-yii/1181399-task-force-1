@@ -17,12 +17,12 @@ abstract class AbstractAction
     /**
      * @return string Локализованное имя действия
      */
-    abstract public function getName(): string;
+    abstract public static function getName(): string;
 
     /**
      * @return string Нелокализованное название действия в нашей системе
      */
-    abstract public function getSlug(): string;
+    abstract public static function getSlug(): string;
 
-    abstract public function nextStatus(): string;
+    abstract public static function nextStatus(): string;
 }

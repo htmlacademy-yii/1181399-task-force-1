@@ -2,6 +2,7 @@
 
 namespace Htmlacademy\Actions\Tasks;
 
+use Htmlacademy\Enums\Actions;
 use Htmlacademy\Models\Task;
 
 class RemoveAction extends AbstractAction
@@ -17,7 +18,7 @@ class RemoveAction extends AbstractAction
     /**
      * @inheritDoc
      */
-    public function getName(): string
+    public static function getName(): string
     {
         return 'Отменить заказ';
     }
@@ -25,12 +26,12 @@ class RemoveAction extends AbstractAction
     /**
      * @inheritDoc
      */
-    public function getSlug(): string
+    public static function getSlug(): string
     {
-        return 'remove';
+        return Actions::REMOVE;
     }
 
-    public function nextStatus(): string
+    public static function nextStatus(): string
     {
         return Task::STATUS_CANCELED;
     }
