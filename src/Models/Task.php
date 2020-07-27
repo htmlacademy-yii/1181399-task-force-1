@@ -8,6 +8,8 @@ use Htmlacademy\Actions\Tasks\DeclineAction;
 use Htmlacademy\Actions\Tasks\DoneAction;
 use Htmlacademy\Actions\Tasks\RemoveAction;
 use Htmlacademy\Enums\Actions;
+use Htmlacademy\Exceptions\StatusDoesNotExistsException;
+use Htmlacademy\Exceptions\StatusNotDefinedException;
 
 class Task
 {
@@ -46,10 +48,15 @@ class Task
         $this->idExecutor = $idExecutor;
     }
 
+    /**
+     * @param string $status
+     * @return bool
+     * @throws StatusDoesNotExistsException
+     */
     public function setStatus(string $status): bool
     {
         if (!array_key_exists($status, self::STATUS_NAMES)) {
-            return false;
+            throw new StatusDoesNotExistsException();
         }
 
         $this->status = $status;
@@ -76,10 +83,15 @@ class Task
         return $availableActions;
     }
 
+    /**
+     * @param string $action
+     * @return string|null
+     * @throws StatusNotDefinedException
+     */
     public function getNextStatus(string $action): ?string
     {
         if (!$this->status || !isset(self::AVAILABLE_ACTIONS[$this->status])) {
-            return null;
+            throw new StatusNotDefinedException();
         }
 
         foreach (self::AVAILABLE_ACTIONS[$this->status] as $act) {
