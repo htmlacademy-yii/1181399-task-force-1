@@ -1,4 +1,4 @@
-dt_add,category_id,description,expire,name,address,budget,lat,long
+created_at,category_id,description,until,title,address,budget,map_w,map_h
 2019-03-09,2,Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.,2019-11-15,enable impactful technologies,1 Eagan Crossing,6587,6.9641667,158.2083333
 2019-07-03,3,"Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit ligula in lacus.
 

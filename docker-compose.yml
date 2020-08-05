@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+  app:
+    image: php:7.4-apache
+    volumes:
+      - ./000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./:/app
+    ports:
+      - 80:80
+    links:
+      - db
+  db:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: "task_force"
+      MYSQL_PASSWORD: "task_force"
+      MYSQL_DATABASE: "task_force"
+

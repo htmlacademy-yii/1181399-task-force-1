@@ -5,8 +5,8 @@ use task_force;
 
 create table if not exists cities (
     id bigint not null auto_increment,
-    map_h varchar(10) not null,
-    map_w varchar(10) not null,
+    map_h varchar(15) not null,
+    map_w varchar(15) not null,
     name varchar(30) not null,
 
     primary key (id)
@@ -14,8 +14,7 @@ create table if not exists cities (
 
 create table if not exists users (
     id bigint not null auto_increment,
-    first_name varchar(255) not null,
-    last_name varchar(255) not null,
+    name varchar(255) not null,
     birthday date not null,
     description longtext,
     email varchar(255) not null,
@@ -26,11 +25,14 @@ create table if not exists users (
     avatar_url text,
     last_visit datetime default current_timestamp,
     city_id bigint not null,
+    address text,
     notification_message bool default true,
     notification_actions bool default true,
     notification_feedback bool default true,
     public_contacts bool default false,
     public_profile bool default true,
+    created_at datetime default current_timestamp,
+    updated_at datetime default current_timestamp on update current_timestamp,
 
     primary key (id),
     foreign key (city_id) references cities (id) on update cascade on delete cascade,
@@ -80,8 +82,8 @@ create table if not exists tasks (
     status enum('new', 'cancelled', 'wip', 'done', 'failed') default 'new',
     address text not null,
     address_comment text,
-    map_w varchar(10),
-    map_h varchar(10),
+    map_w varchar(15),
+    map_h varchar(15),
 
     primary key (id),
     foreign key (author_id) references users (id) on update cascade on delete cascade,
@@ -97,6 +99,8 @@ create table if not exists feedback (
     status enum('success', 'failed'),
     comment text,
     rating tinyint,
+    created_at datetime default current_timestamp,
+    updated_at datetime default current_timestamp on update current_timestamp,
 
     primary key (id),
     foreign key (author_id) references users (id) on update cascade on delete cascade,
