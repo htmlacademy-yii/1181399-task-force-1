@@ -41,7 +41,7 @@ final class CsvParser
             $outputFile->fwrite($outputLine);
         }
 
-        $outputFile->fwrite('commit');
+        $outputFile->fwrite('commit;');
         $outputFile->fwrite('set autocommit=1;');
 
         return $outputFile->getPathname();

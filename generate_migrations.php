@@ -36,9 +36,9 @@ $inputParameters = [
     ],
 ];
 
-$outputFile = new SplFileObject(__DIR__ . '/seed.sql', 'w');
 foreach ($inputParameters as $parameters)
 {
+    $outputFile = new SplFileObject(__DIR__ . "/migrations/{$parameters['tableName']}.sql", 'w');
     $filename = __DIR__ . "/data/{$parameters['filename']}.csv";
     $file = new SplFileObject($filename);
     $parser = new \Htmlacademy\Database\CsvParser($file, $parameters['addFields'], $parameters['tableName'], $outputFile);
