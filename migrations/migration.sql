@@ -10,7 +10,7 @@ create table if not exists cities (
     name varchar(30) not null,
 
     primary key (id)
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists users (
     id bigint not null auto_increment,
@@ -37,7 +37,7 @@ create table if not exists users (
     primary key (id),
     foreign key (city_id) references cities (id) on update cascade on delete cascade,
     unique (id)
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists bookmarks (
     id bigint not null auto_increment,
@@ -47,7 +47,7 @@ create table if not exists bookmarks (
     primary key (id),
     foreign key (user_id) references users (id) on update cascade on delete cascade,
     foreign key (bookmark_user_id) references users (id) on update cascade on delete cascade
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists categories (
     id bigint not null auto_increment,
@@ -55,7 +55,7 @@ create table if not exists categories (
     name varchar(255) not null,
 
     primary key (id)
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists category_user (
     id bigint not null auto_increment,
@@ -65,7 +65,7 @@ create table if not exists category_user (
     primary key (id),
     foreign key (user_id) references users (id) on update cascade on delete cascade,
     foreign key (category_id) references categories (id) on update cascade on delete cascade
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists tasks (
     id bigint not null auto_increment,
@@ -89,7 +89,7 @@ create table if not exists tasks (
     foreign key (author_id) references users (id) on update cascade on delete cascade,
     foreign key (executor_id) references users (id) on update cascade on delete set null,
     foreign key (city_id) references cities (id) on update cascade on delete cascade
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists feedback (
     id bigint not null auto_increment,
@@ -106,7 +106,7 @@ create table if not exists feedback (
     foreign key (author_id) references users (id) on update cascade on delete cascade,
     foreign key (user_id) references users (id) on update cascade on delete cascade,
     foreign key (task_id) references tasks (id) on update cascade on delete cascade
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists applications (
     id bigint not null auto_increment,
@@ -121,7 +121,7 @@ create table if not exists applications (
     primary key (id),
     foreign key (user_id) references users (id) on update cascade on delete cascade,
     foreign key (task_id) references tasks (id) on update cascade on delete cascade
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists messages (
     id bigint not null auto_increment,
@@ -137,7 +137,7 @@ create table if not exists messages (
     foreign key (author_id) references users (id) on update cascade on delete cascade,
     foreign key (recipient_id) references users (id) on update cascade on delete cascade,
     foreign key (task_id) references tasks (id) on update cascade on delete cascade
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists attachments (
     id bigint not null auto_increment,
@@ -147,7 +147,7 @@ create table if not exists attachments (
     updated_at datetime default current_timestamp on update current_timestamp,
 
     primary key (id)
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists attachment_user (
     id bigint not null auto_increment,
@@ -157,7 +157,7 @@ create table if not exists attachment_user (
     primary key (id),
     foreign key (user_id) references users (id) on update cascade on delete cascade,
     foreign key (attachment_id) references attachments (id) on update cascade on delete cascade
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists attachment_task (
     id bigint not null auto_increment,
@@ -167,7 +167,7 @@ create table if not exists attachment_task (
     primary key (id),
     foreign key (attachment_id) references attachments (id) on update cascade on delete cascade,
     foreign key (task_id) references tasks (id) on update cascade on delete cascade
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists feed (
     id bigint not null auto_increment,
@@ -179,6 +179,6 @@ create table if not exists feed (
     primary key (id),
     foreign key (user_id) references users (id) on update cascade on delete cascade,
     foreign key (task_id) references tasks (id) on update cascade on delete cascade
-);
+) character set utf8mb4 collate utf8mb4_general_ci;
 
 # set foreign_key_checks = 1;
