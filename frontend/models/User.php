@@ -44,6 +44,10 @@ use Yii;
  */
 class User extends \yii\db\ActiveRecord
 {
+
+    public $tasks_count;
+    public $feedback_count;
+    public $rating;
     /**
      * {@inheritdoc}
      */
@@ -173,7 +177,7 @@ class User extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|FeedbackQuery
      */
-    public function getFeedbacks0()
+    public function getSelfFeedbacks()
     {
         return $this->hasMany(Feedback::class, ['user_id' => 'id']);
     }
@@ -223,9 +227,14 @@ class User extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery|TasksQuery
      */
-    public function getTasks0()
+    public function getExecutorTasks()
     {
         return $this->hasMany(Task::class, ['executor_id' => 'id']);
+    }
+
+    public function getCategories()
+    {
+        return $this->hasMany(CategoryUser::class, ['user_id' => 'id'])->with('category');
     }
 
     /**
@@ -235,5 +244,12 @@ class User extends \yii\db\ActiveRecord
     public static function find()
     {
         return new UsersQuery(get_called_class());
+    }
+
+    public function isOnline()
+    {
+        $lastVisit = new \DateTimeImmutable($this->last_visit);
+        $interval = $lastVisit->diff(new \DateTimeImmutable());
+        return $interval->i + $interval->h * 60 + $interval->d * 24 * 60 < 5;
     }
 }
