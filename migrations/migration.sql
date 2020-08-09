@@ -88,7 +88,8 @@ create table if not exists tasks (
     primary key (id),
     foreign key (author_id) references users (id) on update cascade on delete cascade,
     foreign key (executor_id) references users (id) on update cascade on delete set null,
-    foreign key (city_id) references cities (id) on update cascade on delete cascade
+    foreign key (city_id) references cities (id) on update cascade on delete cascade,
+    foreign key (category_id) references categories (id) on update cascade on delete cascade
 ) character set utf8mb4 collate utf8mb4_general_ci;
 
 create table if not exists feedback (
