@@ -11,7 +11,7 @@ class TasksController extends Controller
     {
         $status = Task::STATUS_NEW;
         $tasks = Task::find()
-            ->where("status = '{$status}'")
+            ->where(['status' => $status])
             ->joinWith('category')
             ->joinWith('city')
             ->orderBy('created_at DESC')
