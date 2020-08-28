@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use Cassandra\Exception\ValidationException;
 use DateInterval;
 use frontend\models\Category;
 use frontend\models\Task;
@@ -16,10 +17,13 @@ class TasksController extends Controller
     {
         $request = new TasksSearchForm();
         $request->load(Yii::$app->request->get());
-        $request->validate();
+        if ($request->validate()) {
+
+        }
 
         $searchFields = [
             'status' => Task::STATUS_NEW,
+            'remote' => $request->remote,
         ];
 
         $tasks = $this->getTasks($searchFields);

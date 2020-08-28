@@ -56,12 +56,13 @@ $searchFormConfig = [
 <section class="search-task">
     <div class="search-task__wrapper">
 
-        <?php ActiveForm::begin($searchFormConfig); ?>
+        <?php $form = ActiveForm::begin($searchFormConfig); ?>
 
         <?php
         foreach ($request->attributeLabels() as $attr => $label) {
             $field = new ActiveField(
                 [
+                    'form' => $form,
                     'model' => $request,
                     'template' => "{input}\n{error}",
                     'attribute' => $attr,
@@ -72,7 +73,6 @@ $searchFormConfig = [
         } ?>
 
         <?= $field->render() ?>
-
 
         <?php ActiveForm::end(); ?>
 
