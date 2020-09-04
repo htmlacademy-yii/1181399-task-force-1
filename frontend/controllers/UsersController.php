@@ -3,6 +3,9 @@
 namespace frontend\controllers;
 
 use DateTime;
+use frontend\models\Category;
+use frontend\models\requests\TasksSearchForm;
+use frontend\models\requests\UsersSearchForm;
 use frontend\models\User;
 use frontend\models\UsersQuery;
 use Yii;
@@ -12,6 +15,22 @@ use yii\web\Controller;
 class UsersController extends Controller
 {
     public function actionIndex()
+    {
+        $request = new UsersSearchForm();
+        $request->load(Yii::$app->request->get());
+        if (!$request->validate()) {
+            return $this->redirect('/tasks');
+        }
+
+
+
+        $users = $this->getUsers($request);
+        $categories = Category::find()->all();
+
+        return $this->render('browse', ['users' => $users, 'request' => $request, 'categories' => $categories]);
+    }
+
+    private function getUsers(UsersSearchForm $request)
     {
         $users = User::find()
             ->select(
@@ -30,36 +49,39 @@ class UsersController extends Controller
             ->groupBy('users.id');
 
 
-        if (($categories = Yii::$app->request->get('categories')) && is_array($categories)) {
+        if (($categories = $request->categories) && is_array($categories)) {
             $users->leftJoin('category_user as cu', 'cu.user_id = users.id')
-                ->where(['in', 'cu.category_id', $categories]);
+                ->andWhere(['in', 'cu.category_id', $categories]);
         }
 
-        if (Yii::$app->request->get('online')) {
+        if ($request->online) {
             $lastVisit = (new \DateTimeImmutable())->modify('-5m')->format('Y-m-d H:i:s');
-            $users->where(['>=', 'last_visit', $lastVisit]);
+            $users->andWhere(['>=', 'last_visit', $lastVisit]);
         }
 
-        if (Yii::$app->request->get('free')) {
-            $users->where('not exists ' .
-                '(select 1 from tasks where executor_id = users.id and status in ("wip", "new"))'
+        if ($request->free) {
+            $users->andWhere('not exists ' .
+                             '(select 1 from tasks where executor_id = users.id and status in ("wip", "new"))'
             );
         }
 
-        if (Yii::$app->request->get('bookmarked')) {
+        if ($request->bookmarked) {
             // здесь интересно. У нас пока нет авторизации, поэтому будем использовать хардкод id пользователя - 1
-            $users->where('exists ' .
-              '(select 1 from bookmarks where bookmark_user_id = users.id and bookmarks.user_id = 1)'
+            $users->andWhere('exists ' .
+                             '(select 1 from bookmarks where bookmark_user_id = users.id and bookmarks.user_id = 1)'
             );
         }
 
-        if (Yii::$app->request->get('hasFeedback')) {
-            $users->leftJoin('feedbacks', 'user_id = users.id')
+        if ($request->hasFeedback) {
+            $users->leftJoin('feedback as f', 'f.user_id = users.id')
                 ->groupBy('users.id')
-                ->having('count(feedback.id) > 0');
+                ->having('count(f.id) > 0');
         }
 
+        if (isset($request->searchName) && $request->searchName) {
+            $users->andWhere(['like', 'users.name', $request->searchName]);
+        }
 
-        return $this->render('browse', ['users' => $users->all()]);
+        return $users->all();
     }
 }
