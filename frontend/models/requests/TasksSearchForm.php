@@ -33,4 +33,13 @@ class TasksSearchForm extends Model
             'searchName' => 'Поиск по имени',
         ];
     }
+
+    public function getPeriods() {
+        return [
+            '' => 'Период',
+            'day' => 'День',
+            'week' => 'Неделя',
+            'month' => 'Месяц',
+        ];
+    }
 }

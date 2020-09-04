@@ -15,6 +15,7 @@ $this->title = 'Task Force';
 $searchFormConfig = [
     'method' => 'get',
     'id' => 'filterForm',
+    'action' => 'tasks',
     'options' => [
         'class' => 'search-task__form',
     ],
@@ -57,56 +58,22 @@ $searchFormConfig = [
     <div class="search-task__wrapper">
 
         <?php $form = ActiveForm::begin($searchFormConfig); ?>
-
-        <?php
-        foreach ($request->attributeLabels() as $attr => $label) {
-            $field = new ActiveField(
-                [
-                    'form' => $form,
-                    'model' => $request,
-                    'template' => "{input}\n{error}",
-                    'attribute' => $attr,
-                    'options' => ['class' => 'field registration__field']
-                ]
-            );
-            $field->textInput(['class' => 'field__input input input--big placeholder-shown', 'placeholder' => $label]);
-        } ?>
-
-        <?= $field->render() ?>
-
+            <fieldset class="search-task__categories">
+                <legend>Категории</legend>
+                <?= \yii\helpers\BaseHtml::activeCheckboxList($request, 'categories', \yii\helpers\ArrayHelper::map($categories, 'id', 'name'), [
+                        ['tag' => false, 'inputOptions' => ['class' => 'visually-hidden checkbox__input']]
+                ]) ?>
+            </fieldset>
+            <fieldset class="search-task__categories">
+                <legend>Дополнительно</legend>
+                <?= \yii\helpers\BaseHtml::activeCheckbox($request, 'withoutApplications', ['tag' => false, 'inputOptions' => ['class' => 'visually-hidden checkbox__input']]) ?>
+                <?= \yii\helpers\BaseHtml::activeCheckbox($request, 'remote', ['tag' => false, 'inputOptions' => ['class' => 'visually-hidden checkbox__input']]) ?>
+            </fieldset>
+            <label class="search-task__name">Период</label>
+            <?= \yii\helpers\BaseHtml::activeDropDownList($request, 'period', $request->getPeriods(), ['class' => 'input multiple-select']) ?>
+            <label class="search-task__name" for="9">Поиск по названию</label>
+            <?= \yii\helpers\BaseHtml::activeInput('search', $request, 'searchName', ['class' => 'input-middle input']) ?>
+            <button class="button" type="submit">Искать</button>
         <?php ActiveForm::end(); ?>
-
-
-        <!--        <form class="search-task__form" name="test" method="post" action="#">-->
-        <!--            <fieldset class="search-task__categories">-->
-        <!--                <legend>Категории</legend>-->
-        <!--                <input class="visually-hidden checkbox__input" id="1" type="checkbox" name="" value="" checked>-->
-        <!--                <label for="1">Курьерские услуги </label>-->
-        <!--                <input class="visually-hidden checkbox__input" id="2" type="checkbox" name="" value="" checked>-->
-        <!--                <label  for="2">Грузоперевозки </label>-->
-        <!--                <input class="visually-hidden checkbox__input" id="3" type="checkbox" name="" value="">-->
-        <!--                <label  for="3">Переводы </label>-->
-        <!--                <input class="visually-hidden checkbox__input" id="4" type="checkbox" name="" value="">-->
-        <!--                <label  for="4">Строительство и ремонт </label>-->
-        <!--                <input class="visually-hidden checkbox__input" id="5" type="checkbox" name="" value="">-->
-        <!--                <label  for="5">Выгул животных </label>-->
-        <!--            </fieldset>-->
-        <!--            <fieldset class="search-task__categories">-->
-        <!--                <legend>Дополнительно</legend>-->
-        <!--                <input class="visually-hidden checkbox__input" id="6" type="checkbox" name="" value="">-->
-        <!--                <label for="6">Без откликов</label>-->
-        <!--                <input class="visually-hidden checkbox__input" id="7" type="checkbox" name="" value="" checked>-->
-        <!--                <label for="7">Удаленная работа </label>-->
-        <!--            </fieldset>-->
-        <!--            <label class="search-task__name" for="8">Период</label>-->
-        <!--            <select class="multiple-select input" id="8" size="1" name="time[]">-->
-        <!--                <option value="day">За день</option>-->
-        <!--                <option selected value="week">За неделю</option>-->
-        <!--                <option value="month">За месяц</option>-->
-        <!--            </select>-->
-        <!--            <label class="search-task__name" for="9">Поиск по названию</label>-->
-        <!--            <input class="input-middle input" id="9" type="search" name="q" placeholder="">-->
-        <!--            <button class="button" type="submit">Искать</button>-->
-        <!--        </form>-->
     </div>
 </section>
