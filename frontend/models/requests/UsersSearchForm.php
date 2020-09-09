@@ -51,7 +51,7 @@ class UsersSearchForm extends Model
             ->leftJoin('feedback', 'feedback.user_id = users.id')
             ->with('categories')
             ->orderBy('created_at desc')
-            ->groupBy('users.id');
+            ->groupBy(['users.id', 'users.created_at']);
 
 
         if (($categories = $this->categories) && is_array($categories)) {
@@ -84,6 +84,8 @@ class UsersSearchForm extends Model
         }
 
         $users->andFilterWhere(['like', 'users.name', $this->searchName]);
+
+        var_dump($users->prepare(\Yii::$app->db->queryBuilder)->createCommand()->rawSql);
 
         return $users->all();
     }
