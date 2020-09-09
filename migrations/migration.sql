@@ -80,7 +80,7 @@ create table if not exists tasks (
     updated_at datetime default current_timestamp on update current_timestamp,
     until date not null,
     status enum('new', 'cancelled', 'wip', 'done', 'failed') default 'new',
-    address text not null,
+    address text,
     address_comment text,
     map_w varchar(15),
     map_h varchar(15),

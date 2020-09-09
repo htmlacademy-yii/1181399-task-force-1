@@ -2,20 +2,21 @@
 
 namespace frontend\controllers;
 
-use frontend\models\Task;
+use frontend\models\Category;
+use frontend\models\requests\TasksSearchForm;
+use Yii;
 use yii\web\Controller;
 
 class TasksController extends Controller
 {
     public function actionIndex()
     {
-        $status = Task::STATUS_NEW;
-        $tasks = Task::find()
-            ->where(['status' => $status])
-            ->joinWith('category')
-            ->joinWith('city')
-            ->orderBy('created_at DESC')
-            ->all();
-        return $this->render('browse', ['tasks' => $tasks]);
+        $form = new TasksSearchForm();
+        $form->load(Yii::$app->request->get());
+
+        $tasks = $form->getTasks();
+        $categories = Category::find()->all();
+
+        return $this->render('browse', ['tasks' => $tasks, 'request' => $form, 'categories' => $categories]);
     }
 }
