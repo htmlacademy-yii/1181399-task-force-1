@@ -16,7 +16,8 @@ return [
             'rules' => [
                 'tasks' => 'tasks/index',
                 'users' => 'users/index',
-                'tasks/view/<id:\d+>' => 'tasks/view'
+                'tasks/view/<id:\d+>' => 'tasks/view',
+                'users/view/<id:\d+>' => 'users/view',
             ],
         ]
     ],
