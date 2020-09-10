@@ -4,8 +4,10 @@ namespace frontend\controllers;
 
 use frontend\models\Category;
 use frontend\models\requests\TasksSearchForm;
+use frontend\models\Task;
 use Yii;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class TasksController extends Controller
 {
@@ -18,5 +20,18 @@ class TasksController extends Controller
         $categories = Category::find()->all();
 
         return $this->render('browse', ['tasks' => $tasks, 'request' => $form, 'categories' => $categories]);
+    }
+
+    public function actionView($id)
+    {
+        $task = Task::findOne($id);
+        if (!$task) {
+            throw new NotFoundHttpException("Задание с ID {$id} не существует!");
+        }
+
+        $author = $task->author;
+        $applications = $task->applications;
+
+        return $this->render('show', ['task' => $task, 'author' => $author, 'applications' => $applications]);
     }
 }

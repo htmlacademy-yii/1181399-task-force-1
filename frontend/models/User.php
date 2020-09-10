@@ -222,6 +222,11 @@ class User extends \yii\db\ActiveRecord
         return $this->hasMany(Task::class, ['author_id' => 'id']);
     }
 
+    public function getTasksCount()
+    {
+        return $this->hasMany(Task::class, ['author_id' => 'id'])->count();
+    }
+
     /**
      * Gets query for [[Tasks0]].
      *
@@ -235,6 +240,11 @@ class User extends \yii\db\ActiveRecord
     public function getCategories()
     {
         return $this->hasMany(CategoryUser::class, ['user_id' => 'id'])->with('category');
+    }
+
+    public function getRatingSum()
+    {
+        return $this->hasMany(Feedback::class, ['user_id' => 'id'])->sum('rating');
     }
 
     /**

@@ -183,6 +183,17 @@ class Task extends \yii\db\ActiveRecord
         return $this->hasMany(Message::class, ['task_id' => 'id']);
     }
 
+    public function getApplicationsCount()
+    {
+        return $this->hasMany(Application::class, ['task_id' => 'id'])->count();
+    }
+
+    public function getAttachments()
+    {
+        return $this->hasMany(Attachment::class, ['id' => 'attachment_id'])
+            ->viaTable('attachment_task', ['task_id' => 'id']);
+    }
+
     /**
      * {@inheritdoc}
      * @return TasksQuery the active query used by this AR class.
