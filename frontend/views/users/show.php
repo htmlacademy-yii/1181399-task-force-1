@@ -16,8 +16,8 @@ $this->title = 'Task Force';
         <div class="user__card">
             <img src="/img/man-hat.png" width="120" height="120" alt="Аватар пользователя">
             <div class="content-view__headline">
-                <h1><?= $user->name ?></h1>
-                <p><?= $user->city->name ?>, <?= $user->getAge() ?> лет</p>
+                <h1><?= Html::encode($user->name) ?></h1>
+                <p><?= $user->city->name ?? '' ?>, <?= $user->getAge() ?> лет</p>
                 <div class="profile-mini__name five-stars__rate">
                     <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
                     <b><?= $user->getSelfFeedbacks()->sum('rating') ?? 0 ?></b>
@@ -30,7 +30,7 @@ $this->title = 'Task Force';
             </div>
         </div>
         <div class="content-view__description">
-            <p><?= $user->description ?></p>
+            <p><?= Html::encode($user->description) ?></p>
         </div>
         <div class="user__card-general-information">
             <div class="user__card-info">
@@ -42,9 +42,9 @@ $this->title = 'Task Force';
                 </div>
                 <h3 class="content-view__h3">Контакты</h3>
                 <div class="user__card-link">
-                    <a class="user__card-link--tel link-regular" href="#"><?= $user->phone ?></a>
-                    <a class="user__card-link--email link-regular" href="#"><?= $user->email ?></a>
-                    <a class="user__card-link--skype link-regular" href="#"><?= $user->skype ?></a>
+                    <a class="user__card-link--tel link-regular" href="#"><?= Html::encode($user->phone) ?></a>
+                    <a class="user__card-link--email link-regular" href="#"><?= Html::encode($user->email) ?></a>
+                    <a class="user__card-link--skype link-regular" href="#"><?= Html::encode($user->skype) ?></a>
                 </div>
             </div>
             <div class="user__card-photo">
@@ -60,13 +60,13 @@ $this->title = 'Task Force';
         <div class="content-view__feedback-wrapper reviews-wrapper">
             <?php foreach ($user->selfFeedbacks as $feedback): ?>
             <div class="feedback-card__reviews">
-                <p class="link-task link">Задание <a href="#" class="link-regular">«<?= $feedback->task->title ?>»</a></p>
+                <p class="link-task link">Задание <a href="#" class="link-regular">«<?= Html::encode($feedback->task->title) ?>»</a></p>
                 <div class="card__review">
                     <a href="#"><img src="/img/man-glasses.jpg" width="55" height="54"></a>
                     <div class="feedback-card__reviews-content">
-                        <p class="link-name link"><a href="#" class="link-regular"><?= $feedback->user->name ?></a></p>
+                        <p class="link-name link"><a href="#" class="link-regular"><?= Html::encode($feedback->user->name) ?></a></p>
                         <p class="review-text">
-                            <?= $feedback->comment ?>
+                            <?= Html::encode($feedback->comment) ?>
                         </p>
                     </div>
                     <div class="card__review-rate">

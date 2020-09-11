@@ -36,8 +36,8 @@ $searchFormConfig = [
                 <p class="new-task_description">
                     <?= Html::encode($task->description) ?>
                 </p>
-                <b class="new-task__price new-task__price--translation"><?= $task->budget ?><b> ₽</b></b>
-                <p class="new-task__place"><?= $task->city->name ?>, <?= Html::encode($task->address) ?></p>
+                <b class="new-task__price new-task__price--translation"><?= Html::encode($task->budget) ?><b> ₽</b></b>
+                <p class="new-task__place"><?= $task->city->name ?? '' ?>, <?= Html::encode($task->address) ?></p>
                 <span class="new-task__time"><?= Yii::$app->formatter->asRelativeTime($task->created_at) ?></span>
             </div>
         <?php

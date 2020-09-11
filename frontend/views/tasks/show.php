@@ -18,25 +18,25 @@ $this->title = 'Task Force';
         <div class="content-view__card-wrapper">
             <div class="content-view__header">
                 <div class="content-view__headline">
-                    <h1><?= $task->title ?></h1>
+                    <h1><?= Html::encode($task->title) ?></h1>
                     <span>Размещено в категории
                                     <a href="#" class="link-regular"><?= $task->category->name ?></a>
                                     <?= Yii::$app->formatter->asRelativeTime($task->created_at) ?></span>
                 </div>
-                <b class="new-task__price new-task__price--clean content-view-price"><?= $task->budget ?><b> ₽</b></b>
+                <b class="new-task__price new-task__price--clean content-view-price"><?= Html::encode($task->budget) ?><b> ₽</b></b>
                 <div class="new-task__icon new-task__icon--<?= $task->category->icon ?> content-view-icon"></div>
             </div>
             <div class="content-view__description">
                 <h3 class="content-view__h3">Общее описание</h3>
                 <p>
-                    <?= $task->description ?>
+                    <?= Html::encode($task->description) ?>
                 </p>
             </div>
             <?php if (count($task->attachments) > 0): ?>
             <div class="content-view__attach">
                 <h3 class="content-view__h3">Вложения</h3>
                 <?php foreach($task->attachments as $attachment): ?>
-                <a href="#"><?= $attachment->name ?></a>
+                <a href="#"><?= Html::encode($attachment->name) ?></a>
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>
@@ -45,12 +45,12 @@ $this->title = 'Task Force';
                 <div class="content-view__location-wrapper">
                     <div class="content-view__map">
                         <a href="#"><img src="/img/map.jpg" width="361" height="292"
-                                         alt="<?= $task->address ?>"></a>
+                                         alt="<?= Html::encode($task->address) ?>"></a>
                     </div>
                     <div class="content-view__address">
-                        <span class="address__town"><?= $task->city->name ?></span><br>
-                        <span><?= $task->address ?></span>
-                        <p><?= $task->address_comment ?></p>
+                        <span class="address__town"><?= $task->city->name ?? '' ?></span><br>
+                        <span><?= Html::encode($task->address) ?></span>
+                        <p><?= Html::encode($task->address_comment) ?></p>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@ $this->title = 'Task Force';
                 <div class="feedback-card__top">
                     <a href="#"><img src="/img/man-glasses.jpg" width="55" height="55"></a>
                     <div class="feedback-card__top--name">
-                        <p><a href="#" class="link-regular"><?= $application->user->name ?></a></p>
+                        <p><a href="#" class="link-regular"><?= Html::encode($application->user->name) ?></a></p>
                         <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
                         <b><?= $application->user->getRatingSum() ?></b>
                     </div>
@@ -80,9 +80,9 @@ $this->title = 'Task Force';
                 </div>
                 <div class="feedback-card__content">
                     <p>
-                        <?= $application->comment ?>
+                        <?= Html::encode($application->comment) ?>
                     </p>
-                    <span><?= $application->budget ?> ₽</span>
+                    <span><?= Html::encode($application->budget) ?> ₽</span>
                 </div>
                 <div class="feedback-card__actions">
                     <a class="button__small-color request-button button"
@@ -102,7 +102,7 @@ $this->title = 'Task Force';
             <div class="profile-mini__top">
                 <img src="/img/man-brune.jpg" width="62" height="62" alt="Аватар заказчика">
                 <div class="profile-mini__name five-stars__rate">
-                    <p><?= $author->name ?></p>
+                    <p><?= Html::encode($author->name) ?></p>
                 </div>
             </div>
             <p class="info-customer"><span><?= $author->getTasksCount() ?> заданий</span><span class="last-"><?= Yii::$app->formatter->asRelativeTime($author->last_visit) ?></span></p>
