@@ -29,9 +29,6 @@ class TasksController extends Controller
             throw new NotFoundHttpException("Задание с ID {$id} не существует!");
         }
 
-        $author = $task->author;
-        $applications = $task->applications;
-
-        return $this->render('show', ['task' => $task, 'author' => $author, 'applications' => $applications]);
+        return $this->render('show', ['task' => $task]);
     }
 }

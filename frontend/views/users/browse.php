@@ -44,7 +44,7 @@ $searchFormConfig = [
                 <span><?= $user->feedback_count ?> отзывов</span>
             </div>
             <div class="feedback-card__top--name user__search-card">
-                <p class="link-name"><a href="/users/view/<?= $user->id ?>" class="link-regular"><?= Html::encode($user->name) ?></a></p>
+                <p class="link-name"><a href="<?= \yii\helpers\BaseUrl::to(['users/view/', 'id' => $user->id]) ?>" class="link-regular"><?= Html::encode($user->name) ?></a></p>
                 <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
                 <b><?= $user->rating ?? 0 ?></b>
                 <p class="user__search-content">

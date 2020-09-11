@@ -3,8 +3,6 @@
 /* @var $this yii\web\View */
 
 /* @var $task frontend\models\Task */
-/* @var $author frontend\models\User */
-/* @var $applications frontend\models\Application[] */
 
 use yii\helpers\Html;
 use yii\widgets\ActiveField;
@@ -65,9 +63,9 @@ $this->title = 'Task Force';
         </div>
     </div>
     <div class="content-view__feedback">
-        <h2>Отклики <span>(<?= count($applications) ?>)</span></h2>
+        <h2>Отклики <span>(<?= count($task->applications) ?>)</span></h2>
         <div class="content-view__feedback-wrapper">
-            <?php foreach($applications as $application): ?>
+            <?php foreach($task->applications as $application): ?>
             <div class="content-view__feedback-card">
                 <div class="feedback-card__top">
                     <a href="#"><img src="/img/man-glasses.jpg" width="55" height="55"></a>
@@ -82,7 +80,7 @@ $this->title = 'Task Force';
                     <p>
                         <?= Html::encode($application->comment) ?>
                     </p>
-                    <span><?= Html::encode($application->budget) ?> ₽</span>
+                    <span><?= $application->budget ?> ₽</span>
                 </div>
                 <div class="feedback-card__actions">
                     <a class="button__small-color request-button button"
@@ -102,10 +100,10 @@ $this->title = 'Task Force';
             <div class="profile-mini__top">
                 <img src="/img/man-brune.jpg" width="62" height="62" alt="Аватар заказчика">
                 <div class="profile-mini__name five-stars__rate">
-                    <p><?= Html::encode($author->name) ?></p>
+                    <p><?= Html::encode($task->author->name) ?></p>
                 </div>
             </div>
-            <p class="info-customer"><span><?= $author->getTasksCount() ?> заданий</span><span class="last-"><?= Yii::$app->formatter->asRelativeTime($author->last_visit) ?></span></p>
+            <p class="info-customer"><span><?= $task->author->getTasksCount() ?> заданий</span><span class="last-"><?= Yii::$app->formatter->asRelativeTime($task->author->last_visit) ?></span></p>
             <a href="#" class="link-regular">Смотреть профиль</a>
         </div>
     </div>
