@@ -39,12 +39,12 @@ $searchFormConfig = [
     <div class="content-view__feedback-card user__search-wrapper">
         <div class="feedback-card__top">
             <div class="user__search-icon">
-                <a href="#"><img src="./img/man-glasses.jpg" width="65" height="65"></a>
+                <a href="#"><img src="/img/man-glasses.jpg" width="65" height="65"></a>
                 <span><?= $user->tasks_count ?> заданий</span>
                 <span><?= $user->feedback_count ?> отзывов</span>
             </div>
             <div class="feedback-card__top--name user__search-card">
-                <p class="link-name"><a href="#" class="link-regular"><?= Html::encode($user->name) ?></a></p>
+                <p class="link-name"><a href="<?= \yii\helpers\BaseUrl::to(['users/view/', 'id' => $user->id]) ?>" class="link-regular"><?= Html::encode($user->name) ?></a></p>
                 <span></span><span></span><span></span><span></span><span class="star-disabled"></span>
                 <b><?= $user->rating ?? 0 ?></b>
                 <p class="user__search-content">

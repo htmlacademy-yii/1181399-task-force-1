@@ -35,7 +35,7 @@ use Yii;
  * @property CategoryUser[] $categoryUsers
  * @property City $city
  * @property Feedback[] $feedbacks
- * @property Feedback[] $feedbacks0
+ * @property Feedback[] $selfFeedbacks
  * @property Feed[] $feeds
  * @property Message[] $messages
  * @property Message[] $messages0
@@ -173,7 +173,7 @@ class User extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Feedbacks0]].
+     * Gets query for [[self_feedbacks]].
      *
      * @return \yii\db\ActiveQuery|FeedbackQuery
      */
@@ -222,6 +222,11 @@ class User extends \yii\db\ActiveRecord
         return $this->hasMany(Task::class, ['author_id' => 'id']);
     }
 
+    public function getTasksCount()
+    {
+        return $this->hasMany(Task::class, ['author_id' => 'id'])->count();
+    }
+
     /**
      * Gets query for [[Tasks0]].
      *
@@ -234,7 +239,13 @@ class User extends \yii\db\ActiveRecord
 
     public function getCategories()
     {
-        return $this->hasMany(CategoryUser::class, ['user_id' => 'id'])->with('category');
+        return $this->hasMany(Category::class, ['id' => 'category_id'])
+            ->viaTable('category_user', ['user_id' => 'id']);
+    }
+
+    public function getRatingSum()
+    {
+        return $this->hasMany(Feedback::class, ['user_id' => 'id'])->sum('rating');
     }
 
     /**
@@ -251,5 +262,16 @@ class User extends \yii\db\ActiveRecord
         $lastVisit = new \DateTimeImmutable($this->last_visit);
         $interval = $lastVisit->diff(new \DateTimeImmutable());
         return $interval->i + $interval->h * 60 + $interval->d * 24 * 60 < 5;
+    }
+
+    public function getAge()
+    {
+        return (new \DateTime())->diff(new \DateTime($this->birthday))->y;
+    }
+
+    public function getAttachments()
+    {
+        return $this->hasMany(Attachment::class, ['id' => 'attachment_id'])
+            ->viaTable('attachment_user', ['user_id' => 'id']);
     }
 }
