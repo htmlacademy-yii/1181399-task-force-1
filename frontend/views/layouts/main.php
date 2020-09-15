@@ -97,6 +97,7 @@ AppAsset::register($this);
                     <a href="#" class="link-regular">«Помочь с курсовой»</a>
                 </p>
             </div>
+            <?php if(!isset($user) || $user === null): ?>
             <div class="header__account">
                 <a class="header__account-photo">
                     <img src="./img/user-photo.png"
@@ -120,6 +121,7 @@ AppAsset::register($this);
                     </li>
                 </ul>
             </div>
+            <?php endif; ?>
         </div>
     </header>
     <main class="page-main">
