@@ -9,14 +9,10 @@ use yii\base\Model;
 
 class RegistrationForm extends Model
 {
-    public $email;
-    public $name;
-    public $city;
-    public $password;
-
     public function rules()
     {
         return [
+            [['email', 'name', 'city', 'password'], 'required'],
             [['email', 'name', 'city', 'password'], 'safe'],
             [['email', 'name', 'password'], 'string', 'max' => 100],
             [['email'], 'email'],

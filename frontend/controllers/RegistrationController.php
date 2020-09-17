@@ -18,7 +18,7 @@ class RegistrationController extends Controller
         $cities = City::find()->all();
 
         if (Yii::$app->request->isPost) {
-            if (!$request->validate()) {
+            if ($request->validate()) {
                 $user = $this->registerUser($request);
                 return $this->goHome();
             }
