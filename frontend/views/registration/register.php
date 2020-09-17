@@ -9,6 +9,7 @@
 
 use frontend\models\requests\UsersSearchForm;
 use yii\helpers\Html;
+use yii\widgets\ActiveField;
 use yii\widgets\ActiveForm;
 
 $formConfig = [
@@ -26,10 +27,8 @@ $formConfig = [
     <div class="registration-wrapper">
         <?php
         $form = ActiveForm::begin($formConfig); ?>
-        <label>Ваш email</label>
-        <?= \yii\helpers\BaseHtml::activeInput('text', $request, 'email', ['class' => 'input textarea']) ?>
-        <label>Ваше имя</label>
-        <?= \yii\helpers\BaseHtml::activeInput('text', $request, 'name', ['class' => 'input textarea']) ?>
+        <?= $form->field($request, 'email', ['inputOptions' => ['class' => 'input textarea']]) ?>
+        <?= $form->field($request, 'name', ['inputOptions' => ['class' => 'input textarea']]) ?>
         <span>Введите ваше имя и фамилию</span>
         <label>Город проживания</label>
         <?= \yii\helpers\BaseHtml::activeDropDownList(
@@ -38,8 +37,7 @@ $formConfig = [
             \yii\helpers\ArrayHelper::map($cities, 'id', 'name'),
             ['class' => 'multiple-select input town-select registration-town']
         ) ?>
-        <label>Пароль</label>
-        <?= Html::activeInput('password', $request, 'password', ['class' => 'input textarea']) ?>
+        <?= $form->field($request, 'password', ['inputOptions' => ['class' => 'input textarea']]) ?>
         <span>Длина пароля от 8 символов</span>
         <?= Html::button('Создать аккаунт', ['class' => 'button button__registration', 'type' => 'submit']) ?>
         <?php

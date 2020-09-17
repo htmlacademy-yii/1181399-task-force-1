@@ -17,13 +17,10 @@ class RegistrationController extends Controller
 
         $cities = City::find()->all();
 
-        if (Yii::$app->request->method === 'POST') {
+        if (Yii::$app->request->isPost) {
             if (!$request->validate()) {
-                return $this->render('register', compact('request', 'cities'));
-            }
-            $user = $this->registerUser($request);
-            if ($user) {
-                return $this->redirect('/');
+                $user = $this->registerUser($request);
+                return $this->goHome();
             }
         }
 
@@ -35,7 +32,7 @@ class RegistrationController extends Controller
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = password_hash($request->password, PASSWORD_DEFAULT);
+        $user->password = Yii::$app->security->generatePasswordHash($request->password);
         $user->city_id = $request->city;
         return $user->save();
     }
