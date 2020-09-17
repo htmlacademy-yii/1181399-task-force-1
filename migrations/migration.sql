@@ -15,7 +15,7 @@ create table if not exists cities (
 create table if not exists users (
     id bigint not null auto_increment,
     name varchar(255) not null,
-    birthday date not null,
+    birthday date,
     description longtext,
     email varchar(255) not null,
     password varchar(255) not null,
