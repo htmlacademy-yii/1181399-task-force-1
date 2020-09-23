@@ -97,7 +97,7 @@ AppAsset::register($this);
                     <a href="#" class="link-regular">«Помочь с курсовой»</a>
                 </p>
             </div>
-            <?php if(!\yii\web\User::isGuest): ?>
+            <?php if(!Yii::$app->user->isGuest): ?>
             <div class="header__account">
                 <a class="header__account-photo">
                     <img src="./img/user-photo.png"

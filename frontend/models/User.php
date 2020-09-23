@@ -3,6 +3,8 @@
 namespace frontend\models;
 
 use Yii;
+use yii\base\NotSupportedException;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "users".
@@ -42,12 +44,13 @@ use Yii;
  * @property Task[] $tasks
  * @property Task[] $tasks0
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
 
     public $tasks_count;
     public $feedback_count;
     public $rating;
+
     /**
      * {@inheritdoc}
      */
@@ -65,11 +68,27 @@ class User extends \yii\db\ActiveRecord
             [['name', 'email', 'password', 'city_id'], 'required'],
             [['birthday', 'last_visit', 'created_at', 'updated_at'], 'safe'],
             [['description', 'avatar_url', 'address'], 'string'],
-            [['city_id', 'notification_message', 'notification_actions', 'notification_feedback', 'public_contacts', 'public_profile'], 'integer'],
+            [
+                [
+                    'city_id',
+                    'notification_message',
+                    'notification_actions',
+                    'notification_feedback',
+                    'public_contacts',
+                    'public_profile'
+                ],
+                'integer'
+            ],
             [['name', 'email', 'password'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 20],
             [['skype', 'telegram'], 'string', 'max' => 50],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => City::class, 'targetAttribute' => ['city_id' => 'id']],
+            [
+                ['city_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => City::class,
+                'targetAttribute' => ['city_id' => 'id']
+            ],
         ];
     }
 
@@ -84,7 +103,7 @@ class User extends \yii\db\ActiveRecord
             'birthday' => 'Birthday',
             'description' => 'Description',
             'email' => 'Email',
-            'password' => 'Password',
+            'password' => 'Пароль',
             'phone' => 'Phone',
             'skype' => 'Skype',
             'telegram' => 'Telegram',
@@ -273,5 +292,94 @@ class User extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Attachment::class, ['id' => 'attachment_id'])
             ->viaTable('attachment_user', ['user_id' => 'id']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentity($id)
+    {
+        return static::findOne(['id' => $id]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return \common\models\User|null
+     */
+    public static function findByUsername($username)
+    {
+        return static::findOne(['email' => $username]);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateAuthKey($authKey)
+    {
+        return $this->getAuthKey() === $authKey;
+    }
+
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
+    }
+
+    /**
+     * Generates password hash from password and sets it to the model
+     *
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+    }
+
+    /**
+     * Generates "remember me" authentication key
+     */
+    public function generateAuthKey()
+    {
+        $this->auth_key = Yii::$app->security->generateRandomString();
+    }
+
+    /**
+     * Removes password reset token
+     */
+    public function removePasswordResetToken()
+    {
+        $this->password_reset_token = null;
     }
 }
