@@ -37,11 +37,15 @@ class LandingController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
+                'denyCallback' => function ($rule, $action) {
+                    return $this->redirect('/tasks');
+                },
                 'rules' => [
                     [
                         'actions' => ['landing'],
                         'allow' => true,
                         'roles' => ['?'],
+
                     ],
                     [
                         'actions' => ['logout'],

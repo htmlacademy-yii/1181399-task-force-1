@@ -24,7 +24,6 @@ return [
             ],
         ],
         'user' => [
-            'class' => \frontend\helpers\User::class,
             'identityClass' => \frontend\models\User::class,
         ],
     ],
