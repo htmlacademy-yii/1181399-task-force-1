@@ -33,6 +33,7 @@ create table if not exists users (
     public_profile bool default true,
     created_at datetime default current_timestamp,
     updated_at datetime default current_timestamp on update current_timestamp,
+    auth_key varchar(255),
 
     primary key (id),
     foreign key (city_id) references cities (id) on update cascade on delete cascade,

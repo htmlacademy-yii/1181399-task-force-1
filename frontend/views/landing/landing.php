@@ -7,15 +7,19 @@ use yii\helpers\Html;
 use yii\widgets\ActiveField;
 
 ?>
+<?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>TaskForce</title>
+    <?php $this->registerCsrfMetaTags() ?>
+    <?php $this->head(); ?>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="landing">
+<?php $this->beginBody(); ?>
 <div class="table-layout">
     <header class=" page-header--index">
         <div class="main-container page-header__container page-header__container--index">
@@ -220,9 +224,9 @@ use yii\widgets\ActiveField;
     </footer>
     <section class="modal enter-form form-modal" id="enter-form">
         <h2>Вход на сайт</h2>
-        <?php $form = \yii\widgets\ActiveForm::begin(['method' => 'post', 'action' => 'landing', 'enableAjaxValidation' => true,]); ?>
-            <?= $form->field($model, 'email', ['inputOptions' => ['class' => 'enter-form-email input input-middle'], 'enableAjaxValidation' => true]) ?>
-            <?= $form->field($model, 'password', ['inputOptions' => ['class' => 'enter-form-email input input-middle'], 'enableAjaxValidation' => true]) ?>
+        <?php $form = \yii\widgets\ActiveForm::begin(['method' => 'post', 'action' => '/', 'enableAjaxValidation' => true,]); ?>
+            <?= $form->field($model, 'email', ['inputOptions' => ['class' => 'enter-form-email input input-middle']]) ?>
+            <?= $form->field($model, 'password', ['inputOptions' => ['class' => 'enter-form-email input input-middle']]) ?>
             <button class="button" type="submit">Войти</button>
         <?php \yii\widgets\ActiveForm::end(); ?>
         <button class="form-modal-close" id="close-modal" type="button">Закрыть</button>
@@ -230,5 +234,7 @@ use yii\widgets\ActiveField;
 </div>
 <div class="overlay"></div>
 <script src="js/main.js"></script>
+<?php $this->endBody(); ?>
 </body>
 </html>
+<?php $this->endPage() ?>

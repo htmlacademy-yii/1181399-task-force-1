@@ -5,21 +5,21 @@ namespace frontend\controllers;
 use common\models\LoginForm;
 use frontend\models\Task;
 use Yii;
-use yii\base\Controller;
+use yii\web\Controller;
 use yii\helpers\Url;
 
 class LandingController extends Controller
 {
     public function actionLanding()
     {
-        $tasks = Task::find()->orderBy('created_at')->limit(4)->all();
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return Yii::$app->response->redirect('/tasks');
         }
+        $tasks = Task::find()->orderBy('created_at')->limit(4)->all();
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return Yii::$app->response->redirect('/tasks');
         } else {
             $model->password = '';
 
@@ -27,8 +27,9 @@ class LandingController extends Controller
         }
     }
 
-    public function actionLogin()
+    public function actionLogout()
     {
-
+        Yii::$app->user->logout();
+        return $this->goHome();
     }
 }

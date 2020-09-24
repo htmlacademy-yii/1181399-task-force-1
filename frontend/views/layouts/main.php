@@ -105,7 +105,7 @@ AppAsset::register($this);
                          alt="Аватар пользователя">
                 </a>
                 <span class="header__account-name">
-                 Василий
+                 <?= Html::encode(Yii::$app->user->getIdentity()->name) ?>
              </span>
             </div>
              <div class="account__pop-up">
@@ -117,7 +117,7 @@ AppAsset::register($this);
                         <a href="#">Настройки</a>
                     </li>
                     <li>
-                        <a href="#">Выход</a>
+                        <a href="/logout">Выход</a>
                     </li>
                 </ul>
             </div>
