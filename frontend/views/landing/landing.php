@@ -226,7 +226,7 @@ use yii\widgets\ActiveField;
         <h2>Вход на сайт</h2>
         <?php $form = \yii\widgets\ActiveForm::begin(['method' => 'post', 'action' => '/', 'enableAjaxValidation' => true,]); ?>
             <?= $form->field($model, 'email', ['inputOptions' => ['class' => 'enter-form-email input input-middle']]) ?>
-            <?= $form->field($model, 'password', ['inputOptions' => ['class' => 'enter-form-email input input-middle']]) ?>
+            <?= $form->field($model, 'password', ['inputOptions' => ['class' => 'enter-form-email input input-middle', 'type' => 'password']]) ?>
             <button class="button" type="submit">Войти</button>
         <?php \yii\widgets\ActiveForm::end(); ?>
         <button class="form-modal-close" id="close-modal" type="button">Закрыть</button>

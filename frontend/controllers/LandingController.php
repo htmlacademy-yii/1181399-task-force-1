@@ -5,6 +5,8 @@ namespace frontend\controllers;
 use common\models\LoginForm;
 use frontend\models\Task;
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\helpers\Url;
 
@@ -12,14 +14,11 @@ class LandingController extends Controller
 {
     public function actionLanding()
     {
-        if (!Yii::$app->user->isGuest) {
-            return Yii::$app->response->redirect('/tasks');
-        }
         $tasks = Task::find()->orderBy('created_at')->limit(4)->all();
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return Yii::$app->response->redirect('/tasks');
+            return $this->redirect('/tasks');
         } else {
             $model->password = '';
 
@@ -31,5 +30,26 @@ class LandingController extends Controller
     {
         Yii::$app->user->logout();
         return $this->goHome();
+    }
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['landing'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ]
+        ];
     }
 }

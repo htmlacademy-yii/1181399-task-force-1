@@ -117,7 +117,7 @@ AppAsset::register($this);
                         <a href="#">Настройки</a>
                     </li>
                     <li>
-                        <a href="/logout">Выход</a>
+                        <a href="<?= \yii\helpers\Url::to('logout') ?>">Выход</a>
                     </li>
                 </ul>
             </div>
