@@ -14,12 +14,18 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => false,
             'rules' => [
+                '' => 'landing/landing',
                 'tasks' => 'tasks/index',
                 'users' => 'users/index',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                'registration' => 'registration/register'
+                'registration' => 'registration/register',
+                'login' => 'site/login',
+                'logout' => 'landing/logout'
             ],
-        ]
+        ],
+        'user' => [
+            'identityClass' => \frontend\models\User::class,
+        ],
     ],
     'language' => 'ru-RU',
 ];

@@ -97,7 +97,7 @@ AppAsset::register($this);
                     <a href="#" class="link-regular">«Помочь с курсовой»</a>
                 </p>
             </div>
-            <?php if(!\yii\web\User::isGuest): ?>
+            <?php if(!Yii::$app->user->isGuest): ?>
             <div class="header__account">
                 <a class="header__account-photo">
                     <img src="./img/user-photo.png"
@@ -105,7 +105,7 @@ AppAsset::register($this);
                          alt="Аватар пользователя">
                 </a>
                 <span class="header__account-name">
-                 Василий
+                 <?= Html::encode(Yii::$app->user->getIdentity()->name) ?>
              </span>
             </div>
              <div class="account__pop-up">
@@ -117,7 +117,7 @@ AppAsset::register($this);
                         <a href="#">Настройки</a>
                     </li>
                     <li>
-                        <a href="#">Выход</a>
+                        <a href="<?= \yii\helpers\Url::to('logout') ?>">Выход</a>
                     </li>
                 </ul>
             </div>

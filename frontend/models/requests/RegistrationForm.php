@@ -9,6 +9,12 @@ use yii\base\Model;
 
 class RegistrationForm extends Model
 {
+    public $email;
+    public $password;
+    public $name;
+    public $city;
+
+
     public function rules()
     {
         return [
