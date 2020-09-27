@@ -387,4 +387,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    public function isAuthor()
+    {
+        return count($this->categoryUsers) === 0;
+    }
 }
