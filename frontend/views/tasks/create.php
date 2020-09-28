@@ -4,6 +4,8 @@
 
 /* @var $task frontend\models\Task */
 
+/* @var $model \frontend\models\requests\TaskCreateForm */
+
 use yii\helpers\Html;
 use yii\widgets\ActiveField;
 use yii\widgets\ActiveForm;
@@ -36,7 +38,7 @@ $this->title = 'Task Force';
             <span>Загрузите файлы, которые помогут исполнителю лучше выполнить или оценить работу</span>
             <div class="create__file">
                 <span>Добавить новый файл</span>
-                <?= $form->field($model, 'files', ['inputOptions' => ['class' => 'dropzone']])->fileInput() ?>
+                <?= $form->field($model, 'files[]', ['inputOptions' => ['class' => 'dropzone']])->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
                 <!--                          <input type="file" name="files[]" class="dropzone">-->
             </div>
             <label for="13">Локация</label>
@@ -52,8 +54,8 @@ $this->title = 'Task Force';
                 </div>
                 <div class="create__price-time--wrapper">
                     <label for="15">Срок исполнения</label>
-                    <?= $form->field($model, 'until', ['inputOptions' => ['class' => 'input-middle input input-date'], 'template' => '{input}{error}'])
-                        ->input('date')
+                    <?= $form->field($model, 'until', ['inputOptions' => ['class' => 'input-middle input input-date', 'placeholder' => 'yyyy-mm-dd'], 'template' => '{input}{error}'])
+                        ->input('text')
                     ?>
                     <span>Укажите крайний срок исполнения</span>
                 </div>
@@ -73,12 +75,17 @@ $this->title = 'Task Force';
                     что всё в фокусе, а фото показывает объект со всех
                     ракурсов.</p>
             </div>
+            <?php if ($model->hasErrors()): ?>
             <div class="warning-item warning-item--error">
                 <h2>Ошибки заполнения формы</h2>
-                <h3>Категория</h3>
-                <p>Это поле должно быть выбрано.<br>
-                    Задание должно принадлежать одной из категорий</p>
+                <?php foreach ($model->getErrors() as $field => $error): ?>
+                    <h3><?= $field ?></h3>
+                    <p><?php foreach($error as $err): ?>
+                        <?= $err ?><br>
+                        <?php endforeach; ?></p>
+                <?php endforeach; ?>
             </div>
+            <?php endif; ?>
         </div>
     </div>
     <button form="task-form" class="button" type="submit">Опубликовать</button>

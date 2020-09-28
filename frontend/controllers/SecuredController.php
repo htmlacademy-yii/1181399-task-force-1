@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-use yii\base\Controller;
+use yii\web\Controller;
 use yii\filters\AccessControl;
 
 abstract class SecuredController extends Controller

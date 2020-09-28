@@ -8,6 +8,7 @@ use frontend\models\City;
 use frontend\models\Task;
 use frontend\models\User;
 use yii\base\Model;
+use yii\web\UploadedFile;
 
 class TaskCreateForm extends Model
 {
@@ -16,7 +17,7 @@ class TaskCreateForm extends Model
     public $category;
     public $budget;
     public $until;
-    public $files = [];
+    public $files;
 
     public function rules()
     {
@@ -26,7 +27,7 @@ class TaskCreateForm extends Model
             [['title', 'description'], 'string'],
             [['category'], 'exist', 'targetClass' => Category::class, 'targetAttribute' => 'id'],
             [['budget'], 'number'],
-            [['until'], 'date', 'format' => 'dd.MM.yyyy'],
+            [['until'], 'date', 'format' => 'Y-m-d'],
             [['files'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 0],
         ];
     }
@@ -47,6 +48,15 @@ class TaskCreateForm extends Model
     {
         if ($this->validate()) {
             $ids = [];
+
+            $this->files = UploadedFile::getInstances($this, 'files');
+
+            if (!is_array($this->files)) {
+                return false;
+            }
+
+
+
             foreach ($this->files as $file) {
                 $name = 'uploads/' . $file->baseName . '.' . $file->extension;
                 $file->saveAs($name);
@@ -55,7 +65,7 @@ class TaskCreateForm extends Model
                 $uploadedFile->url = $name;
                 $uploadedFile->save();
 
-                $uploadedFile->link('attachmentTasks', $task);
+                $uploadedFile->link('tasks', $task);
             }
             return true;
         } else {
@@ -70,11 +80,14 @@ class TaskCreateForm extends Model
         }
 
         $task = new Task();
-        $task->budget = $this->budget;
+        $task->budget = (int)$this->budget;
         $task->title = $this->title;
         $task->description = $this->description;
         $task->until = $this->until;
-        $task->author_id = \Yii::$app->user->getId();
+        $task->author_id = (int)\Yii::$app->user->getId();
+        $task->city_id = 1;
+        $task->address = 'Улица Пупкина, д.1';
+        $task->category_id = (int)$this->category;
 
         $task->save();
 

@@ -63,6 +63,12 @@ class Attachment extends \yii\db\ActiveRecord
         return $this->hasMany(AttachmentTask::class, ['attachment_id' => 'id']);
     }
 
+    public function getTasks()
+    {
+        return $this->hasMany(Task::class, ['id' => 'task_id'])
+            ->viaTable('attachment_task', ['attachment_id' => 'id']);
+    }
+
     /**
      * Gets query for [[AttachmentUsers]].
      *

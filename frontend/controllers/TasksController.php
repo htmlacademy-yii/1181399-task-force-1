@@ -40,7 +40,9 @@ class TasksController extends SecuredController
         $model->load(Yii::$app->request->post());
 
         if (Yii::$app->request->isPost) {
-            $model->saveTask();
+            if ($model->saveTask()) {
+                return $this->redirect('/tasks');
+            }
         }
 
         $categories = Category::find()->all();
