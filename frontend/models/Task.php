@@ -55,7 +55,7 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['author_id', 'category_id', 'city_id', 'title', 'until', 'address'], 'required'],
+            [['author_id', 'category_id', 'city_id', 'title'], 'required'],
             [['author_id', 'executor_id', 'category_id', 'city_id', 'budget'], 'integer'],
             [['description', 'status', 'address', 'address_comment'], 'string'],
             [['created_at', 'updated_at', 'until'], 'safe'],

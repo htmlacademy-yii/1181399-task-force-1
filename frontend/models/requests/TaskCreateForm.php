@@ -23,10 +23,10 @@ class TaskCreateForm extends Model
     {
         return [
             [['title', 'description', 'category', 'budget', 'until'], 'safe'],
-            [['title', 'description', 'category', 'budget', 'until'], 'required'],
-            [['title', 'description'], 'string'],
+            [['title', 'description', 'category'], 'required'],
+            [['title', 'description'], 'string', 'min' => 1],
             [['category'], 'exist', 'targetClass' => Category::class, 'targetAttribute' => 'id'],
-            [['budget'], 'number'],
+            [['budget'], 'number', 'min' => '1'],
             [['until'], 'date', 'format' => 'Y-m-d'],
             [['files'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 0],
         ];
@@ -51,12 +51,6 @@ class TaskCreateForm extends Model
 
             $this->files = UploadedFile::getInstances($this, 'files');
 
-            if (!is_array($this->files)) {
-                return false;
-            }
-
-
-
             foreach ($this->files as $file) {
                 $name = 'uploads/' . $file->baseName . '.' . $file->extension;
                 $file->saveAs($name);
@@ -80,19 +74,19 @@ class TaskCreateForm extends Model
         }
 
         $task = new Task();
-        $task->budget = (int)$this->budget;
+        $task->budget = $this->budget;
         $task->title = $this->title;
         $task->description = $this->description;
         $task->until = $this->until;
-        $task->author_id = (int)\Yii::$app->user->getId();
+        $task->author_id = \Yii::$app->user->getId();
         $task->city_id = 1;
         $task->address = 'Улица Пупкина, д.1';
-        $task->category_id = (int)$this->category;
+        $task->category_id = $this->category;
 
         $task->save();
 
         $this->upload($task);
 
-        return true;
+        return $task->id;
     }
 }

@@ -7,6 +7,7 @@
 /* @var $model \frontend\models\requests\TaskCreateForm */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveField;
 use yii\widgets\ActiveForm;
 
@@ -18,7 +19,7 @@ $this->title = 'Task Force';
     <div class="create__task-main">
         <?php $form = ActiveForm::begin(
             [
-                'action' => '/tasks/create',
+                'action' => Url::to('/tasks/create'),
                 'method' => 'post',
                 'options' => ['enctype' => 'multipart/form-data', 'class' => 'create__task-form form-create'],
             ]
@@ -78,15 +79,9 @@ $this->title = 'Task Force';
             <?php if ($model->hasErrors()): ?>
             <div class="warning-item warning-item--error">
                 <h2>Ошибки заполнения формы</h2>
-                <?php foreach ($model->getErrors() as $field => $error): ?>
-                    <h3><?= $field ?></h3>
-                    <p><?php foreach($error as $err): ?>
-                        <?= $err ?><br>
-                        <?php endforeach; ?></p>
-                <?php endforeach; ?>
+                <?= $model->getErrorSummary(true); ?>
             </div>
             <?php endif; ?>
         </div>
     </div>
-    <button form="task-form" class="button" type="submit">Опубликовать</button>
 </section>

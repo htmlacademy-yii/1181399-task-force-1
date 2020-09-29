@@ -79,7 +79,7 @@ create table if not exists tasks (
     title varchar(255) not null,
     created_at datetime default current_timestamp,
     updated_at datetime default current_timestamp on update current_timestamp,
-    until date not null,
+    until date,
     status enum('new', 'cancelled', 'wip', 'done', 'failed') default 'new',
     address text,
     address_comment text,

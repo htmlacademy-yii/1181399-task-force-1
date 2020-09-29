@@ -8,6 +8,7 @@ use frontend\models\requests\TasksSearchForm;
 use frontend\models\Task;
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -40,8 +41,8 @@ class TasksController extends SecuredController
         $model->load(Yii::$app->request->post());
 
         if (Yii::$app->request->isPost) {
-            if ($model->saveTask()) {
-                return $this->redirect('/tasks');
+            if ($id = $model->saveTask()) {
+                return $this->redirect(Url::toRoute(['tasks/view', 'id' => $id]));
             }
         }
 
