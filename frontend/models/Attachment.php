@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "attachments".
@@ -61,6 +62,12 @@ class Attachment extends \yii\db\ActiveRecord
     public function getAttachmentTasks()
     {
         return $this->hasMany(AttachmentTask::class, ['attachment_id' => 'id']);
+    }
+
+    public function getTasks()
+    {
+        return $this->hasMany(Task::class, ['id' => 'task_id'])
+            ->viaTable('attachment_task', ['attachment_id' => 'id']);
     }
 
     /**

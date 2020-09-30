@@ -34,7 +34,7 @@ $this->title = 'Task Force';
             <div class="content-view__attach">
                 <h3 class="content-view__h3">Вложения</h3>
                 <?php foreach($task->attachments as $attachment): ?>
-                <a href="#"><?= Html::encode($attachment->name) ?></a>
+                <a href="/<?= $attachment->url ?>" download="<?= $attachment->name ?>"><?= Html::encode($attachment->name) ?></a>
                 <?php endforeach; ?>
             </div>
             <?php endif; ?>
