@@ -56,7 +56,7 @@ $this->title = 'Task Force';
                 <div class="create__price-time--wrapper">
                     <label for="15">Срок исполнения</label>
                     <?= $form->field($model, 'until', ['inputOptions' => ['class' => 'input-middle input input-date', 'placeholder' => 'yyyy-mm-dd'], 'template' => '{input}{error}'])
-                        ->input('text')
+                        ->input('date')
                     ?>
                     <span>Укажите крайний срок исполнения</span>
                 </div>
