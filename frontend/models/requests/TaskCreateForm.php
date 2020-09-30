@@ -79,8 +79,6 @@ class TaskCreateForm extends Model
         $task->description = $this->description;
         $task->until = $this->until;
         $task->author_id = \Yii::$app->user->getId();
-        $task->city_id = 1;
-        $task->address = 'Улица Пупкина, д.1';
         $task->category_id = $this->category;
 
         $task->save();

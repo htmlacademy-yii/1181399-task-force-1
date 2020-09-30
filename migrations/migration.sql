@@ -73,7 +73,7 @@ create table if not exists tasks (
     author_id bigint not null,
     executor_id bigint,
     category_id bigint not null,
-    city_id bigint not null,
+    city_id bigint,
     budget int unsigned,
     description longtext,
     title varchar(255) not null,
