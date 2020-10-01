@@ -392,4 +392,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return count($this->categoryUsers) === 0;
     }
+
+    public function applied($task_id)
+    {
+        return Application::find()->where(['task_id' => $task_id, 'user_id' => $this->id])->count() > 0;
+    }
 }

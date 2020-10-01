@@ -8,4 +8,5 @@ class Actions
     const DECLINE = 'decline';
     const DONE = 'done';
     const REMOVE = 'remove';
+    const APPLY = 'apply';
 }

@@ -25,6 +25,7 @@ use Yii;
  * @property string|null $map_h
  *
  * @property Application[] $applications
+ * @property Application[] $visibleApplications
  * @property AttachmentTask[] $attachmentTasks
  * @property User $author
  * @property Category $category
@@ -101,6 +102,16 @@ class Task extends \yii\db\ActiveRecord
     public function getApplications()
     {
         return $this->hasMany(Application::class, ['task_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Applications]].
+     *
+     * @return \yii\db\ActiveQuery|ApplicationsQuery
+     */
+    public function getVisibleApplications()
+    {
+        return $this->hasMany(Application::class, ['task_id' => 'id'])->where(['in', 'status', ['accepted', 'new']]);
     }
 
     /**

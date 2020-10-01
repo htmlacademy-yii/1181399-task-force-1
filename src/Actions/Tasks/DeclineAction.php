@@ -3,7 +3,7 @@
 namespace Htmlacademy\Actions\Tasks;
 
 use Htmlacademy\Enums\Actions;
-use Htmlacademy\Models\Task;
+use Htmlacademy\Models\TaskStateMachine;
 
 class DeclineAction extends AbstractAction
 {
@@ -12,7 +12,7 @@ class DeclineAction extends AbstractAction
      */
     public function can(int $authorId, ?int $executorId, int $userId): bool
     {
-        return $authorId === $userId;
+        return $executorId === $userId;
     }
 
     /**
@@ -33,6 +33,6 @@ class DeclineAction extends AbstractAction
 
     public static function nextStatus(): string
     {
-        return Task::STATUS_FAILED;
+        return TaskStateMachine::STATUS_FAILED;
     }
 }

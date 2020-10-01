@@ -11,7 +11,7 @@ use Htmlacademy\Enums\Actions;
 use Htmlacademy\Exceptions\StatusDoesNotExistsException;
 use Htmlacademy\Exceptions\StatusNotDefinedException;
 
-class Task
+class TaskStateMachine
 {
     // Вся эта история со статусами до боли напоминает паттерн State machine.
     // Его реализовывать не стал, так как попытался вжиться в роль студента, только закончившего первый курс.
@@ -42,7 +42,7 @@ class Task
 
     private $status;
 
-    public function __construct(int $idExecutor, int $idAuthor)
+    public function __construct(?int $idExecutor, int $idAuthor)
     {
         $this->idAuthor = $idAuthor;
         $this->idExecutor = $idExecutor;

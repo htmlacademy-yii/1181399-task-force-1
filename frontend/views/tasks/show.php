@@ -3,12 +3,18 @@
 /* @var $this yii\web\View */
 
 /* @var $task frontend\models\Task */
+/* @var $taskStateMachine Htmlacademy\Models\TaskStateMachine */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveField;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Task Force';
+
+\frontend\assets\TasksAsset::register($this);
+
+$availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
 
 ?>
 <section class="content-view">
@@ -54,18 +60,26 @@ $this->title = 'Task Force';
             </div>
         </div>
         <div class="content-view__action-buttons">
+            <?php if (!Yii::$app->user->getIdentity()->isAuthor() && !Yii::$app->user->getIdentity()->applied($task->id)): ?>
             <button class=" button button__big-color response-button open-modal"
                     type="button" data-for="response-form">Откликнуться</button>
+            <?php endif; ?>
+            <?php if (in_array(\Htmlacademy\Enums\Actions::DECLINE, $availableActions)): ?>
             <button class="button button__big-color refusal-button open-modal"
                     type="button" data-for="refuse-form">Отказаться</button>
+            <?php endif; ?>
+            <?php if (in_array(\Htmlacademy\Enums\Actions::DONE, $availableActions)): ?>
             <button class="button button__big-color request-button open-modal"
                     type="button" data-for="complete-form">Завершить</button>
+            <?php endif; ?>
         </div>
     </div>
+    <?php if (count($task->applications) > 0): ?>
     <div class="content-view__feedback">
         <h2>Отклики <span>(<?= count($task->applications) ?>)</span></h2>
         <div class="content-view__feedback-wrapper">
             <?php foreach($task->applications as $application): ?>
+            <?php if (Yii::$app->user->getId() === $task->author_id || Yii::$app->user->getId() === $application->user_id): ?>
             <div class="content-view__feedback-card">
                 <div class="feedback-card__top">
                     <a href="#"><img src="/img/man-glasses.jpg" width="55" height="55"></a>
@@ -83,15 +97,19 @@ $this->title = 'Task Force';
                     <span><?= $application->budget ?> ₽</span>
                 </div>
                 <div class="feedback-card__actions">
-                    <a class="button__small-color request-button button"
+                    <?php if($application->status === 'new' && Yii::$app->user->getId() === $task->author_id): ?>
+                    <a class="button__small-color request-button button" href="<?= Url::toRoute(['applications/accept', 'applicationId' => $application->id]) ?>"
                        type="button">Подтвердить</a>
-                    <a class="button__small-color refusal-button button"
+                    <a class="button__small-color refusal-button button"  href="<?= Url::toRoute(['applications/reject', 'applicationId' => $application->id]) ?>"
                        type="button">Отказать</a>
+                    <?php endif; ?>
                 </div>
             </div>
+            <?php endif; ?>
             <?php endforeach; ?>
         </div>
     </div>
+    <?php endif; ?>
 </section>
 <section class="connect-desk">
     <div class="connect-desk__profile-mini">
@@ -109,50 +127,56 @@ $this->title = 'Task Force';
     </div>
     <div id="chat-container">
         <!--                    добавьте сюда атрибут task с указанием в нем id текущего задания-->
-        <chat class="connect-desk__chat"></chat>
+        <chat class="connect-desk__chat" task="<?= $task->id ?>"></chat>
     </div>
 </section>
 
 <section class="modal response-form form-modal" id="response-form">
     <h2>Отклик на задание</h2>
-    <form action="#" method="post">
+    <?php $form = ActiveForm::begin([
+            'method' => 'POST',
+            'action' => Url::to('/applications/create'),
+        ]); ?>
         <p>
             <label class="form-modal-description" for="response-payment">Ваша цена</label>
-            <input class="response-form-payment input input-middle input-money" type="text" name="response-payment" id="response-payment">
+            <?= $form->field($applicationModel, 'budget', ['inputOptions' => ['class' => 'response-form-payment input input-middle input-money'], 'template' => "{input}\n{error}"])->input('text') ?>
         </p>
         <p>
             <label class="form-modal-description" for="response-comment">Комментарий</label>
-            <textarea class="input textarea" rows="4" id="response-comment" name="response-comment" placeholder="Place your text"></textarea>
+            <?= $form->field($applicationModel, 'comment', ['inputOptions' => ['class' => 'response-form-payment input input-middle input-money'], 'template' => "{input}\n{error}"])->textarea() ?>
         </p>
-        <button class="button modal-button" type="submit">Отправить</button>
-    </form>
+        <?= $form->field($applicationModel, 'task_id', ['inputOptions' => ['class' => 'response-form-payment input input-middle input-money'], 'template' => '{input}'])->input('hidden', ['value' => $task->id]) ?>
+        <?= $form->field($applicationModel, 'user_id', ['inputOptions' => ['class' => 'input textarea'], 'template' => '{input}'])->input('hidden', ['value' => Yii::$app->user->getId()]) ?>
+    <button class="button modal-button" type="submit">Отправить</button>
+
+    <?php ActiveForm::end(); ?>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
 <section class="modal completion-form form-modal" id="complete-form">
     <h2>Завершение задания</h2>
     <p class="form-modal-description">Задание выполнено?</p>
-    <form action="#" method="post">
-        <input class="visually-hidden completion-input completion-input--yes" type="radio" id="completion-radio--yes" name="completion" value="yes">
+    <?php $form = ActiveForm::begin(['action' => Url::toRoute('applications/done'), 'method' => 'POST']); // здесь нужна помощь по созданию радиокнопок.?>
+        <?= $form->field($doneModel, 'done', ['inputOptions' => ['template' => '{input}']])->radio(['class' => "visually-hidden completion-input completion-input--yes", 'id' => 'completion-radio--yes', 'value' => 'done']) ?>
         <label class="completion-label completion-label--yes" for="completion-radio--yes">Да</label>
-        <input class="visually-hidden completion-input completion-input--difficult" type="radio" id="completion-radio--yet" name="completion" value="difficulties">
+        <?= $form->field($doneModel, 'done', ['template' => '{input}'])->radio(['class' => "visually-hidden completion-input completion-input--difficult", 'id' => 'completion-radio--yet', 'value' => "difficulties"]) ?>
         <label  class="completion-label completion-label--difficult" for="completion-radio--yet">Возникли проблемы</label>
         <p>
             <label class="form-modal-description" for="completion-comment">Комментарий</label>
-            <textarea class="input textarea" rows="4" id="completion-comment" name="completion-comment" placeholder="Place your text"></textarea>
+            <?= $form->field($doneModel, 'comment', ['template' => '{input}'])->textarea(['class' => 'input textarea', 'id' => 'completion-comment']) ?>
         </p>
         <p class="form-modal-description">
             Оценка
-        <div class="feedback-card__top--name completion-form-star">
-            <span class="star-disabled"></span>
-            <span class="star-disabled"></span>
-            <span class="star-disabled"></span>
-            <span class="star-disabled"></span>
-            <span class="star-disabled"></span>
-        </div>
+            <div class="feedback-card__top--name completion-form-star">
+                <span class="star-disabled"></span>
+                <span class="star-disabled"></span>
+                <span class="star-disabled"></span>
+                <span class="star-disabled"></span>
+                <span class="star-disabled"></span>
+            </div>
         </p>
-        <input type="hidden" name="rating" id="rating">
+        <?= $form->field($doneModel, 'rating', ['inputOptions' => ['id' => 'rating'], 'template' => '{input}'])->hiddenInput(); ?>
         <button class="button modal-button" type="submit">Отправить</button>
-    </form>
+    <?php ActiveForm::end() ?>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
 <section class="modal form-modal refusal-form" id="refuse-form">
@@ -164,7 +188,10 @@ $this->title = 'Task Force';
     </p>
     <button class="button__form-modal button" id="close-modal"
             type="button">Отмена</button>
+    <?php ActiveForm::begin(['action' => Url::toRoute(['applications/fail', 'taskId' => $task->id]), 'method' => 'POST']); ?>
     <button class="button__form-modal refusal-button button"
-            type="button">Отказаться</button>
+            type="submit">Отказаться</button>
+    <?php ActiveForm::end(); ?>
     <button class="form-modal-close" type="button">Закрыть</button>
 </section>
+<div class="overlay"></div>

@@ -3,7 +3,7 @@
 namespace Htmlacademy\Actions\Tasks;
 
 use Htmlacademy\Enums\Actions;
-use Htmlacademy\Models\Task;
+use Htmlacademy\Models\TaskStateMachine;
 
 class AcceptAction extends AbstractAction
 {
@@ -33,6 +33,6 @@ class AcceptAction extends AbstractAction
 
     public static function nextStatus(): string
     {
-        return Task::STATUS_WIP;
+        return TaskStateMachine::STATUS_WIP;
     }
 }

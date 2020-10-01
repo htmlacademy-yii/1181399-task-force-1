@@ -3,9 +3,12 @@
 namespace frontend\controllers;
 
 use frontend\models\Category;
+use frontend\models\requests\ApplicationCreateForm;
+use frontend\models\requests\ApplicationDoneForm;
 use frontend\models\requests\TaskCreateForm;
 use frontend\models\requests\TasksSearchForm;
 use frontend\models\Task;
+use Htmlacademy\Models\TaskStateMachine;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\Url;
@@ -32,7 +35,23 @@ class TasksController extends SecuredController
             throw new NotFoundHttpException("Задание с ID {$id} не существует!");
         }
 
-        return $this->render('show', ['task' => $task]);
+        $applicationForm = new ApplicationCreateForm();
+        $applicationForm->load(Yii::$app->request->post());
+
+        $applicationDoneForm = new ApplicationDoneForm();
+        $applicationDoneForm->load(Yii::$app->request->post());
+
+        $taskStateMachine = new TaskStateMachine($task->executor_id, $task->author_id);
+        $taskStateMachine->setStatus($task->status);
+
+        return $this->render('show',
+             [
+                 'task' => $task,
+                 'applicationModel' => $applicationForm,
+                 'doneModel' => $applicationDoneForm,
+                 'taskStateMachine' => $taskStateMachine,
+             ]
+        );
     }
 
     public function actionCreate()

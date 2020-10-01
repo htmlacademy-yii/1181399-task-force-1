@@ -3,7 +3,7 @@
 namespace Htmlacademy\Actions\Tasks;
 
 use Htmlacademy\Enums\Actions;
-use Htmlacademy\Models\Task;
+use Htmlacademy\Models\TaskStateMachine;
 
 class RemoveAction extends AbstractAction
 {
@@ -33,6 +33,6 @@ class RemoveAction extends AbstractAction
 
     public static function nextStatus(): string
     {
-        return Task::STATUS_CANCELED;
+        return TaskStateMachine::STATUS_CANCELED;
     }
 }

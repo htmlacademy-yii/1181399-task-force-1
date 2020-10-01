@@ -5,7 +5,7 @@ namespace frontend\models;
 /**
  * This is the ActiveQuery class for [[Task]].
  *
- * @see Task
+ * @see TaskStateMachine
  */
 class TasksQuery extends \yii\db\ActiveQuery
 {
