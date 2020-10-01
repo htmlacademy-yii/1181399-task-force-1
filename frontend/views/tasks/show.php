@@ -156,9 +156,27 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
     <h2>Завершение задания</h2>
     <p class="form-modal-description">Задание выполнено?</p>
     <?php $form = ActiveForm::begin(['action' => Url::toRoute('applications/done'), 'method' => 'POST']); // здесь нужна помощь по созданию радиокнопок.?>
-        <?= $form->field($doneModel, 'done', ['inputOptions' => ['template' => '{input}']])->radio(['class' => "visually-hidden completion-input completion-input--yes", 'id' => 'completion-radio--yes', 'value' => 'done']) ?>
+        <?= Html::activeRadio($doneModel, 'done',
+                              [
+                                  'class' => "visually-hidden completion-input completion-input--yes",
+                                  'id' => 'completion-radio--yes',
+                                  'value' => 'done',
+                                  'label' => false,
+                                  'type' => 'radio',
+                                  'uncheck' => false
+                              ]
+        ) ?>
         <label class="completion-label completion-label--yes" for="completion-radio--yes">Да</label>
-        <?= $form->field($doneModel, 'done', ['template' => '{input}'])->radio(['class' => "visually-hidden completion-input completion-input--difficult", 'id' => 'completion-radio--yet', 'value' => "difficulties"]) ?>
+        <?= Html::activeRadio($doneModel, 'done',
+                              [
+                                  'class' => "visually-hidden completion-input completion-input--difficult",
+                                  'id' => 'completion-radio--yet',
+                                  'value' => 'difficulties',
+                                  'label' => false,
+                                  'type' => 'radio',
+                                  'uncheck' => false
+                              ]
+        ) ?>
         <label  class="completion-label completion-label--difficult" for="completion-radio--yet">Возникли проблемы</label>
         <p>
             <label class="form-modal-description" for="completion-comment">Комментарий</label>
@@ -175,6 +193,7 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
             </div>
         </p>
         <?= $form->field($doneModel, 'rating', ['inputOptions' => ['id' => 'rating'], 'template' => '{input}'])->hiddenInput(); ?>
+        <?= $form->field($doneModel, 'taskId', ['inputOptions' => ['id' => 'rating'], 'template' => '{input}'])->hiddenInput(['value' => $task->id]); ?>
         <button class="button modal-button" type="submit">Отправить</button>
     <?php ActiveForm::end() ?>
     <button class="form-modal-close" type="button">Закрыть</button>

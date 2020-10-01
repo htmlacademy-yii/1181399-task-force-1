@@ -18,12 +18,12 @@ class ApplicationDoneForm extends Model
     public function rules()
     {
         return [
-            [['rating', 'comment', 'task_id', 'done'], 'safe'],
-            [['rating', 'comment', 'task_id', 'done'], 'required'],
+            [['rating', 'comment', 'taskId', 'done'], 'safe'],
+            [['rating', 'comment', 'taskId', 'done'], 'required'],
             [['comment'], 'string', 'min' => 1],
             [['rating'], 'number', 'min' => 1, 'max' => 5],
-            [['task_id'], 'exist', 'targetClass' => Task::class, 'targetAttribute' => 'id'],
-            [['done'], 'in', 'range' => ['difficulties', 'done']],
+            [['taskId'], 'exist', 'targetClass' => Task::class, 'targetAttribute' => 'id'],
+            [['done'], 'in', 'range' => ['done', 'difficulties']],
         ];
     }
 
@@ -37,7 +37,10 @@ class ApplicationDoneForm extends Model
 
     public function finishTask()
     {
-        $this->validate();
+        if (!$this->validate()) {
+            var_dump($this->getErrors(), $this->done);
+            return false;
+        };
         switch($this->done){
             case 'difficulties':
                 return $this->setDifficulties();

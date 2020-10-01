@@ -57,7 +57,7 @@ class ApplicationsController extends SecuredController
 
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
-            $model->setDone();
+            $model->finishTask();
         }
 
         return $this->goBack();
