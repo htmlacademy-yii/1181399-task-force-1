@@ -70,7 +70,7 @@ class ApplicationDoneForm extends Model
         $task->status = 'failed';
         $task->save();
 
-        $this->addFeedback($task);
+        $this->addFeedback($task, 'failed');
     }
 
     public function setDone()
@@ -86,13 +86,15 @@ class ApplicationDoneForm extends Model
         return true;
     }
 
-    private function addFeedback(Task $task)
+    private function addFeedback(Task $task, string $status = 'success')
     {
         $feedback = new Feedback();
         $feedback->author_id = $task->author_id;
         $feedback->user_id = $task->executor_id;
+        $feedback->task_id = $task->id;
         $feedback->comment = $this->comment;
         $feedback->rating = $this->rating;
+        $feedback->status = $status;
 
         $feedback->save();
     }

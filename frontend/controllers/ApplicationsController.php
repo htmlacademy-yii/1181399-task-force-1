@@ -58,6 +58,7 @@ class ApplicationsController extends SecuredController
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
             $model->finishTask();
+            return $this->redirect(Url::to(['tasks/view', 'id' => $model->taskId]));
         }
 
         return $this->goBack();
