@@ -111,7 +111,7 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getVisibleApplications()
     {
-        return $this->hasMany(Application::class, ['task_id' => 'id'])->where(['in', 'status', ['accepted', 'new']]);
+        return $this->getApplications()->where(['in', 'status', ['accepted', 'new']]);
     }
 
     /**

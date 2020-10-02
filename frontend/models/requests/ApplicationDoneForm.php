@@ -38,7 +38,6 @@ class ApplicationDoneForm extends Model
     public function finishTask()
     {
         if (!$this->validate()) {
-            var_dump($this->getErrors(), $this->done);
             return false;
         };
         switch($this->done){

@@ -21,7 +21,8 @@ class ApplicationCreateForm extends Model
             [['comment'], 'string', 'min' => 1],
             [['budget'], 'number', 'min' => '1'],
             [['task_id'], 'exist', 'targetClass' => Task::class, 'targetAttribute' => 'id'],
-            [['task_id'], 'uniqueApplication']
+            [['task_id'], 'uniqueApplication'],
+            [['task_id'], 'userIsExecutor']
         ];
     }
 
@@ -46,11 +47,6 @@ class ApplicationCreateForm extends Model
 
     public function create()
     {
-        if (Yii::$app->user->getIdentity()->isAuthor()) {
-            $this->addError('task_id', 'Вы должны являться исполнителем.');
-            return false;
-        }
-
         if ($this->validate()) {
             return $this->createApplication();
         }
@@ -59,16 +55,20 @@ class ApplicationCreateForm extends Model
 
     public function uniqueApplication()
     {
-        $applications = Application::find()->where([
-           'user_id' => Yii::$app->user->getId(),
-           'task_id' => $this->task_id,
-       ])->all();
-
-        if (count($applications) > 0) {
+        if (Yii::$app->user->getIdentity()->applied($this->task_id)) {
             $this->addError('task_id', "Вы уже создавали заявку на эту задачу");
             return false;
         }
 
+        return true;
+    }
+
+    public function userIsExecutor()
+    {
+        if (Yii::$app->user->getIdentity()->isAuthor()) {
+            $this->addError('task_id', 'Вы должны являться исполнителем.');
+            return false;
+        }
         return true;
     }
 }
