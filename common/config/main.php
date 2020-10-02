@@ -25,6 +25,7 @@ return [
         ],
         'user' => [
             'identityClass' => \frontend\models\User::class,
+            'class' => 'yii\web\User'
         ],
     ],
     'language' => 'ru-RU',

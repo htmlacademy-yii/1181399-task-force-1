@@ -3,7 +3,7 @@
 namespace Htmlacademy\Actions\Tasks;
 
 use Htmlacademy\Enums\Actions;
-use Htmlacademy\Models\Task;
+use Htmlacademy\Models\TaskStateMachine;
 
 class DoneAction extends AbstractAction
 {
@@ -12,7 +12,7 @@ class DoneAction extends AbstractAction
      */
     public function can(int $authorId, ?int $executorId, int $userId): bool
     {
-        return $executorId === $userId;
+        return $authorId === $userId;
     }
 
     /**
@@ -33,6 +33,6 @@ class DoneAction extends AbstractAction
 
     public static function nextStatus(): string
     {
-        return Task::STATUS_DONE;
+        return TaskStateMachine::STATUS_DONE;
     }
 }
