@@ -21,6 +21,11 @@ use Yii;
  */
 class Application extends \yii\db\ActiveRecord
 {
+    const STATUS_NEW = 'new';
+    const STATUS_DECLINED = 'declined';
+    const STATUS_ACCEPTED = 'accepted';
+
+
     /**
      * {@inheritdoc}
      */
