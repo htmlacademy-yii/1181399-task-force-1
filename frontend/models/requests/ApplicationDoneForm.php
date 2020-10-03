@@ -5,6 +5,7 @@ namespace frontend\models\requests;
 use frontend\models\Application;
 use frontend\models\Feedback;
 use frontend\models\Task;
+use Htmlacademy\Models\TaskStateMachine;
 use Yii;
 use yii\base\Model;
 
@@ -66,10 +67,10 @@ class ApplicationDoneForm extends Model
             return false;
         }
 
-        $task->status = 'failed';
+        $task->status = TaskStateMachine::STATUS_FAILED;
         $task->save();
 
-        $this->addFeedback($task, 'failed');
+        $this->addFeedback($task, TaskStateMachine::STATUS_FAILED);
     }
 
     public function setDone()
@@ -78,7 +79,7 @@ class ApplicationDoneForm extends Model
             return false;
         }
 
-        $task->status = 'done';
+        $task->status = TaskStateMachine::STATUS_DONE;
         $task->save();
 
         $this->addFeedback($task);
