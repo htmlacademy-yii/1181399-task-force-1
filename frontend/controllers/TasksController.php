@@ -61,7 +61,7 @@ class TasksController extends SecuredController
 
         if (Yii::$app->request->isPost) {
             if ($id = $model->saveTask()) {
-                return $this->redirect(Url::toRoute(['tasks/view', 'id' => $id]));
+                return $this->redirect(['tasks/view', 'id' => $id]);
             }
         }
 
@@ -73,15 +73,25 @@ class TasksController extends SecuredController
     {
         $rules = parent::behaviors();
         $rule = [
-            'allow' => true,
-            'actions' => ['create'],
-            'matchCallback' => function ($rule, $action) {
-                $user = Yii::$app->user->getIdentity();
-                return $user->isAuthor();
-            }
+            [
+                'allow' => false,
+                'roles' => ['?']
+            ],
+            [
+                'allow' => false,
+                'actions' => ['create'],
+                'roles' => ['@'],
+                'matchCallback' => function ($rule, $action) {
+                    $user = Yii::$app->user->getIdentity();
+                    return !$user->isAuthor();
+                }
+            ],
+            [
+                'allow' => true,
+                'roles' => ['@']
+            ]
         ];
-
-        array_unshift($rules['access']['rules'], $rule);
+        array_unshift($rules['access']['rules'], ...$rule);
 
         return $rules;
     }
