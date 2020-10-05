@@ -47,6 +47,11 @@ class ApplicationCreateForm extends Model
 
     public function create()
     {
+        $task = Task::findOne(['id' => $this->task_id]);
+        if ($task->author_id === Yii::$app->user->getId()) {
+            return false;
+        }
+
         if ($this->validate()) {
             return $this->createApplication();
         }
