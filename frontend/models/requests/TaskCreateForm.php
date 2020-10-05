@@ -7,6 +7,8 @@ use frontend\models\Category;
 use frontend\models\City;
 use frontend\models\Task;
 use frontend\models\User;
+use frontend\services\YandexMapsApiService;
+use Yii;
 use yii\base\Model;
 use yii\web\UploadedFile;
 
@@ -18,13 +20,14 @@ class TaskCreateForm extends Model
     public $budget;
     public $until;
     public $files;
+    public $address;
 
     public function rules()
     {
         return [
             [['title', 'description', 'category', 'budget', 'until'], 'safe'],
             [['title', 'description', 'category'], 'required'],
-            [['title', 'description'], 'string', 'min' => 1],
+            [['title', 'description', 'address'], 'string', 'min' => 1],
             [['category'], 'exist', 'targetClass' => Category::class, 'targetAttribute' => 'id'],
             [['budget'], 'number', 'min' => '1'],
             [['until'], 'date', 'format' => 'Y-m-d'],
@@ -80,6 +83,28 @@ class TaskCreateForm extends Model
         $task->until = $this->until;
         $task->author_id = \Yii::$app->user->getId();
         $task->category_id = $this->category;
+
+        if (isset($this->address)) {
+            $task->address = $this->address;
+
+            $service = new YandexMapsApiService(Yii::$app->params['mapsApiKey']);
+            $response = $service->getPositionFromAddress($this->address);
+            $point = $service->getCoordsFromResponse($response);
+            $city = $service->getCityFromResponse($response);
+
+            if (is_array($point)) {
+                $task->map_w = $point['lat'];
+                $task->map_h = $point['long'];
+            }
+
+            if ($city) {
+                $cityId = City::find()->where(['like', 'name', $city])->one()->id ?? null;
+
+                if ($cityId) {
+                    $task->city_id = $cityId;
+                }
+            }
+        }
 
         $task->save();
 

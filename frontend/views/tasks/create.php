@@ -43,7 +43,7 @@ $this->title = 'Task Force';
                 <!--                          <input type="file" name="files[]" class="dropzone">-->
             </div>
             <label for="13">Локация</label>
-            <input class="input-navigation input-middle input" id="13" type="search" name="q" placeholder="Санкт-Петербург, Калининский район">
+            <?= $form->field($model, 'address', ['template' => '{input}{error}'])->input('search', ['class' => 'input-navigation input-middle input']) ?>
             <span>Укажите адрес исполнения, если задание требует присутствия</span>
             <div class="create__price-time">
                 <div class="create__price-time--wrapper">
