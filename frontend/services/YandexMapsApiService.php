@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Request;
+use Yii;
 
 class YandexMapsApiService
 {
@@ -26,6 +27,9 @@ class YandexMapsApiService
         ]);
 
         $data = null;
+
+        $address = $this->appendCityToSearchString($address);
+
         try {
             $request = new Request('GET', '/1.x');
             $response = $client->send($request, [
@@ -90,5 +94,14 @@ class YandexMapsApiService
         }
 
         return null;
+    }
+
+    public function appendCityToSearchString(string $address)
+    {
+        if (isset(Yii::$app->user->getIdentity()->city->name)) {
+            $address = Yii::$app->user->getIdentity()->city->name . ', ' . $address;
+        }
+
+        return $address;
     }
 }
