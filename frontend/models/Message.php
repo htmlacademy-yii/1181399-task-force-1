@@ -113,20 +113,4 @@ class Message extends \yii\db\ActiveRecord
             }
         ];
     }
-
-    public function beforeValidate()
-    {
-
-        if (null !== Yii::$app->request->post('message')) {
-            $this->content = Yii::$app->request->post('message');
-        }
-
-        if (isset($this->task_id)) {
-            $authorId = Yii::$app->user->getId();
-            $this->author_id = $authorId;
-            $this->recipient_id = $authorId === $this->task->author_id ? $this->task->author_id : $this->task->executor_id;
-        }
-
-        return parent::beforeValidate();
-    }
 }

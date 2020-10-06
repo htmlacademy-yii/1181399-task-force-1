@@ -22,7 +22,7 @@ class MessageCreateRequest extends ActiveRecord
     {
         return [
             [['message', 'task_id'], 'required'],
-            ['message', 'safe'],
+            [['message', 'task_id'], 'safe'],
             ['message', 'string', 'min' => 1],
             ['task_id', 'exist', 'targetClass' => Task::class, 'targetAttribute' => 'id'],
         ];
