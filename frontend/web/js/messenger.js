@@ -35,6 +35,7 @@ Vue.component('chat', {
       })
       .then(result => {
         if (result.status !== 201) {
+          result.json();
           return Promise.reject(new Error('Запрошенный ресурс не существует'));
         }
 
@@ -45,6 +46,7 @@ Vue.component('chat', {
         this.message = null;
       })
       .catch(err => {
+        result.json();
         console.error('Не удалось отправить сообщение', err);
       })
     },
@@ -52,6 +54,7 @@ Vue.component('chat', {
       fetch(this.api_url + '?task_id=' + this.task)
       .then(result => {
         if (result.status !== 200) {
+          result.json();
           return Promise.reject(new Error('Запрошенный ресурс не существует'));
         }
 
@@ -61,6 +64,7 @@ Vue.component('chat', {
         this.messages = messages;
       })
       .catch(err => {
+        result.json();
         console.error('Не удалось получить сообщения чата', err);
       })
     }
