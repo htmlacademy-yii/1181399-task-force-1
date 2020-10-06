@@ -44,6 +44,7 @@ class MessageCreateRequest extends ActiveRecord
         $message->task_id = $this->task_id;
         $message->content = $this->message;
 
-        return $message->save();
+        $message->save();
+        return true;
     }
 }
