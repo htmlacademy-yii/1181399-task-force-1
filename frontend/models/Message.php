@@ -41,8 +41,8 @@ class Message extends \yii\db\ActiveRecord
             [['author_id', 'recipient_id', 'task_id', 'is_read'], 'integer'],
             [['content'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
-            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
-            [['recipient_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['recipient_id' => 'id']],
+            [['author_id'], 'exist', 'skipOnError' => false, 'targetClass' => User::class, 'targetAttribute' => 'id'],
+            [['recipient_id'], 'exist', 'skipOnError' => false, 'targetClass' => User::class, 'targetAttribute' => 'id'],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
         ];
     }

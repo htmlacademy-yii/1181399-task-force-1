@@ -32,7 +32,7 @@ class MessagesController extends ActiveController
             ],
             'create' => [
                 'class' => 'yii\rest\CreateAction',
-                'modelClass' => $this->modelClass,
+                'modelClass' => MessageCreateRequest::class,
                 'checkAccess' => [$this, 'checkAccess'],
                 'scenario' => $this->createScenario,
             ]
