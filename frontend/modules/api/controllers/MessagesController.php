@@ -11,11 +11,13 @@ use yii\rest\Controller;
 
 class MessagesController extends ActiveController
 {
-    public $modelClass = Task::class;
+    public $modelClass = Message::class;
 
-    public function actionIndex($id)
+    public function actionIndex()
     {
-        // Здесь отсутствует параметр $id и роут localhost/api/messages/{id} не открывается.
+        if (!$id = Yii::$app->request->get('task_id')) {
+            return false;
+        }
         return Message::find()->where(['task_id' => $id])->all();
     }
 
