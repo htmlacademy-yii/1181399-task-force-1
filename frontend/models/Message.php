@@ -101,4 +101,15 @@ class Message extends \yii\db\ActiveRecord
     {
         return new MessagesQuery(get_called_class());
     }
+
+    public function fields()
+    {
+        return [
+            'message' => 'content',
+            'published_at' => 'created_at',
+            'is_mine' => function () {
+                return $this->author_id === Yii::$app->user->getId();
+            }
+        ];
+    }
 }

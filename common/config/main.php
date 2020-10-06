@@ -15,12 +15,15 @@ return [
             'enableStrictParsing' => false,
             'rules' => [
                 '' => 'landing/landing',
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/tasks'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/messages'],
+                'POST api/messages/<taskId:\d+>' => 'api/messages/create',
                 'tasks' => 'tasks/index',
                 'users' => 'users/index',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 'registration' => 'registration/register',
                 'login' => 'site/login',
-                'logout' => 'landing/logout'
+                'logout' => 'landing/logout',
             ],
         ],
         'user' => [
