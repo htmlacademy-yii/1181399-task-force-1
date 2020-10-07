@@ -12,16 +12,11 @@ class MessageCreateRequest extends Message
 {
     public $message;
 
-    public static function tableName()
-    {
-        return 'messages';
-    }
-
     public function beforeValidate()
     {
         /** @var Task $task */
         $task = Task::findOne(['id' => $this->task_id]);
-        $userId = Yii::$app->user->getId() ?? 21;
+        $userId = Yii::$app->user->getId();
 
         $this->recipient_id = $task->author_id === $userId ? $task->author_id : $task->executor_id;
         $this->author_id = $userId;
