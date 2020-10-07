@@ -38,6 +38,7 @@ class Message extends \yii\db\ActiveRecord
     {
         return [
             [['author_id', 'recipient_id', 'task_id', 'content'], 'required'],
+            [['author_id', 'recipient_id', 'task_id', 'content', 'message'], 'safe'],
             [['author_id', 'recipient_id', 'task_id', 'is_read'], 'integer'],
             [['content'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
