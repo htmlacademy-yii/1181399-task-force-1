@@ -4,7 +4,9 @@ namespace frontend\modules\api\controllers;
 
 use frontend\models\Message;
 use frontend\models\requests\MessageCreateRequest;
+use frontend\models\Task;
 use Yii;
+use yii\web\ForbiddenHttpException;
 
 class MessagesController extends SecuredRestController
 {
@@ -34,5 +36,24 @@ class MessagesController extends SecuredRestController
                 'scenario' => $this->createScenario,
             ]
         ];
+    }
+
+    public function checkAccess($action, $model = null, $params = [])
+    {
+        if (!Yii::$app->request->get('task_id') && !Yii::$app->request->post('task_id')) {
+
+            throw new ForbiddenHttpException();
+        }
+        $taskId = Yii::$app->request->get('task_id') ?? Yii::$app->request->post('task_id');
+        $task = Task::findOne(['id' => $taskId]);
+
+        if (!$task) {
+            throw new ForbiddenHttpException();
+        }
+
+        $userId = Yii::$app->user->getId();
+        if ($task->author_id !== $userId || $task->executor_id !== $userId) {
+            throw new ForbiddenHttpException();
+        }
     }
 }
