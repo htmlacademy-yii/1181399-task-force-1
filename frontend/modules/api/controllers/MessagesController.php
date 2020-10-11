@@ -40,10 +40,6 @@ class MessagesController extends SecuredRestController
 
     public function checkAccess($action, $model = null, $params = [])
     {
-        if (!Yii::$app->request->get('task_id') && !Yii::$app->request->post('task_id')) {
-
-            throw new ForbiddenHttpException();
-        }
         $taskId = Yii::$app->request->get('task_id') ?? Yii::$app->request->post('task_id');
         $task = Task::findOne(['id' => $taskId]);
 
@@ -52,7 +48,7 @@ class MessagesController extends SecuredRestController
         }
 
         $userId = Yii::$app->user->getId();
-        if ($task->author_id !== $userId || $task->executor_id !== $userId) {
+        if ($task->author_id !== $userId && $task->executor_id !== $userId) {
             throw new ForbiddenHttpException();
         }
     }
