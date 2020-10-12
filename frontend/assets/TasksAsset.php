@@ -14,8 +14,8 @@ class TasksAsset extends AssetBundle
     ];
     public $js = [
         'js/main.js',
-        'js/initYmaps.js'
-        //  'js/messenger.js'
+        'js/initYmaps.js',
+        'js/messenger.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

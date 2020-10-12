@@ -213,4 +213,19 @@ class Task extends \yii\db\ActiveRecord
     {
         return new TasksQuery(get_called_class());
     }
+
+    public function fields()
+    {
+        return [
+            'id',
+            'author_name' => function () {
+                return $this->author->name;
+            },
+            'new_messages' => function() {
+                return count($this->messages);
+            },
+            'published_at' => 'created_at',
+            'title'
+        ];
+    }
 }

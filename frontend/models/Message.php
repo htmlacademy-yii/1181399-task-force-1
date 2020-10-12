@@ -22,6 +22,7 @@ use Yii;
  */
 class Message extends \yii\db\ActiveRecord
 {
+    public $message;
     /**
      * {@inheritdoc}
      */
@@ -37,11 +38,12 @@ class Message extends \yii\db\ActiveRecord
     {
         return [
             [['author_id', 'recipient_id', 'task_id', 'content'], 'required'],
+            [['author_id', 'recipient_id', 'task_id', 'content', 'message'], 'safe'],
             [['author_id', 'recipient_id', 'task_id', 'is_read'], 'integer'],
             [['content'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
-            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
-            [['recipient_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['recipient_id' => 'id']],
+            [['author_id'], 'exist', 'skipOnError' => false, 'targetClass' => User::class, 'targetAttribute' => 'id'],
+            [['recipient_id'], 'exist', 'skipOnError' => false, 'targetClass' => User::class, 'targetAttribute' => 'id'],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Task::class, 'targetAttribute' => ['task_id' => 'id']],
         ];
     }
@@ -100,5 +102,16 @@ class Message extends \yii\db\ActiveRecord
     public static function find()
     {
         return new MessagesQuery(get_called_class());
+    }
+
+    public function fields()
+    {
+        return [
+            'message' => 'content',
+            'published_at' => 'created_at',
+            'is_mine' => function () {
+                return $this->author_id === Yii::$app->user->getId();
+            }
+        ];
     }
 }
