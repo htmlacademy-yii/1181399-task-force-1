@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use Htmlacademy\Models\TaskStateMachine;
 use Yii;
 
 /**
@@ -171,7 +172,7 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getFeedbacks()
     {
-        return $this->hasMany(Feedback::class, ['task_id' => 'id']);
+        return $this->hasOne(Feedback::class, ['task_id' => 'id']);
     }
 
     /**
@@ -227,5 +228,10 @@ class Task extends \yii\db\ActiveRecord
             'published_at' => 'created_at',
             'title'
         ];
+    }
+
+    public function getStatusName()
+    {
+        return TaskStateMachine::STATUS_NAMES[$this->status] ?? 'Ошибка статуса';
     }
 }

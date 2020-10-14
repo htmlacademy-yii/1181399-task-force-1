@@ -19,6 +19,7 @@ return [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'api/messages'],
                 'tasks' => 'tasks/index',
                 'users' => 'users/index',
+                'list' => 'list/index',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 'registration' => 'registration/register',
                 'login' => 'site/login',
