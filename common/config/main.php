@@ -20,6 +20,7 @@ return [
                 'tasks' => 'tasks/index',
                 'users' => 'users/index',
                 'list' => 'list/index',
+                'account' => 'account/index',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
                 'registration' => 'registration/register',
                 'login' => 'site/login',

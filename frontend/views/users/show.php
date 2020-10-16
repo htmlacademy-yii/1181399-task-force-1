@@ -14,7 +14,7 @@ $this->title = 'Task Force';
 <section class="content-view">
     <div class="user__card-wrapper">
         <div class="user__card">
-            <img src="/img/man-hat.png" width="120" height="120" alt="Аватар пользователя">
+            <img src="/<?= $user->avatar_url ?>" width="120" height="120" alt="Аватар пользователя">
             <div class="content-view__headline">
                 <h1><?= Html::encode($user->name) ?></h1>
                 <p><?= $user->city->name ?? '' ?>, <?= $user->getAge() ?> лет</p>

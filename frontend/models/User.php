@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use DateTime;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\web\IdentityInterface;
@@ -35,6 +36,7 @@ use yii\web\IdentityInterface;
  * @property Bookmark[] $bookmarks
  * @property Bookmark[] $bookmarks0
  * @property CategoryUser[] $categoryUsers
+ * @property Category[] $categories
  * @property City $city
  * @property Feedback[] $feedbacks
  * @property Feedback[] $selfFeedbacks
@@ -396,5 +398,16 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function applied($task_id)
     {
         return Application::find()->where(['task_id' => $task_id, 'user_id' => $this->id])->count() > 0;
+    }
+
+    public function age()
+    {
+        $datetime1 = new DateTime($this->birthday);
+
+        $datetime2 = new DateTime();
+
+        $diff = $datetime1->diff($datetime2);
+
+        return $diff->y;
     }
 }
