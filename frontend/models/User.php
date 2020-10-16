@@ -3,9 +3,11 @@
 namespace frontend\models;
 
 use DateTime;
+use voskobovich\linker\LinkerBehavior;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\web\IdentityInterface;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "users".
@@ -76,10 +78,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                     'notification_message',
                     'notification_actions',
                     'notification_feedback',
-                    'public_contacts',
-                    'public_profile'
+                    'private_contacts',
+                    'private_profile'
                 ],
-                'integer'
+                'boolean'
             ],
             [['name', 'email', 'password'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 20],
@@ -90,6 +92,18 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
                 'skipOnError' => true,
                 'targetClass' => City::class,
                 'targetAttribute' => ['city_id' => 'id']
+            ],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => LinkerBehavior::class,
+                'relations' => [
+                    'categories_ids' => 'categories'
+                ],
             ],
         ];
     }
@@ -409,5 +423,30 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $diff = $datetime1->diff($datetime2);
 
         return $diff->y;
+    }
+
+
+    public function uploadPhotos()
+    {
+        $files = UploadedFile::getInstancesByName('file');
+
+        if (!$files) {
+            return;
+        }
+
+        $this->unlinkAll('attachments', true);
+
+        foreach ($files as $file) {
+            $randomName = Yii::$app->security->generateRandomString(12);
+            $name = "uploads/{$randomName}.{$file->extension}";
+            $file->saveAs($name);
+
+            $attachment = new Attachment();
+            $attachment->url = $name;
+            $attachment->name = $file->name;
+            $attachment->save();
+
+            $this->link('attachments', $attachment);
+        }
     }
 }

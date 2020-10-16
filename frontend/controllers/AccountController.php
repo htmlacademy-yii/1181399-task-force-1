@@ -10,34 +10,41 @@ use Yii;
 
 class AccountController extends SecuredController
 {
+    public function beforeAction($action)
+    {
+        if ($this->action->id == 'photos') {
+            $this->enableCsrfValidation = false;
+        }
+
+        return true;
+    }
+
+
     public function actionIndex()
     {
-        $model = new AccountForm();
+        $model = AccountForm::findOne(Yii::$app->user->getId());
         $model->load(Yii::$app->request->post());
 
         if (Yii::$app->request->isPost && $model->validate()) {
             $model->save();
         }
 
-        if ($model->hasErrors()) {
-            var_dump($model->getErrors());
-            die();
-        }
-
         $cities = City::find()->all();
-        /** @var User $user */
-        $user = Yii::$app->user->getIdentity();
-        $model->city_id = $user->city_id;
         $categories = Category::find()->all();
-        $model->specializations = $user->categories;
 
         return $this->render('account',
              [
-                 'user' => $user,
                  'model' => $model,
                  'cities' => $cities,
                  'categories' => $categories
              ]
         );
+    }
+
+    public function actionPhotos()
+    {
+        if (Yii::$app->request->getIsAjax()) {
+            Yii::$app->getUser()->getIdentity()->uploadPhotos();
+        }
     }
 }
