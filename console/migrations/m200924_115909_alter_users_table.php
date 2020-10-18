@@ -27,7 +27,7 @@ class m200924_115909_alter_users_table extends Migration
 
     public function up()
     {
-        $this->alterColumn('tasks', 'unitl', $this->date()->null());
+        $this->alterColumn('tasks', 'until', $this->date()->null());
         $this->alterColumn('tasks', 'city_id', $this->bigInteger()->null());
     }
 

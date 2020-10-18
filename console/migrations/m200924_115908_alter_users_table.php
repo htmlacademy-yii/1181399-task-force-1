@@ -27,7 +27,11 @@ class m200924_115908_alter_users_table extends Migration
 
     public function up()
     {
-        $this->addColumn('users', 'auth_key', $this->string(255));
+        try {
+            $this->addColumn('users', 'auth_key', $this->string(255));
+        } catch (Exception $e) {
+
+        }
     }
 
     /*

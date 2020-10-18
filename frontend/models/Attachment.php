@@ -88,4 +88,9 @@ class Attachment extends \yii\db\ActiveRecord
     {
         return new AttachmentsQuery(get_called_class());
     }
+
+    public function getAbsoluteUrl()
+    {
+        return "/{$this->url}";
+    }
 }
