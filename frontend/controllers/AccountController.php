@@ -36,7 +36,8 @@ class AccountController extends SecuredController
              [
                  'model' => $model,
                  'cities' => $cities,
-                 'categories' => $categories
+                 'categories' => $categories,
+                 'user' => Yii::$app->user->getIdentity(),
              ]
         );
     }

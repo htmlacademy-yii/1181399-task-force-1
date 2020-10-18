@@ -100,7 +100,7 @@ AppAsset::register($this);
             <?php if(!Yii::$app->user->isGuest): ?>
             <div class="header__account">
                 <a class="header__account-photo">
-                    <img src="./img/user-photo.png"
+                    <img src="/<?= Yii::$app->user->getIdentity()->avatar_url ?>"
                          width="43" height="44"
                          alt="Аватар пользователя">
                 </a>
