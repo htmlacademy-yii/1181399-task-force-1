@@ -88,7 +88,11 @@ class TaskCreateForm extends Model
             $task->address = $this->address;
 
             $service = new YandexMapsApiService(Yii::$app->params['mapsApiKey']);
-            $response = $service->getPositionFromAddress($this->address);
+            $keyName = base64_encode($this->address);
+            if (!$response = Yii::$app->cache->get($keyName)) {
+                Yii::$app->cache->set($keyName, $service->getPositionFromAddress($this->address));
+            }
+
             $point = $service->getCoordsFromResponse($response);
             $city = $service->getCityFromResponse($response);
 

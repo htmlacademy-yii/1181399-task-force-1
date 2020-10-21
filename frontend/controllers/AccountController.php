@@ -48,4 +48,11 @@ class AccountController extends SecuredController
             Yii::$app->getUser()->getIdentity()->uploadPhotos();
         }
     }
+
+    public function actionTest()
+    {
+        $response = Yii::$app->cache->get('1231');
+        var_dump($response);
+        Yii::$app->cache->set('1231', hash('sha256', time()));
+    }
 }
