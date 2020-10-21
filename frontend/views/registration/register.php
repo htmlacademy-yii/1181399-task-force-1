@@ -42,5 +42,11 @@ $formConfig = [
         <?= Html::button('Создать аккаунт', ['class' => 'button button__registration', 'type' => 'submit']) ?>
         <?php
         $form = ActiveForm::end(); ?>
+
+
+        <?= yii\authclient\widgets\AuthChoice::widget([
+              'baseAuthUrl' => ['site/auth'],
+              'popupMode' => false,
+          ]) ?>
     </div>
 </section>

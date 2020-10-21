@@ -31,6 +31,17 @@ return [
             'identityClass' => \frontend\models\User::class,
             'class' => 'yii\web\User'
         ],
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'vk' => [
+                    'class' => \yii\authclient\clients\VKontakte::class,
+                    'clientId' => '7635089',
+                    'clientSecret' => 'A7NibiLbpgQOFd9knP8H',
+                    'scope' => ['email']
+                ]
+            ],
+        ]
     ],
     'language' => 'ru-RU',
 ];

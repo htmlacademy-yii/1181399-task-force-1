@@ -25,7 +25,8 @@
     "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
     "guzzlehttp/guzzle": "^7.1",
     "ext-json": "*",
-    "voskobovich/yii2-linker-behavior": "^4.0"
+    "voskobovich/yii2-linker-behavior": "^4.0",
+    "yiisoft/yii2-authclient": "^2.2"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.1.0",

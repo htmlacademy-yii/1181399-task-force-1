@@ -229,6 +229,10 @@ use yii\widgets\ActiveField;
             <?= $form->field($model, 'password', ['inputOptions' => ['class' => 'enter-form-email input input-middle', 'type' => 'password']]) ?>
             <button class="button" type="submit">Войти</button>
         <?php \yii\widgets\ActiveForm::end(); ?>
+        <?= yii\authclient\widgets\AuthChoice::widget([
+              'baseAuthUrl' => ['site/auth'],
+              'popupMode' => false,
+          ]) ?>
         <button class="form-modal-close" id="close-modal" type="button">Закрыть</button>
     </section>
 </div>
