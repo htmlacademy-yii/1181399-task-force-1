@@ -11,6 +11,8 @@ services:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       # Mount source-code for development
       - ./:/app
+    depends_on:
+      - redis
 
   backend:
     build: backend
@@ -21,6 +23,8 @@ services:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       # Mount source-code for development
       - ./:/app
+    depends_on:
+      - redis
 
   mysql:
     image: mysql:5.7
@@ -33,6 +37,11 @@ services:
       - 3306:3306
     volumes:
       - dbdata:/var/lib/mysql
+
+  redis:
+    image: redis:6.0
+    ports:
+      - 6379:6379
 
 volumes:
   dbdata:
