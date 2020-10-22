@@ -46,6 +46,9 @@ return [
             'database' => 0,
         ],
         'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
+        'redisCache' => [
             'class' => 'yii\redis\Cache',
         ],
     ],

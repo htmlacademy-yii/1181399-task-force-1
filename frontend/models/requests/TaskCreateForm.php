@@ -14,6 +14,8 @@ use yii\web\UploadedFile;
 
 class TaskCreateForm extends Model
 {
+    const EXPIRE_TIME = 60 * 60 * 24; // Одни сутки
+    const TAG = 'geocode';
     public $title;
     public $description;
     public $category;
@@ -88,10 +90,7 @@ class TaskCreateForm extends Model
             $task->address = $this->address;
 
             $service = new YandexMapsApiService(Yii::$app->params['mapsApiKey']);
-            $keyName = base64_encode($this->address);
-            if (!$response = Yii::$app->cache->get($keyName)) {
-                Yii::$app->cache->set($keyName, $service->getPositionFromAddress($this->address));
-            }
+            $response = $this->getGeocodeFromCache($service, $this->address);
 
             $point = $service->getCoordsFromResponse($response);
             $city = $service->getCityFromResponse($response);
@@ -115,5 +114,21 @@ class TaskCreateForm extends Model
         $this->upload($task);
 
         return $task->id;
+    }
+
+    private function getGeocodeFromCache(YandexMapsApiService $service, string $address)
+    {
+        try {
+            $keyName = self::TAG . ":" . base64_encode($this->address);
+            if (!$response = Yii::$app->redisCache->get($keyName)) {
+                $response = $service->getPositionFromAddress($this->address);
+                Yii::$app->redisCache->set($keyName, $response, self::EXPIRE_TIME);
+            }
+        } catch (\Exception $e) {
+            $response = $service->getPositionFromAddress($this->address);
+        }
+
+        return $response;
+
     }
 }
