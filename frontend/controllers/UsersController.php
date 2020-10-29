@@ -16,10 +16,17 @@ class UsersController extends SecuredController
         $form = new UsersSearchForm();
         $form->load(Yii::$app->request->get());
 
-        $users = $form->getUsersFromForm();
+        [$users, $pages] = $form->getUsersFromForm();
         $categories = Category::find()->all();
 
-        return $this->render('browse', ['users' => $users, 'request' => $form, 'categories' => $categories]);
+        return $this->render('browse',
+             [
+                 'users' => $users,
+                 'request' => $form,
+                 'categories' => $categories,
+                 'pages' => $pages
+             ]
+        );
     }
 
     public function actionView($id)

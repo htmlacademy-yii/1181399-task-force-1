@@ -4,6 +4,7 @@ namespace frontend\models\requests;
 
 use frontend\models\Task;
 use yii\base\Model;
+use yii\data\Pagination;
 
 class TasksSearchForm extends Model
 {
@@ -43,7 +44,7 @@ class TasksSearchForm extends Model
         ];
     }
 
-    public function getTasks()
+    private function prepareTasksQuery()
     {
         $tasks = Task::find()
             ->where(['tasks.status' => $this->status ?? Task::STATUS_NEW])
@@ -72,9 +73,19 @@ class TasksSearchForm extends Model
         $tasks->andFilterWhere(['like', 'title', $this->searchName])
             ->andFilterWhere(['in', 'category_id', $this->categories]);
 
-        $tasks = $tasks->all();
-
         return $tasks;
+    }
+
+    public function getTasks()
+    {
+        $query = $this->prepareTasksQuery();
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        $result = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+        return [$result, $pages];
+
     }
 
     private function getInterval($period)

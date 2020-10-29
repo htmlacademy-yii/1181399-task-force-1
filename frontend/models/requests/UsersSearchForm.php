@@ -4,6 +4,7 @@ namespace frontend\models\requests;
 
 use frontend\models\User;
 use yii\base\Model;
+use yii\data\Pagination;
 
 class UsersSearchForm extends Model
 {
@@ -35,7 +36,7 @@ class UsersSearchForm extends Model
         ];
     }
 
-    public function getUsersFromForm(): array
+    private function getUsersQuery()
     {
         $users = User::find()
             ->select(
@@ -85,8 +86,19 @@ class UsersSearchForm extends Model
 
         $users->andFilterWhere(['like', 'users.name', $this->searchName]);
 
-        var_dump($users->prepare(\Yii::$app->db->queryBuilder)->createCommand()->rawSql);
+        return $users;
+    }
 
-        return $users->all();
+    public function getUsersFromForm()
+    {
+        $query = $this->getUsersQuery();
+        $countQuery = clone $query;
+
+        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        $result = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+        return [$result, $pages];
+
     }
 }

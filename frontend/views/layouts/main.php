@@ -6,6 +6,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
@@ -59,16 +60,18 @@ AppAsset::register($this);
             <div class="header__nav">
                 <ul class="header-nav__list site-list">
                     <li class="site-list__item">
-                        <a href="#">Задания</a>
+                        <a href="<?= Url::toRoute('tasks/index') ?>">Задания</a>
                     </li>
                     <li class="site-list__item">
-                        <a href="#">Исполнители</a>
+                        <a href="<?= Url::toRoute('users/index') ?>">Исполнители</a>
                     </li>
+                    <?php if (Yii::$app->user->getIdentity()->isAuthor()): ?>
                     <li class="site-list__item">
-                        <a href="#">Создать задание</a>
+                        <a href="<?= Url::toRoute(['tasks/create']) ?>">Создать задание</a>
                     </li>
+                    <?php endif; ?>
                     <li class="site-list__item site-list__item--active">
-                        <a>Мой профиль</a>
+                        <a href="<?= Url::toRoute(['users/view', 'id' => Yii::$app->user->getId()]) ?>">Мой профиль</a>
                     </li>
                 </ul>
             </div>
@@ -111,13 +114,13 @@ AppAsset::register($this);
              <div class="account__pop-up">
                 <ul class="account__pop-up-list">
                     <li>
-                        <a href="#">Мои задания</a>
+                        <a href="<?= Url::toRoute('list/index') ?>">Мои задания</a>
                     </li>
                     <li>
-                        <a href="#">Настройки</a>
+                        <a href="<?= Url::toRoute('account/index') ?>">Настройки</a>
                     </li>
                     <li>
-                        <a href="<?= \yii\helpers\Url::to('logout') ?>">Выход</a>
+                        <a href="<?= Url::to('logout') ?>">Выход</a>
                     </li>
                 </ul>
             </div>
@@ -144,29 +147,26 @@ AppAsset::register($this);
             <div class="page-footer__links">
                 <ul class="links__list">
                     <li class="links__item">
-                        <a href="">Задания</a>
+                        <a href="<?= Url::toRoute('tasks/index') ?>">Задания</a>
                     </li>
                     <li class="links__item">
-                        <a href="">Мой профиль</a>
+                        <a href="<?= Url::toRoute('account/index') ?>">Мой профиль</a>
                     </li>
                     <li class="links__item">
-                        <a href="">Исполнители</a>
+                        <a href="<?= Url::toRoute('users/index') ?>">Исполнители</a>
                     </li>
                     <li class="links__item">
-                        <a href="">Регистрация</a>
+                        <a href="<?= Url::toRoute('landing/landing') ?>">Регистрация</a>
                     </li>
                     <li class="links__item">
-                        <a href="">Создать задание</a>
-                    </li>
-                    <li class="links__item">
-                        <a href="">Справка</a>
+                        <a href="<?= Url::toRoute('tasks/create') ?>">Создать задание</a>
                     </li>
                 </ul>
             </div>
             <div class="page-footer__copyright">
                 <a>
                     <img class="copyright-logo"
-                         src="./img/academy-logo.png"
+                         src="/img/academy-logo.png"
                          width="185" height="63"
                          alt="Логотип HTML Academy">
                 </a>
