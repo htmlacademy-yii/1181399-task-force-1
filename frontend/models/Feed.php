@@ -18,6 +18,30 @@ use Yii;
  */
 class Feed extends \yii\db\ActiveRecord
 {
+    const APPLICATION = 'application';
+    const CHAT = 'chat';
+    const REJECT = 'reject';
+    const START = 'start';
+    const END = 'end';
+    const FEEDBACK = 'feedback';
+
+    const TITLES = [
+        'application' => 'У вас новая заявка!',
+        'chat' => 'Новое сообщение в чате!',
+        'reject' => 'Ваша заявка была отклонена!',
+        'start' => 'Задание началось!',
+        'end' => 'Задание окончено!',
+        'feedback' => 'У вас новая обратная связь!'
+    ];
+
+    const EVENT_TYPES = [
+        'application' => 'notification_actions',
+        'chat' => 'notification_message',
+        'reject' => 'notification_actions',
+        'start' => 'notification_actions',
+        'end' => 'notification_actions',
+        'feedback' => 'notification_feedback',
+    ];
     /**
      * {@inheritdoc}
      */

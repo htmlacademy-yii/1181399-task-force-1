@@ -3,10 +3,12 @@
 namespace frontend\controllers;
 
 use frontend\models\Application;
+use frontend\models\Feed;
 use frontend\models\requests\ApplicationCreateForm;
 use frontend\models\requests\ApplicationDoneForm;
 use frontend\models\Task;
 use frontend\services\ApplicationsService;
+use frontend\services\notifications\NotificationService;
 use Yii;
 use yii\base\InlineAction;
 
@@ -33,6 +35,9 @@ class ApplicationsController extends SecuredController
         $applicationService = new ApplicationsService();
         $applicationService->accept($application);
 
+        $notification = new NotificationService();
+        $notification->notify(Yii::$app->user->getIdentity(), Feed::START, $application->task_id);
+
         return $this->redirect(['tasks/view', 'id' => $application->task->id]);
     }
 
@@ -47,6 +52,9 @@ class ApplicationsController extends SecuredController
         $application->status = Application::STATUS_DECLINED;
         $application->save();
 
+        $notification = new NotificationService();
+        $notification->notify(Yii::$app->user->getIdentity(), Feed::REJECT, $application->task_id);
+
         return $this->redirect(['tasks/view', 'id' => $application->task->id]);
     }
 
@@ -57,6 +65,14 @@ class ApplicationsController extends SecuredController
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
             $model->finishTask();
+
+            $notification = new NotificationService();
+            $notification->notify(
+                Yii::$app->user->getIdentity(),
+                Feed::END,
+                Yii::$app->request->post('task_id')
+            );
+
             return $this->redirect(['tasks/view', 'id' => $model->taskId]);
         }
 
@@ -67,6 +83,13 @@ class ApplicationsController extends SecuredController
     {
         $applicationService = new ApplicationsService();
         $applicationService->fail($taskId, Yii::$app->user->getId());
+
+        $notification = new NotificationService();
+        $notification->notify(
+            Yii::$app->user->getIdentity(),
+            Feed::END,
+            Yii::$app->request->post('task_id')
+        );
 
         return $this->redirect(['tasks/view', 'id' => $taskId]);
     }

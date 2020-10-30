@@ -51,6 +51,9 @@ return [
         'redisCache' => [
             'class' => 'yii\redis\Cache',
         ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+        ],
     ],
     'language' => 'ru-RU',
 ];

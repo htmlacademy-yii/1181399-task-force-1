@@ -449,4 +449,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             $this->link('attachments', $attachment);
         }
     }
+
+    public function shouldRecieve(string $event)
+    {
+        return isset(Feed::EVENT_TYPES[$event]) && $this->{Feed::EVENT_TYPES[$event]} == true;
+    }
 }
