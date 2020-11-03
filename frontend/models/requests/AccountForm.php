@@ -31,7 +31,7 @@ class AccountForm extends User
             [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 6],
             [['avatar'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 1],
             [['new_password'], 'string', 'min' => 8, 'max' => 40, 'skipOnEmpty' => true],
-            [['password_confirmation'], 'compare', 'compareAttribute' => 'new_password', 'message' => 'Пароли должны совпадать', 'skipOnEmpty' => true],
+            [['password_confirmation'], 'compare', 'compareAttribute' => 'new_password', 'message' => 'Пароли должны совпадать', 'skipOnEmpty' => false],
             ['birthday', 'date', 'format' => 'Y-m-d'],
         ];
     }
