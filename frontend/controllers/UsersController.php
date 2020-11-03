@@ -36,6 +36,10 @@ class UsersController extends SecuredController
             throw new NotFoundHttpException("Пользователь с id {$id} не найден");
         }
 
+        if ($user->isAuthor()) {
+            throw new NotFoundHttpException("Пользователь с id {$id} является автором");
+        }
+
         return $this->render('show', ['user' => $user]);
     }
 }
