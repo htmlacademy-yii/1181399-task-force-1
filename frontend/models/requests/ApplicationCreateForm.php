@@ -61,8 +61,9 @@ class ApplicationCreateForm extends Model
 
         if ($this->validate()) {
 
+            $task = Task::findOne(['id' => $this->task_id]);
             $notification = new NotificationService();
-            $notification->notify(Yii::$app->user->getIdentity(), Feed::APPLICATION, $task->id);
+            $notification->notify($task->author, Feed::APPLICATION, $task->id);
 
             return $this->createApplication();
         }
