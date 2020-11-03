@@ -7,6 +7,7 @@
 
 use frontend\models\requests\UsersSearchForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Task Force';
@@ -25,13 +26,13 @@ $searchFormConfig = [
         <p>Сортировать по:</p>
         <ul class="user__search-list">
             <li class="user__search-item user__search-item--current">
-                <a href="#" class="link-regular">Рейтингу</a>
+                <a href="<?= Url::toRoute(['users/index', 'sort' => 'rating']) ?>" class="link-regular">Рейтингу</a>
             </li>
             <li class="user__search-item">
-                <a href="#" class="link-regular">Числу заказов</a>
+                <a href="<?= Url::toRoute(['users/index', 'sort' => 'tasks']) ?>" class="link-regular">Числу заказов</a>
             </li>
             <li class="user__search-item">
-                <a href="#" class="link-regular">Популярности</a>
+                <a href="<?= Url::toRoute(['users/index', 'sort' => 'popularity']) ?>" class="link-regular">Популярности</a>
             </li>
         </ul>
     </div>
@@ -55,7 +56,7 @@ $searchFormConfig = [
         </div>
         <div class="link-specialization user__search-link--bottom">
             <?php foreach ($user->categories as $category): ?>
-                <a href="#" class="link-regular"><?= $category->name ?></a>
+                <a href="<?= Url::toRoute(['tasks/index', 'categories[]' => $category->id]) ?>" class="link-regular"><?= $category->name ?></a>
             <?php endforeach; ?>
         </div>
     </div>
