@@ -145,7 +145,7 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
     <?php
     endif; ?>
 </section>
-<?php if ($task->executor_id === null): ?>
+<?php if ($task->executor_id !== null): ?>
 <section class="connect-desk">
     <div class="connect-desk__profile-mini">
         <?php if ($task->executor_id === Yii::$app->user->getId()): ?>
@@ -176,9 +176,11 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
         </div>
         <?php endif; ?>
     </div>
+    <?php if (Yii::$app->user->getId() === $task->author_id || Yii::$app->user->getId() === $task->executor_id): ?>
     <div id="chat-container">
         <chat class="connect-desk__chat" task="<?= $task->id ?>"></chat>
     </div>
+    <?php endif; ?>
 </section>
 <?php endif; ?>
 
