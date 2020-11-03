@@ -68,7 +68,7 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
         </div>
         <div class="content-view__action-buttons">
             <?php
-            if (!Yii::$app->user->getIdentity()->isAuthor() && !Yii::$app->user->getIdentity()->applied($task->id)): ?>
+            if (!Yii::$app->user->getIdentity()->isAuthor() && !Yii::$app->user->getIdentity()->applied($task->id) && !Yii::$app->user->getId() === $task->author_id): ?>
                 <button class=" button button__big-color response-button open-modal"
                         type="button" data-for="response-form">Откликнуться
                 </button>
