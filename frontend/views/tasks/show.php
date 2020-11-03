@@ -145,8 +145,10 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
     <?php
     endif; ?>
 </section>
+<?php if ($task->executor_id === null): ?>
 <section class="connect-desk">
     <div class="connect-desk__profile-mini">
+        <?php if ($task->executor_id === Yii::$app->user->getId()): ?>
         <div class="profile-mini__wrapper">
             <h3>Заказчик</h3>
             <div class="profile-mini__top">
@@ -159,11 +161,26 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
                         class="last-"><?= Yii::$app->formatter->asRelativeTime($task->author->last_visit) ?></span></p>
             <a href="<?= Url::toRoute(['users/view', 'id' => $task->author_id]) ?>" class="link-regular">Смотреть профиль</a>
         </div>
+        <?php elseif ($task->author_id === Yii::$app->user->getId()): ?>
+        <div class="profile-mini__wrapper">
+            <h3>Исполнитель</h3>
+            <div class="profile-mini__top">
+                <img src="/<?= $task->executor->avatar_url ?>" width="62" height="62" alt="Аватар заказчика">
+                <div class="profile-mini__name five-stars__rate">
+                    <p><?= Html::encode($task->executor->name) ?></p>
+                </div>
+            </div>
+            <p class="info-customer"><span><?= $task->executor->getTasksCount() ?> заданий</span><span
+                        class="last-"><?= Yii::$app->formatter->asRelativeTime($task->executor->last_visit) ?></span></p>
+            <a href="<?= Url::toRoute(['users/view', 'id' => $task->executor_id]) ?>" class="link-regular">Смотреть профиль</a>
+        </div>
+        <?php endif; ?>
     </div>
     <div id="chat-container">
         <chat class="connect-desk__chat" task="<?= $task->id ?>"></chat>
     </div>
 </section>
+<?php endif; ?>
 
 <section class="modal response-form form-modal" id="response-form">
     <h2>Отклик на задание</h2>
