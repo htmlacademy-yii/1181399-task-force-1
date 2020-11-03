@@ -45,12 +45,14 @@ $this->title = 'Task Force';
                     <?php
                     endforeach; ?>
                 </div>
+                <?php if ($user->private_contacts === 1): ?>
                 <h3 class="content-view__h3">Контакты</h3>
                 <div class="user__card-link">
                     <a class="user__card-link--tel link-regular" href="#"><?= Html::encode($user->phone) ?></a>
                     <a class="user__card-link--email link-regular" href="#"><?= Html::encode($user->email) ?></a>
                     <a class="user__card-link--skype link-regular" href="#"><?= Html::encode($user->skype) ?></a>
                 </div>
+                <?php endif; ?>
             </div>
             <div class="user__card-photo">
                 <h3 class="content-view__h3">Фото работ</h3>
@@ -64,6 +66,7 @@ $this->title = 'Task Force';
             </div>
         </div>
     </div>
+    <?php if ($user->getSelfFeedbacks()->count() > 0): ?>
     <div class="content-view__feedback">
         <h2>Отзывы<span>(<?= $user->getSelfFeedbacks()->count() ?>)</span></h2>
         <div class="content-view__feedback-wrapper reviews-wrapper">
@@ -93,4 +96,5 @@ $this->title = 'Task Force';
             endforeach; ?>
         </div>
     </div>
+    <?php endif; ?>
 </section>

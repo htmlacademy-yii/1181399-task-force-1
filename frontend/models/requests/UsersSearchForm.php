@@ -48,6 +48,7 @@ class UsersSearchForm extends Model
                 ]
             )
             ->where('exists(select * from category_user where users.id = user_id)')
+            ->andWhere('private_profile=0')
             ->leftJoin('tasks', 'tasks.executor_id = users.id')
             ->leftJoin('feedback', 'feedback.user_id = users.id')
             ->with('categories')
@@ -98,6 +99,7 @@ class UsersSearchForm extends Model
         $result = $query->offset($pages->offset)
             ->limit($pages->limit)
             ->all();
+
         return [$result, $pages];
 
     }
