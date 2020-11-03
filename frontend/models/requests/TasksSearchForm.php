@@ -3,6 +3,7 @@
 namespace frontend\models\requests;
 
 use frontend\models\Task;
+use Yii;
 use yii\base\Model;
 use yii\data\Pagination;
 
@@ -13,6 +14,15 @@ class TasksSearchForm extends Model
     public $remote;
     public $period;
     public $searchName;
+
+    public function __construct($config = [])
+    {
+        parent::__construct($config);
+
+        if (Yii::$app->request->get('categories')) {
+            $this->categories = Yii::$app->request->get('categories');
+        }
+    }
 
     public function rules()
     {

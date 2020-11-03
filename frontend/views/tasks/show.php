@@ -25,7 +25,7 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
                 <div class="content-view__headline">
                     <h1><?= Html::encode($task->title) ?></h1>
                     <span>Размещено в категории
-                                    <a href="#" class="link-regular"><?= $task->category->name ?></a>
+                                    <a href="<?= Url::toRoute(['tasks/index', 'categories[]' => $task->category->id]) ?>" class="link-regular"><?= $task->category->name ?></a>
                                     <?= Yii::$app->formatter->asRelativeTime($task->created_at) ?></span>
                 </div>
                 <b class="new-task__price new-task__price--clean content-view-price"><?= Html::encode($task->budget) ?>
