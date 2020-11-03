@@ -54,6 +54,9 @@ return [
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
         ],
+        'viewComposer' => [
+            'class' => 'frontend\composers\MainComposer'
+        ],
     ],
     'language' => 'ru-RU',
 ];

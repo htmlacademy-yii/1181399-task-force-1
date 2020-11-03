@@ -87,18 +87,14 @@ AppAsset::register($this);
             <div class="header__lightbulb"></div>
             <div class="lightbulb__pop-up">
                 <h3>Новые события</h3>
+                <?php foreach (Yii::$app->viewComposer->getNotifications() as $notification):
+                    /** @var $notification \frontend\models\Feed */
+                    ?>
                 <p class="lightbulb__new-task lightbulb__new-task--message">
-                    Новое сообщение в чате
-                    <a href="#" class="link-regular">«Помочь с курсовой»</a>
+                    <?= htmlspecialchars($notification->description); ?>
+                    <a href="<?= Url::toRoute(['tasks/view', 'id' => $notification->task_id])?>" class="link-regular">«Помочь с курсовой»</a>
                 </p>
-                <p class="lightbulb__new-task lightbulb__new-task--executor">
-                    Выбран исполнитель для
-                    <a href="#" class="link-regular">«Помочь с курсовой»</a>
-                </p>
-                <p class="lightbulb__new-task lightbulb__new-task--close">
-                    Завершено задание
-                    <a href="#" class="link-regular">«Помочь с курсовой»</a>
-                </p>
+                <?php endforeach; ?>
             </div>
             <?php if(!Yii::$app->user->isGuest): ?>
             <div class="header__account">
@@ -120,7 +116,7 @@ AppAsset::register($this);
                         <a href="<?= Url::toRoute('account/index') ?>">Настройки</a>
                     </li>
                     <li>
-                        <a href="<?= Url::to('logout') ?>">Выход</a>
+                        <a href="<?= Url::to('/logout') ?>">Выход</a>
                     </li>
                 </ul>
             </div>
