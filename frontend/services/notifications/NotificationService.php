@@ -19,7 +19,7 @@ class NotificationService
 
     private function sendEmail(User $user, string $message, string $event, int $taskId)
     {
-        \Yii::$app->mailer->compose('mail/notification', ['content' => $message, 'task' => $taskId])
+        \Yii::$app->mailer->compose('@mail/notification', ['content' => $message, 'taskId' => $taskId])
             ->setFrom('mail@example.com')
             ->setTo($user->email)
             ->setSubject(Feed::TITLES[$event] ?? 'Вам новое уведомление')
