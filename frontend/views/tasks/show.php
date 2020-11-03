@@ -98,11 +98,11 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
                 <?php
                 foreach ($task->applications as $application): ?>
                     <?php
-                    if (Yii::$app->user->getId() === $task->author_id || Yii::$app->user->getId(
-                        ) === $application->user_id): ?>
+                    if (Yii::$app->user->getId() === $task->author_id ||
+                        Yii::$app->user->getId() === $application->user_id): ?>
                         <div class="content-view__feedback-card">
                             <div class="feedback-card__top">
-                                <a href="#"><img src="/img/man-glasses.jpg" width="55" height="55"></a>
+                                <a href="#"><img src="/<?= $application->user->avatar_url ?? 'img/man-glasses.jpg' ?>" width="55" height="55"></a>
                                 <div class="feedback-card__top--name">
                                     <p><a href="#" class="link-regular"><?= Html::encode(
                                                 $application->user->name
@@ -150,18 +150,17 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
         <div class="profile-mini__wrapper">
             <h3>Заказчик</h3>
             <div class="profile-mini__top">
-                <img src="/img/man-brune.jpg" width="62" height="62" alt="Аватар заказчика">
+                <img src="/<?= $task->author->avatar_url ?>" width="62" height="62" alt="Аватар заказчика">
                 <div class="profile-mini__name five-stars__rate">
                     <p><?= Html::encode($task->author->name) ?></p>
                 </div>
             </div>
             <p class="info-customer"><span><?= $task->author->getTasksCount() ?> заданий</span><span
                         class="last-"><?= Yii::$app->formatter->asRelativeTime($task->author->last_visit) ?></span></p>
-            <a href="#" class="link-regular">Смотреть профиль</a>
+            <a href="<?= Url::toRoute(['users/view', 'id' => $task->author_id]) ?>" class="link-regular">Смотреть профиль</a>
         </div>
     </div>
     <div id="chat-container">
-        <!--                    добавьте сюда атрибут task с указанием в нем id текущего задания-->
         <chat class="connect-desk__chat" task="<?= $task->id ?>"></chat>
     </div>
 </section>
