@@ -35,7 +35,7 @@ $this->beginBody(); ?>
     <header class="page-header">
         <div class="main-container page-header__container">
             <div class="page-header__logo">
-                <a href="index.html">
+                <a href="/">
                     <svg class="page-header__logo-image" id="Layer_2" xmlns="http://www.w3.org/2000/svg"
                          viewBox="0 0 1634 646.35">
                         <title>taskforce_logo2-01</title>
@@ -85,7 +85,7 @@ $this->beginBody(); ?>
                         <a href="<?= Url::toRoute('users/index') ?>">Исполнители</a>
                     </li>
                     <?php
-                    if (Yii::$app->user->getIdentity()->isAuthor()): ?>
+                    if (!Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->isAuthor()): ?>
                         <li class="site-list__item">
                             <a href="<?= Url::toRoute(['tasks/create']) ?>">Создать задание</a>
                         </li>
@@ -100,7 +100,7 @@ $this->beginBody(); ?>
                 <select class="multiple-select input town-select" size="1" name="town[]">
                     <?php
                     foreach (Yii::$app->viewComposer->getCities() as $city): ?>
-                        <option value="<?= $city->id ?>" <?= Yii::$app->user->getIdentity(
+                        <option value="<?= $city->id ?>" <?= Yii::$app->user->getId() && Yii::$app->user->getIdentity(
                         )->city_id === $city->id ? 'selected' : '' ?>><?= $city->name ?></option>
                     <?php
                     endforeach; ?>

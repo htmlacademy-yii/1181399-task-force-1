@@ -20,7 +20,9 @@ class RegistrationController extends Controller
         if (Yii::$app->request->isPost) {
             if ($request->validate()) {
                 $user = $this->registerUser($request);
-                return $this->goHome();
+                if ($user) {
+                    return $this->goHome();
+                }
             }
         }
 
