@@ -78,22 +78,24 @@ $this->beginBody(); ?>
             </div>
             <div class="header__nav">
                 <ul class="header-nav__list site-list">
-                    <li class="site-list__item">
+                    <li class="site-list__item <?= Yii::$app->requestedRoute === 'tasks/index' ? 'site-list__item--active' : '' ?>">
                         <a href="<?= Url::toRoute('tasks/index') ?>">Задания</a>
                     </li>
-                    <li class="site-list__item">
+                    <li class="site-list__item <?= Yii::$app->requestedRoute === 'users/index' ? 'site-list__item--active' : '' ?>">
                         <a href="<?= Url::toRoute('users/index') ?>">Исполнители</a>
                     </li>
                     <?php
                     if (!Yii::$app->user->isGuest && Yii::$app->user->getIdentity()->isAuthor()): ?>
-                        <li class="site-list__item">
+                        <li class="site-list__item  <?= Yii::$app->requestedRoute === 'tasks/create' ? 'site-list__item--active' : '' ?>">
                             <a href="<?= Url::toRoute(['tasks/create']) ?>">Создать задание</a>
                         </li>
                     <?php
                     endif; ?>
-                    <li class="site-list__item site-list__item--active">
+                    <?php if (!Yii::$app->user->isGuest && !Yii::$app->user->getIdentity()->isAuthor()): ?>
+                    <li class="site-list__item <?= Yii::$app->requestedRoute === 'users/view' ? 'site-list__item--active' : '' ?>">
                         <a href="<?= Url::toRoute(['users/view', 'id' => Yii::$app->user->getId()]) ?>">Мой профиль</a>
                     </li>
+                    <?php endif; ?>
                 </ul>
             </div>
             <div class="header__town">
