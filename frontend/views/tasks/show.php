@@ -25,7 +25,9 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
                 <div class="content-view__headline">
                     <h1><?= Html::encode($task->title) ?></h1>
                     <span>Размещено в категории
-                                    <a href="<?= Url::toRoute(['tasks/index', 'categories[]' => $task->category->id]) ?>" class="link-regular"><?= $task->category->name ?></a>
+                                    <a href="<?= Url::toRoute(
+                                        ['tasks/index', 'categories[]' => $task->category->id]
+                                    ) ?>" class="link-regular"><?= $task->category->name ?></a>
                                     <?= Yii::$app->formatter->asRelativeTime($task->created_at) ?></span>
                 </div>
                 <b class="new-task__price new-task__price--clean content-view-price"><?= Html::encode($task->budget) ?>
@@ -68,7 +70,9 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
         </div>
         <div class="content-view__action-buttons">
             <?php
-            if (!Yii::$app->user->getIdentity()->isAuthor() && !Yii::$app->user->getIdentity()->applied($task->id) && Yii::$app->user->getId() !== $task->author_id): ?>
+            if (!Yii::$app->user->getIdentity()->isAuthor() && !Yii::$app->user->getIdentity()->applied(
+                    $task->id
+                ) && Yii::$app->user->getId() !== $task->author_id): ?>
                 <button class=" button button__big-color response-button open-modal"
                         type="button" data-for="response-form">Откликнуться
                 </button>
@@ -102,7 +106,8 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
                         Yii::$app->user->getId() === $application->user_id): ?>
                         <div class="content-view__feedback-card">
                             <div class="feedback-card__top">
-                                <a href="#"><img src="/<?= $application->user->avatar_url ?? 'img/man-glasses.jpg' ?>" width="55" height="55"></a>
+                                <a href="#"><img src="/<?= $application->user->avatar_url ?? 'img/man-glasses.jpg' ?>"
+                                                 width="55" height="55"></a>
                                 <div class="feedback-card__top--name">
                                     <p><a href="#" class="link-regular"><?= Html::encode(
                                                 $application->user->name
@@ -145,45 +150,85 @@ $availableActions = $taskStateMachine->getActions(Yii::$app->user->getId());
     <?php
     endif; ?>
 </section>
-<?php if ($task->executor_id !== null): ?>
-<section class="connect-desk">
-    <div class="connect-desk__profile-mini">
-        <?php if ($task->executor_id === Yii::$app->user->getId()): ?>
-        <div class="profile-mini__wrapper">
-            <h3>Заказчик</h3>
-            <div class="profile-mini__top">
-                <img src="/<?= $task->author->avatar_url ?>" width="62" height="62" alt="Аватар заказчика">
-                <div class="profile-mini__name five-stars__rate">
-                    <p><?= Html::encode($task->author->name) ?></p>
-                </div>
-            </div>
-            <p class="info-customer"><span><?= $task->author->getTasksCount() ?> заданий</span><span
-                        class="last-"><?= Yii::$app->formatter->asRelativeTime($task->author->last_visit) ?></span></p>
-            <a href="<?= Url::toRoute(['users/view', 'id' => $task->author_id]) ?>" class="link-regular">Смотреть профиль</a>
-        </div>
-        <?php elseif ($task->author_id === Yii::$app->user->getId()): ?>
-        <div class="profile-mini__wrapper">
-            <h3>Исполнитель</h3>
-            <div class="profile-mini__top">
-                <img src="/<?= $task->executor->avatar_url ?>" width="62" height="62" alt="Аватар заказчика">
-                <div class="profile-mini__name five-stars__rate">
-                    <p><?= Html::encode($task->executor->name) ?></p>
-                </div>
-            </div>
-            <p class="info-customer"><span><?= $task->executor->getTasksCount() ?> заданий</span><span
-                        class="last-"><?= Yii::$app->formatter->asRelativeTime($task->executor->last_visit) ?></span></p>
-            <a href="<?= Url::toRoute(['users/view', 'id' => $task->executor_id]) ?>" class="link-regular">Смотреть профиль</a>
-        </div>
-        <?php endif; ?>
-    </div>
-    <?php if (Yii::$app->user->getId() === $task->author_id || Yii::$app->user->getId() === $task->executor_id): ?>
-    <div id="chat-container">
-        <chat class="connect-desk__chat" task="<?= $task->id ?>"></chat>
-    </div>
-    <?php endif; ?>
-</section>
-<?php endif; ?>
+<?php
+if ($task->author_id === Yii::$app->user->getId() && $task->executor_id !== null): ?>
+    <section class="connect-desk">
+        <div class="connect-desk__profile-mini">
 
+            <div class="profile-mini__wrapper">
+                <h3>Заказчик</h3>
+                <div class="profile-mini__top">
+                    <img src="/<?= $task->author->avatar_url ?>" width="62" height="62" alt="Аватар заказчика">
+                    <div class="profile-mini__name five-stars__rate">
+                        <p><?= Html::encode($task->author->name) ?></p>
+                    </div>
+                </div>
+                <p class="info-customer"><span><?= $task->author->getTasksCount() ?> заданий</span><span
+                            class="last-"><?= Yii::$app->formatter->asRelativeTime($task->author->last_visit) ?></span>
+                </p>
+                <a href="<?= Url::toRoute(['users/view', 'id' => $task->author_id]) ?>" class="link-regular">Смотреть
+                    профиль</a>
+            </div>
+
+            <div class="profile-mini__wrapper">
+                <h3>Исполнитель</h3>
+                <div class="profile-mini__top">
+                    <img src="/<?= $task->executor->avatar_url ?>" width="62" height="62" alt="Аватар заказчика">
+                    <div class="profile-mini__name five-stars__rate">
+                        <p><?= Html::encode($task->executor->name) ?></p>
+                    </div>
+                </div>
+                <p class="info-customer"><span><?= $task->executor->getTasksCount() ?> заданий</span><span
+                            class="last-"><?= Yii::$app->formatter->asRelativeTime(
+                            $task->executor->last_visit
+                        ) ?></span></p>
+                <a href="<?= Url::toRoute(['users/view', 'id' => $task->executor_id]) ?>" class="link-regular">Смотреть
+                    профиль</a>
+            </div>
+
+        </div>
+        <?php
+        if (Yii::$app->user->getId() === $task->author_id || Yii::$app->user->getId() === $task->executor_id): ?>
+            <div id="chat-container">
+                <chat class="connect-desk__chat" task="<?= $task->id ?>"></chat>
+            </div>
+        <?php
+        endif; ?>
+    </section>
+<?php
+endif; ?>
+<?php
+if ($task->author_id !== Yii::$app->user->getId()): ?>
+    <section class="connect-desk">
+        <div class="connect-desk__profile-mini">
+
+            <div class="profile-mini__wrapper">
+                <h3>Заказчик</h3>
+                <div class="profile-mini__top">
+                    <img src="/<?= $task->author->avatar_url ?>" width="62" height="62" alt="Аватар заказчика">
+                    <div class="profile-mini__name five-stars__rate">
+                        <p><?= Html::encode($task->author->name) ?></p>
+                    </div>
+                </div>
+                <p class="info-customer"><span><?= $task->author->getTasksCount() ?> заданий</span><span
+                            class="last-"><?= Yii::$app->formatter->asRelativeTime($task->author->last_visit) ?></span>
+                </p>
+                <a href="<?= Url::toRoute(['users/view', 'id' => $task->author_id]) ?>" class="link-regular">Смотреть
+                    профиль</a>
+            </div>
+
+            <?php
+            if ($task->executor_id !== null && (Yii::$app->user->getId() === $task->author_id || Yii::$app->user->getId(
+                    ) === $task->executor_id)): ?>
+                <div id="chat-container">
+                    <chat class="connect-desk__chat" task="<?= $task->id ?>"></chat>
+                </div>
+            <?php
+            endif; ?>
+        </div>
+    </section>
+<?php
+endif; ?>
 <section class="modal response-form form-modal" id="response-form">
     <h2>Отклик на задание</h2>
     <?php
