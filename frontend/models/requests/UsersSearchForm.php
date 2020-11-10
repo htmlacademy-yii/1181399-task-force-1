@@ -3,6 +3,7 @@
 namespace frontend\models\requests;
 
 use frontend\models\User;
+use Yii;
 use yii\base\Model;
 use yii\data\Pagination;
 
@@ -75,7 +76,8 @@ class UsersSearchForm extends Model
         if ($this->bookmarked) {
             // здесь интересно. У нас пока нет авторизации, поэтому будем использовать хардкод id пользователя - 1
             $users->andWhere('exists ' .
-                             '(select 1 from bookmarks where bookmark_user_id = users.id and bookmarks.user_id = 1)'
+                             '(select 1 from bookmarks where bookmark_user_id = users.id and bookmarks.user_id = :id)',
+                ['id' => Yii::$app->user->getId()]
             );
         }
 

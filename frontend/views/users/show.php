@@ -29,6 +29,7 @@ $this->title = 'Task Force';
             </div>
             <div class="content-view__headline user__card-bookmark user__card-bookmark--current">
                 <span><?= Yii::$app->formatter->asRelativeTime($user->last_visit) ?></span>
+                <a href="<?= Url::toRoute(['users/bookmark', 'id' => $user->id]) ?>"><b></b></a>
             </div>
         </div>
         <div class="content-view__description">
