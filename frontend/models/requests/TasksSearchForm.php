@@ -69,7 +69,7 @@ class TasksSearchForm extends Model
         }
 
         if ($city !== null) {
-            $tasks->andWhere(['city_id' => $city]);
+            $tasks->andWhere(['or', ['city_id' => $city], ['city_id' => null]]);
         }
 
         if ($this->remote) {
