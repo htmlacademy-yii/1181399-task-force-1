@@ -22,20 +22,6 @@ $searchFormConfig = [
 ];
 ?>
 <section class="user__search">
-    <div class="user__search-link">
-        <p>Сортировать по:</p>
-        <ul class="user__search-list">
-            <li class="user__search-item user__search-item--current">
-                <a href="<?= Url::toRoute(['users/index', 'sort' => 'rating']) ?>" class="link-regular">Рейтингу</a>
-            </li>
-            <li class="user__search-item">
-                <a href="<?= Url::toRoute(['users/index', 'sort' => 'tasks']) ?>" class="link-regular">Числу заказов</a>
-            </li>
-            <li class="user__search-item">
-                <a href="<?= Url::toRoute(['users/index', 'sort' => 'popularity']) ?>" class="link-regular">Популярности</a>
-            </li>
-        </ul>
-    </div>
     <?php foreach ($users as $user): ?>
     <div class="content-view__feedback-card user__search-wrapper">
         <div class="feedback-card__top">
@@ -81,6 +67,15 @@ $searchFormConfig = [
 <section  class="search-task">
     <div class="search-task__wrapper">
         <?php $form = ActiveForm::begin($searchFormConfig); ?>
+            <fieldset class="search-task__categories">
+                <legend>Сортировка</legend>
+
+                <?= $form->field($request, 'sort', [ 'template' => '{input}{error}'])->dropDownList([
+                     'rating' => 'Рейтинг',
+                     'popularity' => 'Популярность',
+                     'tasks' => 'Кол-во заказов',
+                 ], ['class' => 'multiple-select input multiple-select-big']);?>
+            </fieldset>
             <fieldset class="search-task__categories">
                 <legend>Категории</legend>
                 <?= \yii\helpers\BaseHtml::activeCheckboxList($request, 'categories', \yii\helpers\ArrayHelper::map($categories, 'id', 'name'), [

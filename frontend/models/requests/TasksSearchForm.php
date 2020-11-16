@@ -62,6 +62,16 @@ class TasksSearchForm extends Model
             ->joinWith('city')
             ->orderBy('created_at DESC');
 
+        $cookies = Yii::$app->request->cookies;
+        $city = Yii::$app->user->getIdentity()->city_id;
+        if ($cookies->has('selected_city')) {
+            $city = $cookies->get('selected_city');
+        }
+
+        if ($city !== null) {
+            $tasks->andWhere(['city_id' => $city]);
+        }
+
         if ($this->remote) {
             $tasks->andWhere('address is null');
         }
@@ -90,7 +100,7 @@ class TasksSearchForm extends Model
     {
         $query = $this->prepareTasksQuery();
         $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'defaultPageSize' => 5]);
         $result = $query->offset($pages->offset)
             ->limit($pages->limit)
             ->all();

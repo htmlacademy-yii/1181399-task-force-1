@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use frontend\models\City;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use frontend\services\AuthorizationService;
@@ -16,6 +17,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\Cookie;
 use yii\widgets\ActiveForm;
 
 /**
@@ -308,5 +310,29 @@ class SiteController extends Controller
     public function onAuthSuccess($client)
     {
         (new AuthorizationService($client))->handle();
+    }
+
+    public function actionCity()
+    {
+        $cityId = Yii::$app->request->get('city');
+        if (!$cityId) {
+            return $this->goBack();
+        }
+
+        $city = City::findOne([
+            'id' => $cityId
+        ]);
+
+        if (!$city) {
+            return $this->goBack();
+        }
+
+        $cookies = Yii::$app->response->cookies;
+        $cookies->remove('selected_city');
+        $cookies->add(new Cookie([
+            'name' => 'selected_city',
+            'value' => $city->id
+        ]));
+        return $this->goBack();
     }
 }

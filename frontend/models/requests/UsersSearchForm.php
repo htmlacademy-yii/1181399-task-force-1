@@ -15,6 +15,7 @@ class UsersSearchForm extends Model
     public $free;
     public $searchName;
     public $bookmarked;
+    public $sort;
 
     public function rules()
     {
@@ -22,6 +23,7 @@ class UsersSearchForm extends Model
             [['categories', 'hasFeedback', 'online', 'free', 'bookmarked', 'searchName'], 'safe'],
             [['searchName'], 'string', 'max' => 100],
             [['hasFeedback', 'online', 'free', 'bookmarked'], 'boolean'],
+            ['sort', 'in', 'range' => ['tasks', 'popularity', 'rating']]
         ];
     }
 
@@ -53,7 +55,6 @@ class UsersSearchForm extends Model
             ->leftJoin('tasks', 'tasks.executor_id = users.id')
             ->leftJoin('feedback', 'feedback.user_id = users.id')
             ->with('categories')
-            ->orderBy('created_at desc')
             ->groupBy(['users.id', 'users.created_at']);
 
 
@@ -89,6 +90,10 @@ class UsersSearchForm extends Model
 
         $users->andFilterWhere(['like', 'users.name', $this->searchName]);
 
+        if ($this->sort) {
+            $users->orderBy($this->getSort($this->sort));
+        }
+
         return $users;
     }
 
@@ -104,5 +109,19 @@ class UsersSearchForm extends Model
 
         return [$result, $pages];
 
+    }
+
+    private function getSort($sort)
+    {
+        switch($sort) {
+            case 'tasks':
+                return 'tasks_count desc';
+            case 'popularity':
+                return 'views desc';
+            case 'rating':
+                return 'rating desc';
+            default:
+                return 'created_at desc';
+        }
     }
 }

@@ -13,6 +13,10 @@ use frontend\assets\AppAsset;
 use common\widgets\Alert;
 
 AppAsset::register($this);
+
+$selectedCity = Yii::$app->request->cookies->get('selected_city')->value ?? Yii::$app->user->getIdentity()->city_id ?? null;
+
+
 ?>
 <?php
 $this->beginPage() ?>
@@ -102,8 +106,7 @@ $this->beginBody(); ?>
                 <select class="multiple-select input town-select" size="1" name="town[]">
                     <?php
                     foreach (Yii::$app->viewComposer->getCities() as $city): ?>
-                        <option value="<?= $city->id ?>" <?= Yii::$app->user->getId() && Yii::$app->user->getIdentity(
-                        )->city_id === $city->id ? 'selected' : '' ?>><?= $city->name ?></option>
+                        <option value="<?= $city->id ?>" <?= $selectedCity === $city->id ? 'selected' : '' ?>><?= $city->name ?></option>
                     <?php
                     endforeach; ?>
                 </select>
@@ -199,6 +202,7 @@ $this->beginBody(); ?>
         </div>
     </footer>
 </div>
+<script src="/js/main.js"></script>
 <?php
 $this->endBody(); ?>
 </body>

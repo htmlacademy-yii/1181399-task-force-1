@@ -41,6 +41,8 @@ class UsersController extends SecuredController
         if ($user->isAuthor()) {
             throw new NotFoundHttpException("Пользователь с id {$id} является автором");
         }
+        $user->views += 1;
+        $user->save();
 
         return $this->render('show', ['user' => $user]);
     }

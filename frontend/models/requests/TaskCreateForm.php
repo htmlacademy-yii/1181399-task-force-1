@@ -101,7 +101,8 @@ class TaskCreateForm extends Model
             }
 
             if ($city) {
-                $cityId = City::find()->where(['like', 'name', $city])->one()->id ?? null;
+                $cityId = City::find()->where(['like', 'name', $city])->one()->id ?? Yii::$app->user->getIdentity(
+                    )->city_id ?? null;
 
                 if ($cityId) {
                     $task->city_id = $cityId;
@@ -129,6 +130,5 @@ class TaskCreateForm extends Model
         }
 
         return $response;
-
     }
 }
