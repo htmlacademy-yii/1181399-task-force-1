@@ -22,10 +22,17 @@ class TasksController extends SecuredController
         $form = new TasksSearchForm();
         $form->load(Yii::$app->request->get());
 
-        $tasks = $form->getTasks();
+        [$tasks, $pages] = $form->getTasks();
         $categories = Category::find()->all();
 
-        return $this->render('browse', ['tasks' => $tasks, 'request' => $form, 'categories' => $categories]);
+        return $this->render('browse',
+             [
+                 'tasks' => $tasks,
+                 'request' => $form,
+                 'categories' => $categories,
+                 'pages' => $pages,
+             ]
+        );
     }
 
     public function actionView($id)

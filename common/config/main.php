@@ -3,6 +3,7 @@ return [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@mail' => '@frontend/views/mail',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
@@ -50,6 +51,12 @@ return [
         ],
         'redisCache' => [
             'class' => 'yii\redis\Cache',
+        ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+        ],
+        'viewComposer' => [
+            'class' => 'frontend\composers\MainComposer',
         ],
     ],
     'language' => 'ru-RU',

@@ -28,7 +28,10 @@ for (var j = 0; j < closeModalLinks.length; j++) {
   closeModalLink.addEventListener("click", closeModal)
 }
 
-document.getElementById('close-modal').addEventListener("click", closeModal);
+var closeModal = document.getElementById('close-modal');
+if (typeof closeModal !== 'undefined' && closeModal !== null) {
+  closeModal.addEventListener("click", closeModal);
+}
 
 var starRating = document.getElementsByClassName("completion-form-star");
 
@@ -56,3 +59,16 @@ if (starRating.length) {
     inputField.value = rating;
   });
 }
+
+var cityDropdown = document.getElementsByClassName('town-select');
+
+if (cityDropdown.length) {
+  cityDropdown = cityDropdown[0];
+
+  cityDropdown.addEventListener('change', function(event) {
+    var selectedCity = event.target.value;
+
+    window.location = '/site/city?city=' + selectedCity;
+  });
+}
+

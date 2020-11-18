@@ -4,6 +4,7 @@
 
 use frontend\models\Task;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveField;
 
 ?>
@@ -56,7 +57,7 @@ use yii\widgets\ActiveField;
                 <a href="#" class="header__account-enter open-modal" data-for="enter-form">
                     <span>Вход</span></a>
                 или
-                <a href="<?= \yii\helpers\Url::to('registration') ?>" class="header__account-registration">
+                <a href="<?= Url::to('registration') ?>" class="header__account-registration">
                     Регистрация
                 </a>
             </div>
@@ -70,7 +71,7 @@ use yii\widgets\ActiveField;
                 <p>Сломался кран на кухне? Надо отправить документы? Нет времени самому гулять с собакой?
                     У нас вы быстро найдёте исполнителя для любой жизненной ситуации?<br>
                     Быстро, безопасно и с гарантией. Просто, как раз, два, три. </p>
-                <a href="<?= \yii\helpers\Url::to('registration') ?>" class="button">Создать аккаунт</a>
+                <a href="<?= Url::to('registration') ?>" class="button">Создать аккаунт</a>
             </div>
             <div class="landing-center">
                 <div class="landing-instruction">
@@ -224,7 +225,7 @@ use yii\widgets\ActiveField;
     </footer>
     <section class="modal enter-form form-modal" id="enter-form">
         <h2>Вход на сайт</h2>
-        <?php $form = \yii\widgets\ActiveForm::begin(['method' => 'post', 'action' => '/', 'enableAjaxValidation' => true,]); ?>
+        <?php $form = \yii\widgets\ActiveForm::begin(['method' => 'post', 'action' => '/', 'enableAjaxValidation' => true, 'validationUrl' => Url::toRoute('site/validation')]); ?>
             <?= $form->field($model, 'email', ['inputOptions' => ['class' => 'enter-form-email input input-middle']]) ?>
             <?= $form->field($model, 'password', ['inputOptions' => ['class' => 'enter-form-email input input-middle', 'type' => 'password']]) ?>
             <button class="button" type="submit">Войти</button>

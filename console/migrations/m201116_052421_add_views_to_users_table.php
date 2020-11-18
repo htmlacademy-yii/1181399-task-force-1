@@ -3,19 +3,16 @@
 use yii\db\Migration;
 
 /**
- * Class m201020_062741_vk_auth
+ * Class m201116_052421_add_views_to_users_table
  */
-class m201020_062741_vk_auth extends Migration
+class m201116_052421_add_views_to_users_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        try {
-            $this->addColumn('users', 'vk_id', $this->string()->null());
-        } catch (\Exception $e) {}
-        $this->alterColumn('users', 'password', $this->string(255)->null());
+        $this->addColumn('users', 'views', $this->bigInteger());
     }
 
     /**
@@ -23,7 +20,7 @@ class m201020_062741_vk_auth extends Migration
      */
     public function safeDown()
     {
-        echo "m201020_062741_vk_auth cannot be reverted.\n";
+        echo "m201116_052421_add_views_to_users_table cannot be reverted.\n";
 
         return false;
     }
@@ -37,7 +34,7 @@ class m201020_062741_vk_auth extends Migration
 
     public function down()
     {
-        echo "m201020_062741_vk_auth cannot be reverted.\n";
+        echo "m201116_052421_add_views_to_users_table cannot be reverted.\n";
 
         return false;
     }

@@ -3,8 +3,10 @@
 namespace frontend\models\requests;
 
 use frontend\models\Application;
+use frontend\models\Feed;
 use frontend\models\Feedback;
 use frontend\models\Task;
+use frontend\services\notifications\NotificationService;
 use Htmlacademy\Models\TaskStateMachine;
 use Yii;
 use yii\base\Model;
@@ -97,5 +99,14 @@ class ApplicationDoneForm extends Model
         $feedback->status = $status;
 
         $feedback->save();
+
+
+
+        $notification = new NotificationService();
+        $notification->notify(
+            Yii::$app->user->getIdentity(),
+            Feed::FEEDBACK,
+            $feedback->task_id
+        );
     }
 }

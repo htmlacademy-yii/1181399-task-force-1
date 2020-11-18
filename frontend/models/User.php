@@ -74,7 +74,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['description', 'avatar_url', 'address'], 'string'],
             [
                 [
-                    'city_id',
                     'notification_message',
                     'notification_actions',
                     'notification_feedback',
@@ -370,6 +369,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function validatePassword($password)
     {
+        if (!$password) {
+            return false;
+        }
+
         return Yii::$app->security->validatePassword($password, $this->password);
     }
 
@@ -448,5 +451,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
             $this->link('attachments', $attachment);
         }
+    }
+
+    public function shouldRecieve(string $event)
+    {
+        return isset(Feed::EVENT_TYPES[$event]) && $this->{Feed::EVENT_TYPES[$event]} == true;
     }
 }

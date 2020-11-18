@@ -3,7 +3,9 @@
 namespace frontend\models\requests;
 
 use frontend\models\Task;
+use Yii;
 use yii\base\Model;
+use yii\data\Pagination;
 
 class TasksSearchForm extends Model
 {
@@ -12,6 +14,15 @@ class TasksSearchForm extends Model
     public $remote;
     public $period;
     public $searchName;
+
+    public function __construct($config = [])
+    {
+        parent::__construct($config);
+
+        if (Yii::$app->request->get('categories')) {
+            $this->categories = Yii::$app->request->get('categories');
+        }
+    }
 
     public function rules()
     {
@@ -43,13 +54,23 @@ class TasksSearchForm extends Model
         ];
     }
 
-    public function getTasks()
+    private function prepareTasksQuery()
     {
         $tasks = Task::find()
             ->where(['tasks.status' => $this->status ?? Task::STATUS_NEW])
             ->joinWith('category')
             ->joinWith('city')
             ->orderBy('created_at DESC');
+
+        $cookies = Yii::$app->request->cookies;
+        $city = Yii::$app->user->getIdentity()->city_id;
+        if ($cookies->has('selected_city')) {
+            $city = $cookies->get('selected_city');
+        }
+
+        if ($city !== null) {
+            $tasks->andWhere(['or', ['city_id' => $city], ['city_id' => null]]);
+        }
 
         if ($this->remote) {
             $tasks->andWhere('address is null');
@@ -72,9 +93,19 @@ class TasksSearchForm extends Model
         $tasks->andFilterWhere(['like', 'title', $this->searchName])
             ->andFilterWhere(['in', 'category_id', $this->categories]);
 
-        $tasks = $tasks->all();
-
         return $tasks;
+    }
+
+    public function getTasks()
+    {
+        $query = $this->prepareTasksQuery();
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'defaultPageSize' => 5]);
+        $result = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+        return [$result, $pages];
+
     }
 
     private function getInterval($period)
