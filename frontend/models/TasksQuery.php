@@ -9,11 +9,6 @@ namespace frontend\models;
  */
 class TasksQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
-    {
-        return $this->andWhere('[[status]]=1');
-    }*/
-
     /**
      * {@inheritdoc}
      * @return Task[]|array
