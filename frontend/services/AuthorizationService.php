@@ -20,6 +20,9 @@ class AuthorizationService
     }
 
 
+    /**
+     * Авторизация через вк.
+     */
     public function handle()
     {
         if (!Yii::$app->user->isGuest) {
@@ -39,6 +42,15 @@ class AuthorizationService
         $this->authUser($user);
     }
 
+    /**
+     * Регистрация через вк.
+     *
+     * @param $id
+     * @param $email
+     * @param $name
+     * @param null $city
+     * @return User
+     */
     private function registerUser($id, $email, $name, $city = null)
     {
         $user = User::findAll(['email' => $email]);
@@ -62,6 +74,12 @@ class AuthorizationService
         return $user;
     }
 
+    /**
+     * Авторизация через конкретного пользователя.
+     *
+     * @param User $user
+     * @return bool
+     */
     private function authUser(User $user)
     {
         return Yii::$app->user->login($user);

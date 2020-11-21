@@ -53,6 +53,12 @@ class TasksSearchForm extends Model
             'month' => 'Месяц',
         ];
     }
+
+    /**
+     * Вытащим список заданий.
+     *
+     * @return array
+     */
     public function getTasks()
     {
         $query = $this->prepareTasksQuery();
@@ -65,7 +71,12 @@ class TasksSearchForm extends Model
 
     }
 
-
+    /**
+     * Подготовим запрос для выдачи подсчета количества или результата запроса.
+     *
+     * @return \frontend\models\TasksQuery
+     * @throws \Throwable
+     */
     private function prepareTasksQuery()
     {
         $tasks = Task::find()

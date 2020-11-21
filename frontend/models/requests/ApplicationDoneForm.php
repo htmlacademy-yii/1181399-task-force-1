@@ -38,6 +38,11 @@ class ApplicationDoneForm extends Model
         ];
     }
 
+    /**
+     * Завершение задания
+     *
+     * @return bool
+     */
     public function finishTask()
     {
         if (!$this->validate()) {
@@ -51,7 +56,11 @@ class ApplicationDoneForm extends Model
         }
     }
 
-
+    /**
+     * Завершение задания с установкой флага "выполнено плохо".
+     *
+     * @return false
+     */
     public function setDifficulties()
     {
         if (!$task = $this->getTask()) {
@@ -64,6 +73,11 @@ class ApplicationDoneForm extends Model
         $this->addFeedback($task, TaskStateMachine::STATUS_FAILED);
     }
 
+    /**
+     * Успешное завершение задания.
+     *
+     * @return bool
+     */
     public function setDone()
     {
         if (!$task = $this->getTask()) {
@@ -88,6 +102,13 @@ class ApplicationDoneForm extends Model
         return $task;
     }
 
+    /**
+     * Создание модели отзыва.
+     *
+     * @param Task $task
+     * @param string $status
+     * @throws \Throwable
+     */
     private function addFeedback(Task $task, string $status = 'success')
     {
         $feedback = new Feedback();

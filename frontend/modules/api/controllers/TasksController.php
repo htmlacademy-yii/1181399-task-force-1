@@ -10,6 +10,11 @@ class TasksController extends ActiveController
 {
     public $modelClass = Task::class;
 
+    /**
+     * Вытаскиваем список заданий в соответствии с тз.
+     *
+     * @return array|Task[]
+     */
     public function actionIndex()
     {
         return Task::find()->where(['=', 'author_id', \Yii::$app->user->getId()])

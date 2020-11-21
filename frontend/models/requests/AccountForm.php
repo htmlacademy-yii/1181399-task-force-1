@@ -36,6 +36,13 @@ class AccountForm extends User
         ];
     }
 
+    /**
+     * Перед сохранением страницы пользователя обязательно обновляем пароль и загружаем аватар, если они есть в запросе.
+     *
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
     public function beforeSave($insert)
     {
         $this->updatePassword();
@@ -45,6 +52,11 @@ class AccountForm extends User
     }
 
 
+    /**
+     * Обновление пароля пользователя.
+     *
+     * @throws \yii\base\Exception
+     */
     private function updatePassword()
     {
         if ($this->new_password) {
@@ -53,6 +65,10 @@ class AccountForm extends User
         }
     }
 
+    /**
+     * Загрузка аватара пользователя
+     * @throws \yii\base\Exception
+     */
     private function updateAvatar()
     {
         $file = UploadedFile::getInstance($this, 'avatar');

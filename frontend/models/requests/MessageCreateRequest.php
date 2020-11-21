@@ -14,6 +14,11 @@ class MessageCreateRequest extends Message
 {
     public $message;
 
+    /**
+     * Перед созданием сообщения мы добавим необходимые поля и создадим уведомления для всех пользователей.
+     *
+     * @return bool
+     */
     public function beforeValidate()
     {
         /** @var Task $task */

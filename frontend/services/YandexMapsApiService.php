@@ -20,6 +20,14 @@ class YandexMapsApiService
         $this->apiKey = $apiKey;
     }
 
+    /**
+     * Получаем координаты из адреса, введенного пользователем
+     *
+     * @param string $address
+     * @param int $limit
+     * @return array|false
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function getPositionFromAddress(string $address, int $limit = 1)
     {
         $client = new Client([
@@ -58,6 +66,12 @@ class YandexMapsApiService
         return $data;
     }
 
+    /**
+     * Вытаскиваем координаты из ответа, который был получен предыдущим методом
+     *
+     * @param $response
+     * @return array|null
+     */
     public function getCoordsFromResponse($response)
     {
         if (!$response) {
@@ -73,6 +87,12 @@ class YandexMapsApiService
         return ['lat' => $w, 'long' => $h];
     }
 
+    /**
+     * Вытаскиваем название города из ответа от яндекса.
+     *
+     * @param $response
+     * @return mixed|null
+     */
     public function getCityFromResponse($response)
     {
         if (!$response) {
@@ -96,6 +116,13 @@ class YandexMapsApiService
         return null;
     }
 
+    /**
+     * Выполняем действия из тз: подключаем название города пользователя, если он есть, к запросу.
+     *
+     * @param string $address
+     * @return string
+     * @throws \Throwable
+     */
     public function appendCityToSearchString(string $address)
     {
         if (isset(Yii::$app->user->getIdentity()->city->name)) {

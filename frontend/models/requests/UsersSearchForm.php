@@ -53,6 +53,11 @@ class UsersSearchForm extends Model
 
     }
 
+    /**
+     * Подготовим запрос из формы для подсчета количества результатов или выдачи его
+     *
+     * @return \frontend\models\UsersQuery
+     */
     private function getUsersQuery()
     {
         $users = User::find()

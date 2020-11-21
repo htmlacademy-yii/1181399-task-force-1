@@ -10,6 +10,11 @@ use yii\web\Controller;
 
 class RegistrationController extends Controller
 {
+    /**
+     * Страница регистрации пользователя
+     *
+     * @return string|\yii\web\Response
+     */
     public function actionRegister()
     {
         $request = new RegistrationForm();

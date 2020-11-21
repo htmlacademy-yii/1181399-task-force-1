@@ -20,6 +20,12 @@ class AccountController extends SecuredController
     }
 
 
+    /**
+     * Информация об аккаунте.
+     *
+     * @return string
+     * @throws \Throwable
+     */
     public function actionIndex()
     {
         $model = AccountForm::findOne(Yii::$app->user->getId());
@@ -42,6 +48,11 @@ class AccountController extends SecuredController
         );
     }
 
+    /**
+     * Асинхронная загрузка изображений.
+     *
+     * @throws \Throwable
+     */
     public function actionPhotos()
     {
         if (Yii::$app->request->getIsAjax()) {
