@@ -39,6 +39,25 @@ class UsersSearchForm extends Model
         ];
     }
 
+    public function getUsersFromForm()
+    {
+        $query = $this->getUsersQuery();
+        $countQuery = clone $query;
+
+        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        $result = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return [$result, $pages];
+
+    }
+
+    /**
+     * Подготовим запрос из формы для подсчета количества результатов или выдачи его
+     *
+     * @return \frontend\models\UsersQuery
+     */
     private function getUsersQuery()
     {
         $users = User::find()
@@ -95,20 +114,6 @@ class UsersSearchForm extends Model
         }
 
         return $users;
-    }
-
-    public function getUsersFromForm()
-    {
-        $query = $this->getUsersQuery();
-        $countQuery = clone $query;
-
-        $pages = new Pagination(['totalCount' => $countQuery->count()]);
-        $result = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-
-        return [$result, $pages];
-
     }
 
     private function getSort($sort)

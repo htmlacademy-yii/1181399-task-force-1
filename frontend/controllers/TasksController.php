@@ -17,6 +17,11 @@ use yii\web\NotFoundHttpException;
 
 class TasksController extends SecuredController
 {
+    /**
+     * Список заданий
+     *
+     * @return string
+     */
     public function actionIndex()
     {
         $form = new TasksSearchForm();
@@ -35,6 +40,14 @@ class TasksController extends SecuredController
         );
     }
 
+    /**
+     * Просмотр конкретного задания
+     *
+     * @param $id
+     * @return string
+     * @throws NotFoundHttpException
+     * @throws \Htmlacademy\Exceptions\StatusDoesNotExistsException
+     */
     public function actionView($id)
     {
         $task = Task::findOne($id);
@@ -61,6 +74,11 @@ class TasksController extends SecuredController
         );
     }
 
+    /**
+     * Создание задания
+     *
+     * @return string|\yii\web\Response
+     */
     public function actionCreate()
     {
         $model = new TaskCreateForm();

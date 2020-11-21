@@ -14,6 +14,11 @@ use yii\base\InlineAction;
 
 class ApplicationsController extends SecuredController
 {
+    /**
+     * Страница создания заявки на задание
+     *
+     * @return \yii\web\Response
+     */
     public function actionCreate()
     {
         $model = new ApplicationCreateForm();
@@ -24,6 +29,13 @@ class ApplicationsController extends SecuredController
         return $this->redirect(['tasks/view', 'id' => $model->task_id]);
     }
 
+    /**
+     * Принятие заявки
+     *
+     * @param $applicationId
+     * @return \yii\web\Response
+     * @throws \Throwable
+     */
     public function actionAccept($applicationId)
     {
         $application = Application::find()->where(['id' => $applicationId])->one();
@@ -41,6 +53,13 @@ class ApplicationsController extends SecuredController
         return $this->redirect(['tasks/view', 'id' => $application->task->id]);
     }
 
+    /**
+     * Отклонение заявки
+     *
+     * @param $applicationId
+     * @return \yii\web\Response
+     * @throws \Throwable
+     */
     public function actionReject($applicationId)
     {
         $application = Application::find()->where(['id' => $applicationId])->one();
@@ -58,6 +77,13 @@ class ApplicationsController extends SecuredController
         return $this->redirect(['tasks/view', 'id' => $application->task->id]);
     }
 
+
+    /**
+     * Отметка заявки, как сделанное
+     *
+     * @return \yii\web\Response
+     * @throws \Throwable
+     */
     public function actionDone()
     {
         $model = new ApplicationDoneForm();
@@ -79,6 +105,14 @@ class ApplicationsController extends SecuredController
         return $this->goBack();
     }
 
+
+    /**
+     * Несдача заявки.
+     *
+     * @param $taskId
+     * @return \yii\web\Response
+     * @throws \Throwable
+     */
     public function actionFail($taskId)
     {
         $applicationService = new ApplicationsService();

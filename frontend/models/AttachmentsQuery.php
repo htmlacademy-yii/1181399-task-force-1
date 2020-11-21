@@ -9,11 +9,6 @@ namespace frontend\models;
  */
 class AttachmentsQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
-    {
-        return $this->andWhere('[[status]]=1');
-    }*/
-
     /**
      * {@inheritdoc}
      * @return Attachment[]|array

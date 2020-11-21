@@ -16,6 +16,7 @@ class TaskCreateForm extends Model
 {
     const EXPIRE_TIME = 60 * 60 * 24; // Одни сутки
     const TAG = 'geocode';
+
     public $title;
     public $description;
     public $category;
@@ -49,6 +50,12 @@ class TaskCreateForm extends Model
         ];
     }
 
+    /**
+     * Загрузка файлов к заданию.
+     *
+     * @param Task $task
+     * @return bool
+     */
     public function upload(Task $task)
     {
         if ($this->validate()) {
@@ -72,6 +79,12 @@ class TaskCreateForm extends Model
         }
     }
 
+    /**
+     * Основной метод сохранения задания
+     *
+     * @return false|int
+     * @throws \Throwable
+     */
     public function saveTask()
     {
         if (!$this->validate()) {
@@ -117,6 +130,14 @@ class TaskCreateForm extends Model
         return $task->id;
     }
 
+    /**
+     * Если вдруг у нас есть в кэше адрес - используем его.
+     *
+     * @param YandexMapsApiService $service
+     * @param string $address
+     * @return array|false
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     private function getGeocodeFromCache(YandexMapsApiService $service, string $address)
     {
         try {

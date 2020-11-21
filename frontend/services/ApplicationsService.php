@@ -9,6 +9,13 @@ use Htmlacademy\Models\TaskStateMachine;
 
 class ApplicationsService
 {
+    /**
+     * Установка задания и заявки проваленными
+     *
+     * @param int $taskId
+     * @param int|null $userId
+     * @return bool
+     */
     public function fail(int $taskId, ?int $userId): bool
     {
         $task = Task::findOne(['id' => $taskId]);
@@ -24,6 +31,13 @@ class ApplicationsService
         return false;
     }
 
+    /**
+     * Принятие заявки
+     *
+     * @param Application $application
+     * @throws \Htmlacademy\Exceptions\StatusDoesNotExistsException
+     * @throws \Htmlacademy\Exceptions\StatusNotDefinedException
+     */
     public function accept(Application $application)
     {
         $stateMachine = new TaskStateMachine($application->task->executor_id, $application->task->author_id);
@@ -39,6 +53,12 @@ class ApplicationsService
         }
     }
 
+    /**
+     * Удаление оставшихся заявок.
+     *
+     * @param $applications
+     * @param $wonId
+     */
     private function declineAnotherApplications($applications, $wonId)
     {
         foreach ($applications as $application) {

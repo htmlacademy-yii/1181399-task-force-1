@@ -12,6 +12,12 @@ class MessagesController extends SecuredRestController
 {
     public $modelClass = Message::class;
 
+    /**
+     * Страница запроса сообщений для определенного задания.
+     * Обязательный параметр в get - task_id.
+     *
+     * @return array|false|Message[]
+     */
     public function actionIndex()
     {
         if (!$id = Yii::$app->request->get('task_id')) {

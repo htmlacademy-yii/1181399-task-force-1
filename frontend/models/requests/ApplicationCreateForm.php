@@ -35,18 +35,11 @@ class ApplicationCreateForm extends Model
             'comment'=> 'Комментарий'
         ];
     }
-
-    public function createApplication()
-    {
-        $application = new Application();
-        $application->task_id = $this->task_id;
-        $application->comment = $this->comment;
-        $application->budget = $this->budget;
-        $application->user_id = Yii::$app->user->getId();
-
-        return $application->save();
-    }
-
+    /**
+     * Выполнение всех действий по добавлению заявки к объявлению.
+     *
+     * @return bool
+     */
     public function create()
     {
         $task = Task::findOne(['id' => $this->task_id]);
@@ -70,6 +63,29 @@ class ApplicationCreateForm extends Model
         return false;
     }
 
+
+    /**
+     * Создание модели заявки
+     *
+     * @return bool
+     */
+    private function createApplication()
+    {
+        $application = new Application();
+        $application->task_id = $this->task_id;
+        $application->comment = $this->comment;
+        $application->budget = $this->budget;
+        $application->user_id = Yii::$app->user->getId();
+
+        return $application->save();
+    }
+
+    /**
+     * Валидатор уникальности заявки
+     *
+     * @return bool
+     * @throws \Throwable
+     */
     public function uniqueApplication()
     {
         if (Yii::$app->user->getIdentity()->applied($this->task_id)) {
@@ -80,6 +96,12 @@ class ApplicationCreateForm extends Model
         return true;
     }
 
+    /**
+     * Проверка пользователя на то, что он не является "автором".
+     *
+     * @return bool
+     * @throws \Throwable
+     */
     public function userIsExecutor()
     {
         if (Yii::$app->user->getIdentity()->isAuthor()) {

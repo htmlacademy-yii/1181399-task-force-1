@@ -54,6 +54,29 @@ class TasksSearchForm extends Model
         ];
     }
 
+    /**
+     * Вытащим список заданий.
+     *
+     * @return array
+     */
+    public function getTasks()
+    {
+        $query = $this->prepareTasksQuery();
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'defaultPageSize' => 5]);
+        $result = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+        return [$result, $pages];
+
+    }
+
+    /**
+     * Подготовим запрос для выдачи подсчета количества или результата запроса.
+     *
+     * @return \frontend\models\TasksQuery
+     * @throws \Throwable
+     */
     private function prepareTasksQuery()
     {
         $tasks = Task::find()
@@ -94,18 +117,6 @@ class TasksSearchForm extends Model
             ->andFilterWhere(['in', 'category_id', $this->categories]);
 
         return $tasks;
-    }
-
-    public function getTasks()
-    {
-        $query = $this->prepareTasksQuery();
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'defaultPageSize' => 5]);
-        $result = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-        return [$result, $pages];
-
     }
 
     private function getInterval($period)

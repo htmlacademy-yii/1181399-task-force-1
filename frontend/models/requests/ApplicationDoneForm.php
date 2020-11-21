@@ -38,6 +38,11 @@ class ApplicationDoneForm extends Model
         ];
     }
 
+    /**
+     * Завершение задания
+     *
+     * @return bool
+     */
     public function finishTask()
     {
         if (!$this->validate()) {
@@ -52,17 +57,10 @@ class ApplicationDoneForm extends Model
     }
 
     /**
-     * @return Task|false
+     * Завершение задания с установкой флага "выполнено плохо".
+     *
+     * @return false
      */
-    private function getTask()
-    {
-        $task = Task::findOne(['id' => $this->taskId]);
-        if (!$task || !$task->author_id === Yii::$app->user->getId()) {
-            return false;
-        }
-        return $task;
-    }
-
     public function setDifficulties()
     {
         if (!$task = $this->getTask()) {
@@ -75,6 +73,11 @@ class ApplicationDoneForm extends Model
         $this->addFeedback($task, TaskStateMachine::STATUS_FAILED);
     }
 
+    /**
+     * Успешное завершение задания.
+     *
+     * @return bool
+     */
     public function setDone()
     {
         if (!$task = $this->getTask()) {
@@ -87,7 +90,25 @@ class ApplicationDoneForm extends Model
         $this->addFeedback($task);
         return true;
     }
+    /**
+     * @return Task|false
+     */
+    private function getTask()
+    {
+        $task = Task::findOne(['id' => $this->taskId]);
+        if (!$task || !$task->author_id === Yii::$app->user->getId()) {
+            return false;
+        }
+        return $task;
+    }
 
+    /**
+     * Создание модели отзыва.
+     *
+     * @param Task $task
+     * @param string $status
+     * @throws \Throwable
+     */
     private function addFeedback(Task $task, string $status = 'success')
     {
         $feedback = new Feedback();

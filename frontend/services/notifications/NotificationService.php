@@ -7,6 +7,14 @@ use frontend\models\User;
 
 class NotificationService
 {
+    /**
+     * Уведомляет пользователя о событии в определенном задании.
+     * Список определяется в Feed::TITLES
+     *
+     * @param User $user
+     * @param string $event
+     * @param int $taskId
+     */
     public function notify(User $user, string $event, int $taskId)
     {
         if (!$user->shouldRecieve($event)) {
@@ -17,6 +25,14 @@ class NotificationService
         $this->addNotification($user, Feed::TITLES[$event], $event, $taskId);
     }
 
+    /**
+     * Отправка сообщения электронной почтой.
+     *
+     * @param User $user
+     * @param string $message
+     * @param string $event
+     * @param int $taskId
+     */
     private function sendEmail(User $user, string $message, string $event, int $taskId)
     {
         \Yii::$app->mailer->compose('@mail/notification', ['content' => $message, 'taskId' => $taskId])
@@ -26,6 +42,14 @@ class NotificationService
             ->send();
     }
 
+    /**
+     * Отправка сообщения в ленту.
+     *
+     * @param User $user
+     * @param string $message
+     * @param string $event
+     * @param int $taskId
+     */
     private function addNotification(User $user, string $message, string $event, int $taskId)
     {
         $feed = new Feed();
