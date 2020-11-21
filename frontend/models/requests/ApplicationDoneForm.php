@@ -51,17 +51,6 @@ class ApplicationDoneForm extends Model
         }
     }
 
-    /**
-     * @return Task|false
-     */
-    private function getTask()
-    {
-        $task = Task::findOne(['id' => $this->taskId]);
-        if (!$task || !$task->author_id === Yii::$app->user->getId()) {
-            return false;
-        }
-        return $task;
-    }
 
     public function setDifficulties()
     {
@@ -86,6 +75,17 @@ class ApplicationDoneForm extends Model
 
         $this->addFeedback($task);
         return true;
+    }
+    /**
+     * @return Task|false
+     */
+    private function getTask()
+    {
+        $task = Task::findOne(['id' => $this->taskId]);
+        if (!$task || !$task->author_id === Yii::$app->user->getId()) {
+            return false;
+        }
+        return $task;
     }
 
     private function addFeedback(Task $task, string $status = 'success')
