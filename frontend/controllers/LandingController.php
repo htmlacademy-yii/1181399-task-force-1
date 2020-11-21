@@ -12,6 +12,11 @@ use yii\helpers\Url;
 
 class LandingController extends Controller
 {
+    /**
+     * Главная страница лендинга.
+     *
+     * @return string|\yii\web\Response
+     */
     public function actionLanding()
     {
         $tasks = Task::find()->orderBy('created_at')->limit(4)->all();
@@ -26,6 +31,11 @@ class LandingController extends Controller
         }
     }
 
+    /**
+     * Действие выхода из аккаунта
+     *
+     * @return \yii\web\Response
+     */
     public function actionLogout()
     {
         Yii::$app->user->logout();

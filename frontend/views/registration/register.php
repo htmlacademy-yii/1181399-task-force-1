@@ -37,7 +37,7 @@ $formConfig = [
             \yii\helpers\ArrayHelper::map($cities, 'id', 'name'),
             ['class' => 'multiple-select input town-select registration-town']
         ) ?>
-        <?= $form->field($request, 'password', ['inputOptions' => ['class' => 'input textarea']]) ?>
+        <?= $form->field($request, 'password', ['inputOptions' => ['class' => 'input textarea']])->passwordInput() ?>
         <span>Длина пароля от 8 символов</span>
         <?= Html::button('Создать аккаунт', ['class' => 'button button__registration', 'type' => 'submit']) ?>
         <?php

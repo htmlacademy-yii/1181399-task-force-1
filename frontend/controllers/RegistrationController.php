@@ -10,6 +10,11 @@ use yii\web\Controller;
 
 class RegistrationController extends Controller
 {
+    /**
+     * Страница регистрации пользователя
+     *
+     * @return string|\yii\web\Response
+     */
     public function actionRegister()
     {
         $request = new RegistrationForm();
@@ -20,7 +25,9 @@ class RegistrationController extends Controller
         if (Yii::$app->request->isPost) {
             if ($request->validate()) {
                 $user = $this->registerUser($request);
-                return $this->goHome();
+                if ($user) {
+                    return $this->goHome();
+                }
             }
         }
 

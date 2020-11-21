@@ -7,6 +7,7 @@
 
 use frontend\models\requests\UsersSearchForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Task Force';
@@ -21,20 +22,6 @@ $searchFormConfig = [
 ];
 ?>
 <section class="user__search">
-    <div class="user__search-link">
-        <p>Сортировать по:</p>
-        <ul class="user__search-list">
-            <li class="user__search-item user__search-item--current">
-                <a href="#" class="link-regular">Рейтингу</a>
-            </li>
-            <li class="user__search-item">
-                <a href="#" class="link-regular">Числу заказов</a>
-            </li>
-            <li class="user__search-item">
-                <a href="#" class="link-regular">Популярности</a>
-            </li>
-        </ul>
-    </div>
     <?php foreach ($users as $user): ?>
     <div class="content-view__feedback-card user__search-wrapper">
         <div class="feedback-card__top">
@@ -55,15 +42,40 @@ $searchFormConfig = [
         </div>
         <div class="link-specialization user__search-link--bottom">
             <?php foreach ($user->categories as $category): ?>
-                <a href="#" class="link-regular"><?= $category->category->name ?></a>
+                <a href="<?= Url::toRoute(['tasks/index', 'categories[]' => $category->id]) ?>" class="link-regular"><?= $category->name ?></a>
             <?php endforeach; ?>
         </div>
     </div>
     <?php endforeach; ?>
+
+    <div>
+        <?= \yii\widgets\LinkPager::widget(
+            [
+                'pagination' => $pages,
+                'pageCssClass' => 'pagination__item',
+                'prevPageCssClass' => 'pagination__item',
+                'prevPageLabel' => '',
+                'nextPageLabel' => '',
+                'nextPageCssClass' => 'pagination__item',
+                'options' => ['class' => 'new-task__pagination-list'],
+                'activePageCssClass' => 'pagination__item--current',
+            ]
+        ) ?>
+    </div>
 </section>
+
 <section  class="search-task">
     <div class="search-task__wrapper">
         <?php $form = ActiveForm::begin($searchFormConfig); ?>
+            <fieldset class="search-task__categories">
+                <legend>Сортировка</legend>
+
+                <?= $form->field($request, 'sort', [ 'template' => '{input}{error}'])->dropDownList([
+                     'rating' => 'Рейтинг',
+                     'popularity' => 'Популярность',
+                     'tasks' => 'Кол-во заказов',
+                 ], ['class' => 'multiple-select input multiple-select-big']);?>
+            </fieldset>
             <fieldset class="search-task__categories">
                 <legend>Категории</legend>
                 <?= \yii\helpers\BaseHtml::activeCheckboxList($request, 'categories', \yii\helpers\ArrayHelper::map($categories, 'id', 'name'), [

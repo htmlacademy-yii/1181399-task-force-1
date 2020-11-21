@@ -3,7 +3,9 @@
 namespace frontend\models\requests;
 
 use frontend\models\Application;
+use frontend\models\Feed;
 use frontend\models\Task;
+use frontend\services\notifications\NotificationService;
 use Yii;
 use yii\base\Model;
 
@@ -33,8 +35,41 @@ class ApplicationCreateForm extends Model
             'comment'=> 'Комментарий'
         ];
     }
+    /**
+     * Выполнение всех действий по добавлению заявки к объявлению.
+     *
+     * @return bool
+     */
+    public function create()
+    {
+        $task = Task::findOne(['id' => $this->task_id]);
 
-    public function createApplication()
+        if (!$task) {
+            return false;
+        }
+
+        if ($task->author_id === Yii::$app->user->getId()) {
+            return false;
+        }
+
+        if ($this->validate()) {
+
+            $task = Task::findOne(['id' => $this->task_id]);
+            $notification = new NotificationService();
+            $notification->notify($task->author, Feed::APPLICATION, $task->id);
+
+            return $this->createApplication();
+        }
+        return false;
+    }
+
+
+    /**
+     * Создание модели заявки
+     *
+     * @return bool
+     */
+    private function createApplication()
     {
         $application = new Application();
         $application->task_id = $this->task_id;
@@ -45,19 +80,12 @@ class ApplicationCreateForm extends Model
         return $application->save();
     }
 
-    public function create()
-    {
-        $task = Task::findOne(['id' => $this->task_id]);
-        if ($task->author_id === Yii::$app->user->getId()) {
-            return false;
-        }
-
-        if ($this->validate()) {
-            return $this->createApplication();
-        }
-        return false;
-    }
-
+    /**
+     * Валидатор уникальности заявки
+     *
+     * @return bool
+     * @throws \Throwable
+     */
     public function uniqueApplication()
     {
         if (Yii::$app->user->getIdentity()->applied($this->task_id)) {
@@ -68,6 +96,12 @@ class ApplicationCreateForm extends Model
         return true;
     }
 
+    /**
+     * Проверка пользователя на то, что он не является "автором".
+     *
+     * @return bool
+     * @throws \Throwable
+     */
     public function userIsExecutor()
     {
         if (Yii::$app->user->getIdentity()->isAuthor()) {

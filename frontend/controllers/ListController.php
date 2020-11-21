@@ -7,6 +7,11 @@ use Yii;
 
 class ListController extends SecuredController
 {
+    /**
+     * Список задач конкретного авторизованного пользователя
+     *
+     * @return string
+     */
     public function actionIndex()
     {
         $tasks = Task::find()->filterWhere(

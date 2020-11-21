@@ -9,11 +9,6 @@ namespace frontend\models;
  */
 class CategoriesQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
-    {
-        return $this->andWhere('[[status]]=1');
-    }*/
-
     /**
      * {@inheritdoc}
      * @return Category[]|array

@@ -55,6 +55,23 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public $feedback_count;
     public $rating;
 
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -74,7 +91,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['description', 'avatar_url', 'address'], 'string'],
             [
                 [
-                    'city_id',
                     'notification_message',
                     'notification_actions',
                     'notification_feedback',
@@ -263,6 +279,22 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Generates password hash from password and sets it to the model
+     *
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = Yii::$app->security->generatePasswordHash($password);
+    }
+
+    public function getPasswordHash()
+    {
+        return $this->password;
+    }
+
+
+    /**
      * Gets query for [[Tasks0]].
      *
      * @return \yii\db\ActiveQuery|TasksQuery
@@ -292,6 +324,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return new UsersQuery(get_called_class());
     }
 
+    /**
+     * Если пользователь был менее 5 минут назад считаем его "онлайн".
+     *
+     * @return bool
+     * @throws \Exception
+     */
     public function isOnline()
     {
         $lastVisit = new \DateTimeImmutable($this->last_visit);
@@ -299,6 +337,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $interval->i + $interval->h * 60 + $interval->d * 24 * 60 < 5;
     }
 
+    /**
+     * Подсчитываем возраст в годах.
+     *
+     * @return int
+     * @throws \Exception
+     */
     public function getAge()
     {
         return (new \DateTime())->diff(new \DateTime($this->birthday))->y;
@@ -337,23 +381,6 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return static::findOne(['email' => $username]);
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
-    {
-        return $this->getPrimaryKey();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAuthKey()
-    {
-        return $this->auth_key;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -370,22 +397,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public function validatePassword($password)
     {
+        if (!$password) {
+            return false;
+        }
+
         return Yii::$app->security->validatePassword($password, $this->password);
-    }
-
-    /**
-     * Generates password hash from password and sets it to the model
-     *
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        $this->password = Yii::$app->security->generatePasswordHash($password);
-    }
-
-    public function getPasswordHash()
-    {
-        return $this->password;
     }
 
     /**
@@ -404,16 +420,34 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
+    /**
+     * Если юзер в настройках не выбрал ни одной категории - он не автор.
+     *
+     * @return bool
+     */
     public function isAuthor()
     {
         return count($this->categoryUsers) === 0;
     }
 
+    /**
+     * Проверяем, подавал ли пользователь заявку на задачу с конкретным ID.
+     *
+     * @param $task_id
+     * @return bool
+     */
     public function applied($task_id)
     {
         return Application::find()->where(['task_id' => $task_id, 'user_id' => $this->id])->count() > 0;
     }
 
+
+    /**
+     * Подсчет возраста пользователя в годах
+     *
+     * @return int
+     * @throws \Exception
+     */
     public function age()
     {
         $datetime1 = new DateTime($this->birthday);
@@ -425,7 +459,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $diff->y;
     }
 
-
+    /**
+     * Загрузка примеров работ.
+     *
+     * @throws \yii\base\Exception
+     */
     public function uploadPhotos()
     {
         $files = UploadedFile::getInstancesByName('file');
@@ -448,5 +486,16 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
             $this->link('attachments', $attachment);
         }
+    }
+
+    /**
+     * Проверяем, должен ли пользователь получить уведомление.
+     *
+     * @param string $event
+     * @return bool
+     */
+    public function shouldRecieve(string $event)
+    {
+        return isset(Feed::EVENT_TYPES[$event]) && $this->{Feed::EVENT_TYPES[$event]} == true;
     }
 }

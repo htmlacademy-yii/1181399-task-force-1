@@ -3,15 +3,22 @@
 namespace frontend\controllers;
 
 use frontend\models\Application;
+use frontend\models\Feed;
 use frontend\models\requests\ApplicationCreateForm;
 use frontend\models\requests\ApplicationDoneForm;
 use frontend\models\Task;
 use frontend\services\ApplicationsService;
+use frontend\services\notifications\NotificationService;
 use Yii;
 use yii\base\InlineAction;
 
 class ApplicationsController extends SecuredController
 {
+    /**
+     * Страница создания заявки на задание
+     *
+     * @return \yii\web\Response
+     */
     public function actionCreate()
     {
         $model = new ApplicationCreateForm();
@@ -22,6 +29,13 @@ class ApplicationsController extends SecuredController
         return $this->redirect(['tasks/view', 'id' => $model->task_id]);
     }
 
+    /**
+     * Принятие заявки
+     *
+     * @param $applicationId
+     * @return \yii\web\Response
+     * @throws \Throwable
+     */
     public function actionAccept($applicationId)
     {
         $application = Application::find()->where(['id' => $applicationId])->one();
@@ -33,9 +47,19 @@ class ApplicationsController extends SecuredController
         $applicationService = new ApplicationsService();
         $applicationService->accept($application);
 
+        $notification = new NotificationService();
+        $notification->notify(Yii::$app->user->getIdentity(), Feed::START, $application->task_id);
+
         return $this->redirect(['tasks/view', 'id' => $application->task->id]);
     }
 
+    /**
+     * Отклонение заявки
+     *
+     * @param $applicationId
+     * @return \yii\web\Response
+     * @throws \Throwable
+     */
     public function actionReject($applicationId)
     {
         $application = Application::find()->where(['id' => $applicationId])->one();
@@ -47,9 +71,19 @@ class ApplicationsController extends SecuredController
         $application->status = Application::STATUS_DECLINED;
         $application->save();
 
+        $notification = new NotificationService();
+        $notification->notify(Yii::$app->user->getIdentity(), Feed::REJECT, $application->task_id);
+
         return $this->redirect(['tasks/view', 'id' => $application->task->id]);
     }
 
+
+    /**
+     * Отметка заявки, как сделанное
+     *
+     * @return \yii\web\Response
+     * @throws \Throwable
+     */
     public function actionDone()
     {
         $model = new ApplicationDoneForm();
@@ -57,16 +91,39 @@ class ApplicationsController extends SecuredController
         if (Yii::$app->request->isPost) {
             $model->load(Yii::$app->request->post());
             $model->finishTask();
+
+            $notification = new NotificationService();
+            $notification->notify(
+                Yii::$app->user->getIdentity(),
+                Feed::END,
+                Yii::$app->request->post('task_id')
+            );
+
             return $this->redirect(['tasks/view', 'id' => $model->taskId]);
         }
 
         return $this->goBack();
     }
 
+
+    /**
+     * Несдача заявки.
+     *
+     * @param $taskId
+     * @return \yii\web\Response
+     * @throws \Throwable
+     */
     public function actionFail($taskId)
     {
         $applicationService = new ApplicationsService();
         $applicationService->fail($taskId, Yii::$app->user->getId());
+
+        $notification = new NotificationService();
+        $notification->notify(
+            Yii::$app->user->getIdentity(),
+            Feed::END,
+            Yii::$app->request->post('task_id')
+        );
 
         return $this->redirect(['tasks/view', 'id' => $taskId]);
     }

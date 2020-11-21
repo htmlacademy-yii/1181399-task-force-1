@@ -43,15 +43,20 @@ $searchFormConfig = [
         <?php
         endforeach; ?>
     </div>
+
     <div class="new-task__pagination">
-        <ul class="new-task__pagination-list">
-            <li class="pagination__item"><a href="#"></a></li>
-            <li class="pagination__item pagination__item--current">
-                <a>1</a></li>
-            <li class="pagination__item"><a href="#">2</a></li>
-            <li class="pagination__item"><a href="#">3</a></li>
-            <li class="pagination__item"><a href="#"></a></li>
-        </ul>
+        <?= \yii\widgets\LinkPager::widget(
+            [
+                'pagination' => $pages,
+                'pageCssClass' => 'pagination__item',
+                'prevPageCssClass' => 'pagination__item',
+                'prevPageLabel' => '',
+                'nextPageLabel' => '',
+                'nextPageCssClass' => 'pagination__item',
+                'options' => ['class' => 'new-task__pagination-list'],
+                'activePageCssClass' => 'pagination__item--current',
+            ]
+        ) ?>
     </div>
 </section>
 <section class="search-task">

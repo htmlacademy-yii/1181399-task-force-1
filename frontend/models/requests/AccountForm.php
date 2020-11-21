@@ -31,11 +31,18 @@ class AccountForm extends User
             [['file'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 6],
             [['avatar'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 1],
             [['new_password'], 'string', 'min' => 8, 'max' => 40, 'skipOnEmpty' => true],
-            [['password_confirmation'], 'compare', 'compareAttribute' => 'new_password', 'message' => 'Пароли должны совпадать', 'skipOnEmpty' => true],
+            [['password_confirmation'], 'compare', 'compareAttribute' => 'new_password', 'message' => 'Пароли должны совпадать', 'skipOnEmpty' => false],
             ['birthday', 'date', 'format' => 'Y-m-d'],
         ];
     }
 
+    /**
+     * Перед сохранением страницы пользователя обязательно обновляем пароль и загружаем аватар, если они есть в запросе.
+     *
+     * @param bool $insert
+     * @return bool
+     * @throws \yii\base\Exception
+     */
     public function beforeSave($insert)
     {
         $this->updatePassword();
@@ -45,6 +52,11 @@ class AccountForm extends User
     }
 
 
+    /**
+     * Обновление пароля пользователя.
+     *
+     * @throws \yii\base\Exception
+     */
     private function updatePassword()
     {
         if ($this->new_password) {
@@ -53,6 +65,10 @@ class AccountForm extends User
         }
     }
 
+    /**
+     * Загрузка аватара пользователя
+     * @throws \yii\base\Exception
+     */
     private function updateAvatar()
     {
         $file = UploadedFile::getInstance($this, 'avatar');
