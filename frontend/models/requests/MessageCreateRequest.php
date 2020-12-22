@@ -32,6 +32,11 @@ class MessageCreateRequest extends Message
         return true;
     }
 
+    /**
+     * Создает уведомление
+     * @param $task_id
+     * @throws \Throwable
+     */
     private function createNotification($task_id)
     {
         $notification = new NotificationService();

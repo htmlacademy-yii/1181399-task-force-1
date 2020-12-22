@@ -34,6 +34,13 @@ class RegistrationController extends Controller
         return $this->render('register', compact('request', 'cities'));
     }
 
+    /**
+     * Заполняет и сохраняет модель
+     *
+     * @param RegistrationForm $request
+     * @return bool
+     * @throws \yii\base\Exception
+     */
     public function registerUser(RegistrationForm $request)
     {
         $user = new User();

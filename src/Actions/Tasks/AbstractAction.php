@@ -24,5 +24,9 @@ abstract class AbstractAction
      */
     abstract public static function getSlug(): string;
 
+    /**
+     * Возвращает статус
+     * @return string
+     */
     abstract public static function nextStatus(): string;
 }

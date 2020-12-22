@@ -191,11 +191,20 @@ class Task extends \yii\db\ActiveRecord
         return $this->hasMany(Message::class, ['task_id' => 'id']);
     }
 
+    /**
+     * Возвращает количество заявок
+     * @return bool|int|string|null
+     */
     public function getApplicationsCount()
     {
         return $this->hasMany(Application::class, ['task_id' => 'id'])->count();
     }
 
+    /**
+     * Возвращает аттачменты
+     * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
+     */
     public function getAttachments()
     {
         return $this->hasMany(Attachment::class, ['id' => 'attachment_id'])
@@ -226,6 +235,10 @@ class Task extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Возвращает чп статус
+     * @return mixed|string
+     */
     public function getStatusName()
     {
         return TaskStateMachine::STATUS_NAMES[$this->status] ?? 'Ошибка статуса';

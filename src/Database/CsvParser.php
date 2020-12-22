@@ -12,6 +12,13 @@ final class CsvParser
     private $output;
     private $combinedFile;
 
+    /**
+     * CsvParser constructor.
+     * @param SplFileObject $inputCsv
+     * @param array $addFields
+     * @param string $tableName
+     * @param SplFileObject $output
+     */
     public function __construct(SplFileObject $inputCsv, array $addFields, string $tableName, SplFileObject $output)
     {
         $this->input = $inputCsv;
@@ -20,11 +27,20 @@ final class CsvParser
         $this->output = $output;
     }
 
+    /**
+     * Соединяет файлы
+     * @param SplFileObject $combinedFile
+     */
     public function combineWith(SplFileObject $combinedFile)
     {
         $this->combinedFile = $combinedFile;
     }
 
+    /**
+     * Приводит к скл
+     *
+     * @return string
+     */
     public function toSql()
     {
         $outputFile = $this->output;
@@ -47,6 +63,10 @@ final class CsvParser
         return $outputFile->getPathname();
     }
 
+    /**
+     * Колонки
+     * @return array
+     */
     private function getColumns()
     {
         $columns = $this->getColumnsFromFile($this->input);
@@ -70,6 +90,12 @@ final class CsvParser
         return $output;
     }
 
+    /**
+     * Подготавливает sql запрос
+     * @param array $columns
+     * @param array $line
+     * @return string
+     */
     private function prepareStatement(array $columns, array $line): string
     {
         $cols = implode(', ', $columns);
@@ -85,6 +111,11 @@ final class CsvParser
         return "insert into {$this->tableName} ({$cols}) values ($values);" . PHP_EOL;
     }
 
+    /**
+     * возвращает следующую строку
+     * @return array|false
+     * @throws \Exception
+     */
     private function getLine()
     {
         if ($this->input->eof()) {
@@ -106,6 +137,11 @@ final class CsvParser
         return $line;
     }
 
+    /**
+     * Возвращает колонки из файла.
+     * @param SplFileObject $file
+     * @return array|false
+     */
     private function getColumnsFromFile(SplFileObject $file)
     {
         $file->seek(0);
