@@ -10,9 +10,6 @@ use frontend\models\requests\TasksSearchForm;
 use frontend\models\Task;
 use Htmlacademy\Models\TaskStateMachine;
 use Yii;
-use yii\filters\AccessControl;
-use yii\helpers\Url;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 class TasksController extends SecuredController

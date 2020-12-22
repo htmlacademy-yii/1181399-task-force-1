@@ -64,6 +64,12 @@ class Attachment extends \yii\db\ActiveRecord
         return $this->hasMany(AttachmentTask::class, ['attachment_id' => 'id']);
     }
 
+    /**
+     * Список заданий
+     *
+     * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
+     */
     public function getTasks()
     {
         return $this->hasMany(Task::class, ['id' => 'task_id'])
@@ -89,6 +95,11 @@ class Attachment extends \yii\db\ActiveRecord
         return new AttachmentsQuery(get_called_class());
     }
 
+    /**
+     * Абсолютная ссылка с корня
+     *
+     * @return string
+     */
     public function getAbsoluteUrl()
     {
         return "/{$this->url}";

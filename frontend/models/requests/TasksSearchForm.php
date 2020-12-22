@@ -45,6 +45,11 @@ class TasksSearchForm extends Model
         ];
     }
 
+    /**
+     * Возвращает карту соответствий для периода
+     *
+     * @return string[]
+     */
     public function getPeriods() {
         return [
             '' => 'Период',
@@ -119,6 +124,11 @@ class TasksSearchForm extends Model
         return $tasks;
     }
 
+    /**
+     * Карта соответствий для интервала
+     * @param $period
+     * @return string
+     */
     private function getInterval($period)
     {
         switch ($period) {

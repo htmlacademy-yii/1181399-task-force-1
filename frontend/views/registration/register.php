@@ -9,7 +9,6 @@
 
 use frontend\models\requests\UsersSearchForm;
 use yii\helpers\Html;
-use yii\widgets\ActiveField;
 use yii\widgets\ActiveForm;
 
 $formConfig = [

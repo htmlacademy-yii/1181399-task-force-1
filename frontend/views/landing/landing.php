@@ -5,7 +5,6 @@
 use frontend\models\Task;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveField;
 
 ?>
 <?php $this->beginPage() ?>

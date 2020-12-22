@@ -7,7 +7,6 @@ use Htmlacademy\Actions\Tasks\AcceptAction;
 use Htmlacademy\Actions\Tasks\DeclineAction;
 use Htmlacademy\Actions\Tasks\DoneAction;
 use Htmlacademy\Actions\Tasks\RemoveAction;
-use Htmlacademy\Enums\Actions;
 use Htmlacademy\Exceptions\StatusDoesNotExistsException;
 use Htmlacademy\Exceptions\StatusNotDefinedException;
 
@@ -42,6 +41,11 @@ class TaskStateMachine
 
     private $status;
 
+    /**
+     * TaskStateMachine constructor.
+     * @param int|null $idExecutor
+     * @param int $idAuthor
+     */
     public function __construct(?int $idExecutor, int $idAuthor)
     {
         $this->idAuthor = $idAuthor;
@@ -63,6 +67,11 @@ class TaskStateMachine
         return true;
     }
 
+    /**
+     * Возвращает действия для юзера
+     * @param int $userId
+     * @return array|null
+     */
     public function getActions(int $userId): ?array
     {
         if (!$this->status) {
@@ -84,6 +93,7 @@ class TaskStateMachine
     }
 
     /**
+     * возвращает следующий статус
      * @param string $action
      * @return string|null
      * @throws StatusNotDefinedException
@@ -101,21 +111,5 @@ class TaskStateMachine
         }
 
         return null;
-    }
-
-    private function getUserTypeById(int $userId)
-    {
-        switch($userId) {
-            case $this->idExecutor:
-                $type = 'executor';
-                break;
-            case $this->idAuthor:
-                $type = 'author';
-                break;
-            default:
-                $type = 'any';
-        }
-
-        return $type;
     }
 }

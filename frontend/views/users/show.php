@@ -4,10 +4,8 @@
 
 /* @var $user frontend\models\User */
 
-use frontend\models\requests\UsersSearchForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
 
 $this->title = 'Task Force';
 

@@ -6,9 +6,7 @@ use frontend\models\Bookmark;
 use frontend\models\Category;
 use frontend\models\requests\UsersSearchForm;
 use frontend\models\User;
-use models\Book;
 use Yii;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 class UsersController extends SecuredController

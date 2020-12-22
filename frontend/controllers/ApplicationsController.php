@@ -10,7 +10,6 @@ use frontend\models\Task;
 use frontend\services\ApplicationsService;
 use frontend\services\notifications\NotificationService;
 use Yii;
-use yii\base\InlineAction;
 
 class ApplicationsController extends SecuredController
 {

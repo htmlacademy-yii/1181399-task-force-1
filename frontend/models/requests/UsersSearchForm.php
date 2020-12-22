@@ -39,6 +39,11 @@ class UsersSearchForm extends Model
         ];
     }
 
+    /**
+     * Возвращает запрос с пользователями
+     *
+     * @return array
+     */
     public function getUsersFromForm()
     {
         $query = $this->getUsersQuery();
@@ -116,6 +121,12 @@ class UsersSearchForm extends Model
         return $users;
     }
 
+    /**
+     *
+     * Производит сортировку
+     * @param $sort
+     * @return string
+     */
     private function getSort($sort)
     {
         switch($sort) {

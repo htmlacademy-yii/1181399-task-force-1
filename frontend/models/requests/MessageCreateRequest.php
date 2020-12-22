@@ -7,8 +7,6 @@ use frontend\models\Message;
 use frontend\models\Task;
 use frontend\services\notifications\NotificationService;
 use Yii;
-use yii\base\Model;
-use yii\db\ActiveRecord;
 
 class MessageCreateRequest extends Message
 {
@@ -34,6 +32,11 @@ class MessageCreateRequest extends Message
         return true;
     }
 
+    /**
+     * Создает уведомление
+     * @param $task_id
+     * @throws \Throwable
+     */
     private function createNotification($task_id)
     {
         $notification = new NotificationService();

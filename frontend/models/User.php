@@ -273,6 +273,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(Task::class, ['author_id' => 'id']);
     }
 
+    /**
+     * Количество заданий
+     * @return bool|int|string|null
+     */
     public function getTasksCount()
     {
         return $this->hasMany(Task::class, ['author_id' => 'id'])->count();
@@ -288,6 +292,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $this->password = Yii::$app->security->generatePasswordHash($password);
     }
 
+    /**
+     * Хэшированный пароль
+     * @return string
+     */
     public function getPasswordHash()
     {
         return $this->password;
@@ -304,12 +312,21 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(Task::class, ['executor_id' => 'id']);
     }
 
+    /**
+     * Список категорий
+     * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
+     */
     public function getCategories()
     {
         return $this->hasMany(Category::class, ['id' => 'category_id'])
             ->viaTable('category_user', ['user_id' => 'id']);
     }
 
+    /**
+     * Агрегация суммы рейтинга
+     * @return bool|int|mixed|string|null
+     */
     public function getRatingSum()
     {
         return $this->hasMany(Feedback::class, ['user_id' => 'id'])->sum('rating');
@@ -348,6 +365,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return (new \DateTime())->diff(new \DateTime($this->birthday))->y;
     }
 
+    /**
+     * Аттачменты
+     * @return \yii\db\ActiveQuery
+     * @throws \yii\base\InvalidConfigException
+     */
     public function getAttachments()
     {
         return $this->hasMany(Attachment::class, ['id' => 'attachment_id'])

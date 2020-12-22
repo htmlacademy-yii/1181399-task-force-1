@@ -5,7 +5,6 @@ namespace frontend\controllers;
 use frontend\models\Category;
 use frontend\models\City;
 use frontend\models\requests\AccountForm;
-use frontend\models\User;
 use Yii;
 
 class AccountController extends SecuredController

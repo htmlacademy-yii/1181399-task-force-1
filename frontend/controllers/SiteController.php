@@ -113,6 +113,10 @@ class SiteController extends Controller
         }
     }
 
+    /**
+     * Валидирует форму входа по ajax
+     * @return array
+     */
     public function actionValidation()
     {
         $model = new LoginForm();
@@ -307,11 +311,20 @@ class SiteController extends Controller
         );
     }
 
+    /**
+     * Действие при успешном входе
+     * @param $client
+     */
     public function onAuthSuccess($client)
     {
         (new AuthorizationService($client))->handle();
     }
 
+    /**
+     * Смена города
+     *
+     * @return \yii\web\Response
+     */
     public function actionCity()
     {
         $cityId = Yii::$app->request->get('city');

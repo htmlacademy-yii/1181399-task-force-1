@@ -65,22 +65,6 @@ class ApplicationCreateForm extends Model
 
 
     /**
-     * Создание модели заявки
-     *
-     * @return bool
-     */
-    private function createApplication()
-    {
-        $application = new Application();
-        $application->task_id = $this->task_id;
-        $application->comment = $this->comment;
-        $application->budget = $this->budget;
-        $application->user_id = Yii::$app->user->getId();
-
-        return $application->save();
-    }
-
-    /**
      * Валидатор уникальности заявки
      *
      * @return bool
@@ -109,5 +93,22 @@ class ApplicationCreateForm extends Model
             return false;
         }
         return true;
+    }
+
+
+    /**
+     * Создание модели заявки
+     *
+     * @return bool
+     */
+    private function createApplication()
+    {
+        $application = new Application();
+        $application->task_id = $this->task_id;
+        $application->comment = $this->comment;
+        $application->budget = $this->budget;
+        $application->user_id = Yii::$app->user->getId();
+
+        return $application->save();
     }
 }

@@ -3,7 +3,6 @@
 namespace frontend\models\requests;
 
 use frontend\models\City;
-use frontend\models\Task;
 use frontend\models\User;
 use yii\base\Model;
 
