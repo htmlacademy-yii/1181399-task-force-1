@@ -47,7 +47,7 @@ class ApplicationDoneForm extends Model
     {
         if (!$this->validate()) {
             return false;
-        };
+        }
         switch($this->done){
             case 'difficulties':
                 return $this->setDifficulties();

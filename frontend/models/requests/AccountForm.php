@@ -2,11 +2,8 @@
 
 namespace frontend\models\requests;
 
-use frontend\models\Attachment;
-use frontend\models\Category;
 use frontend\models\User;
 use Yii;
-use yii\base\Model;
 use yii\web\UploadedFile;
 
 class AccountForm extends User

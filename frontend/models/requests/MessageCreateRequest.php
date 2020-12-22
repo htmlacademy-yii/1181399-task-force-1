@@ -7,8 +7,6 @@ use frontend\models\Message;
 use frontend\models\Task;
 use frontend\services\notifications\NotificationService;
 use Yii;
-use yii\base\Model;
-use yii\db\ActiveRecord;
 
 class MessageCreateRequest extends Message
 {

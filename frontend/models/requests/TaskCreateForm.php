@@ -6,7 +6,6 @@ use frontend\models\Attachment;
 use frontend\models\Category;
 use frontend\models\City;
 use frontend\models\Task;
-use frontend\models\User;
 use frontend\services\YandexMapsApiService;
 use Yii;
 use yii\base\Model;
@@ -59,8 +58,6 @@ class TaskCreateForm extends Model
     public function upload(Task $task)
     {
         if ($this->validate()) {
-            $ids = [];
-
             $this->files = UploadedFile::getInstances($this, 'files');
 
             foreach ($this->files as $file) {
@@ -138,7 +135,7 @@ class TaskCreateForm extends Model
      * @return array|false
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function getGeocodeFromCache(YandexMapsApiService $service, string $address)
+    private function getGeocodeFromCache(YandexMapsApiService $service)
     {
         try {
             $keyName = self::TAG . ":" . base64_encode($this->address);

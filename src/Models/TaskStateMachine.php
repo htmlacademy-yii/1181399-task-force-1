@@ -7,7 +7,6 @@ use Htmlacademy\Actions\Tasks\AcceptAction;
 use Htmlacademy\Actions\Tasks\DeclineAction;
 use Htmlacademy\Actions\Tasks\DoneAction;
 use Htmlacademy\Actions\Tasks\RemoveAction;
-use Htmlacademy\Enums\Actions;
 use Htmlacademy\Exceptions\StatusDoesNotExistsException;
 use Htmlacademy\Exceptions\StatusNotDefinedException;
 
@@ -101,21 +100,5 @@ class TaskStateMachine
         }
 
         return null;
-    }
-
-    private function getUserTypeById(int $userId)
-    {
-        switch($userId) {
-            case $this->idExecutor:
-                $type = 'executor';
-                break;
-            case $this->idAuthor:
-                $type = 'author';
-                break;
-            default:
-                $type = 'any';
-        }
-
-        return $type;
     }
 }

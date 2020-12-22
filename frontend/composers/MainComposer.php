@@ -4,7 +4,6 @@ namespace frontend\composers;
 
 use frontend\models\City;
 use frontend\models\Feed;
-use frontend\services\notifications\NotificationService;
 
 class MainComposer
 {

@@ -3,7 +3,6 @@
 namespace frontend\modules\api\controllers;
 
 use frontend\models\Task;
-use yii\data\ActiveDataProvider;
 use yii\rest\ActiveController;
 
 class TasksController extends ActiveController

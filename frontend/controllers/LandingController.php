@@ -6,9 +6,7 @@ use common\models\LoginForm;
 use frontend\models\Task;
 use Yii;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\web\Controller;
-use yii\helpers\Url;
 
 class LandingController extends Controller
 {

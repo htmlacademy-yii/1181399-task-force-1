@@ -7,7 +7,6 @@
 /* @var $request frontend\models\requests\TasksSearchForm */
 
 use yii\helpers\Html;
-use yii\widgets\ActiveField;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Task Force';
